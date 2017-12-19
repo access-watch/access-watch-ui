@@ -1,8 +1,11 @@
 {
-  "name": "access-watch-web",
-  "version": "1.2.4",
-  "description": "Access Watch Web UI",
-  "main": "src/main.js",
+  "name": "access-watch-ui",
+  "version": "1.2.5",
+  "description": "The Access Watch processor UI",
+  "main": "dist/main.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --hot",
@@ -13,10 +16,11 @@
     "build:staging": "NODE_ENV=staging webpack",
     "clean": "rm -rf ./dist",
     "prettier": "node_modules/prettier/bin/prettier.js --write '**/*'",
-    "prettier:watch": "node_modules/prettier/bin/prettier.js --watch '**/*'"
+    "prettier:watch": "node_modules/prettier/bin/prettier.js --watch '**/*'",
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "access-watch-ui-components": "^1.0.0",
+    "access-watch-ui-components": "^1.0.1",
     "blacklist": "^1.1.4",
     "classnames": "^2.2.5",
     "country-data": "0.0.31",
@@ -83,7 +87,11 @@
     "globals": {
       "__DEV__": true
     },
-    "moduleFileExtensions": ["js", "jsx", "json"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
     "transform": {
       ".*": "./jest/preprocessor.js"
     },
@@ -91,7 +99,9 @@
       "^!raw-loader!(.+)$": "<rootDir>/jest/empty.js",
       "^.+\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupFiles": ["./jest/setup.js"],
+    "setupFiles": [
+      "./jest/setup.js"
+    ],
     "unmockedModulePathPatterns": [
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
