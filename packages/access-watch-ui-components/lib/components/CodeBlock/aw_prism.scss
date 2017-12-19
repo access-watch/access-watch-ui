@@ -1,0 +1,25 @@
+@import '../vars';
+
+$string-color: $reveal-main-color;
+$keyword-color: $aw-sub-color;
+$variable-color: map-get($statuses, 'bad');
+$function-color: map-get($type-map, 'browser');
+
+code[class*="language-"], pre[class*="language-"] {
+  color: $main-color;
+}
+
+.token {
+  &.string, &.attr-name {
+    color: $string-color;
+  }
+  &.keyword, &.atrule, &.attr-value {
+    color: $keyword-color;
+  }
+  &.variable {
+    color: $variable-color;
+  }
+  &.function, &.property {
+    color: $function-color;
+  }
+}

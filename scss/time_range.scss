@@ -1,0 +1,44 @@
+@import 'vars';
+
+$timerange-color: white;
+$timerange-separator-height: 10px;
+$timerange-separator-width: 15px;
+
+.time-range {
+  display: flex;
+  justify-content: space-between;
+  color: $timerange-color;
+  margin: 10px 0;
+  font-size: 12px;
+  font-family: $default-light-font;
+}
+
+.time-range__time__hour {
+  font-family: $default-font;
+}
+
+.time-range__separator {
+  position: relative;
+  display: inline-block;
+  border-right: solid 1px;
+  height: $timerange-separator-height;
+  padding: 0 $timerange-separator-width / 2;
+  margin-top: $timerange-separator-height / 4;
+  &:before,
+  &:after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+  }
+  &:before {
+    border-bottom: solid 1px;
+    width: $timerange-separator-width;
+    bottom: $timerange-separator-height * 0.5;
+  }
+  &:after {
+    height: 0;
+    width: 0;
+    border: $timerange-separator-height / 2 solid transparent;
+    border-left: $timerange-separator-height / 2 $timerange-color solid;
+  }
+}

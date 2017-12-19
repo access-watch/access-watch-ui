@@ -1,0 +1,68 @@
+@import './vars';
+
+$default-header-height: 90px;
+$x-big-text: 38px;
+$big-text: 24px;
+
+.page-header {
+  background-color: $navbar-bg;
+  color: white;
+  position: relative;
+  margin-bottom: 20px;
+  height: 240px;
+  margin-bottom: 0;
+}
+
+.page-header__header {
+  padding: 40px 20px 0;
+}
+
+.page-header__header-title {
+  font-size: $big-text;
+  font-family: $default-light-font;
+}
+
+.page-header__header-subtitle {
+  display: block;
+  font-size: 13px;
+  margin: 20px 0;
+  font-family: $default-light-font;
+}
+
+.page-header__body {
+}
+
+.page-header__filters {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.page-header-card__label {
+  text-align: left;
+  font-size: $small-text;
+  margin-top: 20px;
+  color: $navbar-text-color;
+  font-family: $default-light-font;
+}
+
+.page-header-card__value {
+  text-align: center;
+  font-size: $x-big-text;
+  font-family: $default-light-font;
+  display: block;
+  margin: $default-header-height/2 0;
+}
+
+.page-header-card__sub-value {
+  text-align: center;
+  font-size: $small-text;
+  font-family: $default-font;
+  display: block;
+  margin-top: 5px;
+}
+
+.page-header__time-selector {
+  display: flex;
+  justify-content: flex-end;
+}

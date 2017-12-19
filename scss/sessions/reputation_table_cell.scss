@@ -1,0 +1,9 @@
+@import '../vars';
+
+.reputation-table-cell {
+  @each $status, $color in $statuses-strong {
+    &--#{$status} {
+      color: $color;
+    }
+  }
+}

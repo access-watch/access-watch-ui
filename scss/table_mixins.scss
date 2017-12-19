@@ -1,0 +1,30 @@
+$table-cn: '.aw-table';
+$table-header-cn: #{$table-cn}__header;
+$table-header-row-cn: #{$table-header-cn}__row;
+$table-header-cell-cn: #{$table-header-cn}__cell;
+$table-body-cn: #{$table-cn}__body;
+$table-body-row-cn: #{$table-body-cn}__row;
+$table-body-cell-cn: #{$table-body-cn}__cell;
+
+@function strong-selector($selector) {
+  @return #{$selector}#{$selector};
+}
+
+@mixin table-header-cell() {
+  #{strong-selector($table-header-cell-cn)} {
+    @content;
+  }
+}
+
+@mixin table-body-cell() {
+  #{strong-selector($table-body-cell-cn)} {
+    @content;
+  }
+}
+
+@mixin table-cell() {
+  #{strong-selector($table-header-cell-cn)},
+  #{strong-selector($table-body-cell-cn)} {
+    @content;
+  }
+}

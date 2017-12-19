@@ -1,0 +1,190 @@
+@import './vars';
+@import 'mixins';
+
+$logs-default-row-bg: #fff;
+$logs-text-color: $dark-gray;
+
+.logs__agent-icon {
+  height: 16px;
+  vertical-align: sub;
+  margin-right: 7px;
+  color: $gray3;
+  svg {
+    fill: $gray3;
+    g {
+      fill: $gray3;
+    }
+  }
+}
+
+.logs-table {
+  position: relative;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-size: 11px;
+  color: $logs-text-color;
+}
+
+.logs-table--fixed {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+
+.logs {
+  position: relative;
+  width: 100%;
+  font-size: 11px;
+  color: $logs-text-color;
+
+  &__row {
+    background-color: $logs-default-row-bg;
+    height: 30px;
+    td,
+    th {
+      &:last-child {
+        padding-right: 40px;
+      }
+    }
+
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.15s linear;
+
+    &--interactive {
+      cursor: pointer;
+      &:hover {
+        background-color: darken($logs-default-row-bg, 7%);
+      }
+    }
+
+    &--hl {
+      background-color: darken($logs-default-row-bg, 12%);
+    }
+
+    @include reputation-table-row-hover();
+
+    @each $status in ('suspicious', 'bad') {
+      &--#{$status}.logs_row--hl {
+        background-color: darken(map-get($logs-row-colors, $status), 12%);
+      }
+    }
+
+    .logs__row--hl::after {
+      display: block;
+      content: '';
+      position: absolute;
+      left: 380px;
+      width: 16px;
+      height: 16px;
+      background-color: red;
+    }
+
+    &--no-bg {
+      background-color: #fff;
+    }
+  }
+  &__col {
+    text-align: left;
+    padding: 5px 10px;
+    overflow: hidden;
+
+    &--time {
+      width: 155px;
+    }
+    &--timeH {
+      width: 80px;
+    }
+    &--request-method {
+      width: 55px;
+    }
+    &--response-status {
+      width: 80px; // this include an extra 30px to fake a missing padding on the right of the table
+    }
+  }
+
+  td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+@each $name, $color in $statuses {
+  .logs__row--#{$name} .logs__col--identity-name,
+  .logs__row--#{$name} .logs__col--identity-label,
+  .logs__row--#{$name} .logs__col--identity-combined {
+    svg {
+      fill: $color;
+    }
+  }
+}
+
+.logs__col--reputation-preview {
+  width: $reputation-preview-width;
+}
+
+td.logs__col--reputation-preview {
+  height: 30px;
+  @each $reputation, $color in $reputation-preview-colors {
+    &--#{$reputation} {
+      background-color: $color;
+    }
+  }
+}
+
+.logs__col--address-label {
+  .flag-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+  }
+}
+
+.logs__col--identity-combined__identity {
+  font-family: $default-bold-font;
+}
+
+.logs__col--identity-label,
+.logs__col--identity-combined {
+  text-transform: capitalize;
+
+  .identity-icon {
+    width: auto;
+    height: 16px;
+    margin-right: 8px;
+    &--browser {
+      svg {
+        fill: map-get($statuses, ok) !important;
+      }
+    }
+
+    &__svg {
+      vertical-align: -4px;
+    }
+  }
+}
+
+.logs-row__separator__td {
+  background-color: $v-light-gray;
+  text-align: center;
+  font-family: $default-bold-font;
+  font-size: 12px;
+}
+
+.logs__loader-container {
+  vertical-align: middle;
+  background-color: white;
+  text-align: center;
+  padding: 15px 0;
+  .logs-end {
+    display: inline-block;
+    height: 100%;
+    svg {
+      height: 75%;
+    }
+  }
+}
+
+.logs__loader {
+  margin: 0 auto;
+}

@@ -1,0 +1,89 @@
+@import './vars';
+
+$header-font-size: 12px;
+$navbar-height: 44px;
+$navbar-active-link-bg: $brand-blue;
+$navbar-active-link-color: $navbar-bg;
+$navbar-border-bottom-color: $x-light-white-bg;
+$navbar-border-bottom-width: 1px;
+
+header {
+  background-color: $navbar-bg;
+  min-width: $desktop-width;
+  border-bottom: solid $navbar-border-bottom-width $navbar-border-bottom-color;
+}
+
+.header {
+  height: $navbar-height;
+  font-size: $header-font-size;
+
+  &__logo {
+    display: inline-block;
+    float: left;
+    padding: 10px;
+    cursor: pointer;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: $navbar-text-color;
+    }
+  }
+}
+
+.navigation {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-block;
+  }
+
+  &__link {
+    position: relative;
+    vertical-align: middle;
+    display: inline-flex;
+    outline: none;
+    box-shadow: none;
+    height: $navbar-height;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: $navbar-text-color;
+    padding: 0 20px;
+    cursor: pointer;
+
+    .SVGIcon {
+      height: 20px;
+      fill: $navbar-text-color;
+      margin-right: 10px;
+    }
+
+    &--logo {
+      font-family: $default-bold-font;
+    }
+
+    &--active {
+      background: $navbar-active-link-bg;
+      color: $navbar-active-link-color;
+      font-family: $default-bold-font;
+      .SVGIcon {
+        fill: $navbar-active-link-color;
+      }
+      &::before {
+        $link-arrow-size: 12px;
+        content: '';
+        position: absolute;
+        bottom: -$link-arrow-size;
+        right: 0;
+        border-top: $link-arrow-size solid transparent;
+        border-bottom: $link-arrow-size solid transparent;
+        border-right: $link-arrow-size solid $navbar-active-link-bg;
+        //Z-index so it is over the bg of the header
+        z-index: 1;
+      }
+    }
+  }
+}

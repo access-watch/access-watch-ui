@@ -1,0 +1,73 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+
+import { V_ADD_RULE, V_REMOVE_RULE, dispatch } from '../../event_hub';
+
+import Button from '../utilities/button';
+import RulePropTypes from './rule_prop_types';
+
+import '../../../scss/rules_button.scss';
+
+const baseClass = 'rule-button';
+const cSfx = sfx => `${baseClass}--${sfx}`;
+
+class RuleButton extends React.Component {
+  static propTypes = {
+    // FIXME : For now value can be any object matching a rule
+    // eslint-disable-next-line react/forbid-prop-types
+    value: PropTypes.object,
+    rule: PropTypes.shape(RulePropTypes),
+    actionPending: PropTypes.bool,
+    type: PropTypes.string,
+    className: PropTypes.string,
+  };
+
+  static defaultProps = {
+    value: null,
+    actionPending: false,
+    rule: null,
+    type: null,
+    className: '',
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    const { value, rule, actionPending, type } = this.props;
+    if (!actionPending) {
+      if (rule) {
+        dispatch({ type: V_REMOVE_RULE, rule });
+      } else {
+        dispatch({ type: V_ADD_RULE, rule: { type, value } });
+      }
+    }
+  }
+
+  render() {
+    const { rule, actionPending, className, ...props } = this.props;
+    const label = rule ? 'Unblock' : 'Block';
+    return (
+      <Button
+        disabled={actionPending}
+        onClick={this.handleClick}
+        className={cx(
+          baseClass,
+          className,
+          { [cSfx('block')]: !rule },
+          { [cSfx('reset')]: !!rule },
+          { [cSfx('disabled')]: actionPending }
+        )}
+        {...props}
+      >
+        {label}
+      </Button>
+    );
+  }
+}
+
+export default RuleButton;

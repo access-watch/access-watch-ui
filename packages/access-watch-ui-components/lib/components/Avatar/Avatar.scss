@@ -1,0 +1,23 @@
+@import '../vars';
+
+.avatar {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.avatar__img {
+  width: 90px;
+  border-radius: 50%;
+}
+
+.avatar__legend {
+  font-size: 14px;
+}
+
+.avatar__name {
+  font-family: $default-bold-font;
+}
+
+.avatar__title {
+  font-weight: lighter;
+}

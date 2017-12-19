@@ -1,0 +1,146 @@
+@import '../vars';
+
+$integration-manual-step-space: 50px;
+$integration-manual-step-width: 50px;
+
+.integration-manual {
+
+}
+
+$integration-manual-title-under-width: 1px;
+$integration-manual-title-under-color: $v-light-gray;
+$integration-manual-title-under-triangle-size: 25px;
+$integration-manual-step-body-bg-color: #F3F3F7;
+$integration-manual-step-bar-bg-color: #E9E9F0;
+$integration-manual-step-link-color: lighten($aw-sub-color, 10%);
+
+
+.integration-manual__title {
+  padding-bottom: 10px;
+  margin-bottom: 45px;
+  font-size: 18px;
+  font-family: $default-bold-font;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  &:before {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: '';
+    height: $integration-manual-title-under-width;
+    background-color: $integration-manual-title-under-color;
+  }
+  &:after {
+    position: absolute;
+    content: '';
+    height: $integration-manual-title-under-triangle-size;
+    width: $integration-manual-title-under-triangle-size;
+    background-color: white;
+    bottom: 0;
+    right: 50%;
+    border: solid 1px $integration-manual-title-under-color;
+    border-top: none;
+    border-right: none;
+    transform: translateY(49%) rotate(-45deg);
+  }
+}
+
+.integration-manual__logo {
+  height: 60px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.integration-manual__step {
+  margin: 25px 0;
+  position: relative;
+  &:last-child {
+    .integration-manual__step__body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      text-align: center;
+      background-color: inherit;
+      color: inherit;
+      &:before {
+        content: none;
+      }
+    }
+    pre {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.integration-manual__step__title {
+  margin: 25px 0;
+  text-align: center;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.integration-manual__step__num {
+  font-family: $default-bold-font;
+  padding: 0 8px;
+}
+
+.integration-manual__step__body {
+  position: relative;
+  margin: 40px 0 70px;
+  padding: 40px;
+  padding-top: 75px;
+  border-radius: 15px;
+  background-color: $integration-manual-step-body-bg-color;
+  overflow: hidden;
+  font-size: 16px;
+  &:before {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    height: 35px;
+    width: 100%;
+    background-color: $integration-manual-step-bar-bg-color;
+  }
+  a {
+    &, &:visited, &:active {
+      color: $integration-manual-step-link-color;
+    }
+  }
+}
+
+.integration-manual {
+  .code-block__content {
+    display: inline-block;
+    min-width: 100%;
+    position: relative;
+    border: unset;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow: auto;
+    width: 100%;
+  }
+}
+
+.btn.btn--integration-manual {
+  display: inline-block;
+  text-decoration: none;
+  background-color: $main-color;
+  color: white;
+  border-radius: 50px;
+  margin: 30px auto;
+}
+
+.integration-manual__integration-dropdown {
+  .dropdown_label {
+    text-decoration: underline;
+    margin-top: 0;
+    font-size: 13px;
+  }
+  .dropdown_children-wrapper {
+    width: 600px;
+  }
+}

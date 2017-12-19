@@ -1,0 +1,187 @@
+@import './vars';
+
+%btn-default {
+  // make sure there's space around for the box-shadow
+  margin: 3px;
+  outline: none;
+  border: solid 1px $btn-default-color;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+  padding: 6px 15px;
+  vertical-align: middle;
+  line-height: 1.6;
+  color: $btn-default-color;
+  font-family: inherit;
+  font-size: 14px;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+%btn-link {
+  border: 0;
+  padding: inherit;
+  vertical-align: inherit;
+  font-size: inherit;
+}
+
+@mixin btn-link-color($color) {
+  color: $color;
+
+  &:focus,
+  &:hover {
+    color: darken($color, 5%);
+  }
+
+  &:active {
+    color: darken($color, 15%);
+  }
+}
+
+%btn-opacity {
+  opacity: 0.4;
+
+  &:focus,
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 1;
+  }
+}
+
+@mixin btn-type($color, $bg: $btn-bg) {
+  border-color: $color;
+  background-color: $bg;
+  color: $color;
+
+  &:hover,
+  &:focus {
+    background-color: mix($color, $bg, 5%);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px mix($color, $bg, 10%);
+  }
+
+  &:active {
+    box-shadow: none;
+    background-color: mix($color, $bg, 14%);
+  }
+}
+
+@mixin white-to-brand-purple(){
+  fill: white;
+  filter: brightness(25%) sepia(100%) hue-rotate(200deg);
+}
+
+@mixin onboarding-page() {
+  text-align: center;
+  width: $site-creation-width;
+  margin: auto;
+  color: $site-creation-main-color;
+  font-family: $default-light-font;
+  min-width: $site-creation-min-width;
+  max-width: $site-creation-max-width;
+}
+
+@mixin site-creation-btn {
+  height: $site-creation-button-size;
+  width: $site-creation-button-size;
+  background-color: $aw-sub-color;
+  font-style: italic;
+  border: none;
+  margin: 40px 0;
+  border-radius: 50%;
+  font-family: $default-font;
+}
+
+@mixin arrow($width, $size, $pos) {
+  position: relative;
+  height: $size * 1.2;
+  width: $width;
+  &:before {
+    content: '';
+    position: absolute;
+    width: $width;
+    top: 50%;
+    #{$pos}: 0;
+    border-bottom: solid 1px;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    height: $size;
+    width: $size;
+    top: calc(50% - #{$size / 2});
+    @if $pos == 'left' {
+      border-bottom: solid 1px;
+      transform: translateX(1px) rotateZ(45deg);
+    } @else {
+      border-top: solid 1px;
+      transform: translateX(-1px) rotateZ(45deg);
+    }
+    border-#{$pos}: solid 1px;
+  }
+}
+
+@mixin cross($position, $size, $thickness, $color) {
+  position: absolute;
+  top: $position;
+  right: $position;
+  height: $size;
+  width: $size;
+  cursor: pointer;
+  &:before, &:after {
+    content: ' ';
+    position: absolute;
+    height: 100%;
+    width: $thickness;
+    background-color: $color;
+  }
+
+  &:before {
+    transform: rotateZ(45deg);
+  }
+
+  &:after {
+    transform: rotateZ(-45deg);
+  }
+}
+
+@mixin rounded-blue-button(){
+  position: relative;
+  overflow: hidden;
+  padding: 10px 22px;
+  border-radius: 30px;
+  border: none;
+  background-color: $aw-sub-color;
+  color: white;
+  font-family: $default-bold-font;
+  font-size: 12px;
+  &:active {
+    background-color: darken($aw-sub-color, 10%);
+  }
+}
+
+@mixin placeholder {
+  &::placeholder {@content}
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
+}
+
+@mixin subscription-limit {
+  &--exceeded, &--exceeded a {
+    color: $orange;
+  }
+  &--critical, &--critical a {
+    color: map-get($statuses, 'suspicious');
+  }
+}

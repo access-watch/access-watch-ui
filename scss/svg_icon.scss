@@ -1,0 +1,17 @@
+// source: https://gist.github.com/MoOx/1eb30eac43b2114de73a
+
+.SVGIcon {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* fix webkit/blink poor rendering issues */
+  transform: translate3d(0, 0, 0);
+
+  svg {
+    width: inherit;
+    height: inherit;
+    line-height: inherit;
+
+    color: inherit;
+  }
+}

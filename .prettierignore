@@ -1,0 +1,9 @@
+node_modules/*
+*.sh
+dist/*
+assets/*
+.git*
+.DS_Store
+*.yml
+.prettierignore
+*.log

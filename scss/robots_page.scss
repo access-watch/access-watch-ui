@@ -1,0 +1,23 @@
+@import 'vars';
+@import 'page-header';
+@import 'mixins';
+
+.robots-page {
+  background-color: $brand-purple;
+  color: #fff;
+
+  .sessions {
+    .session-block-- {
+      &suspicious,
+      &ok {
+        .session-block__icon {
+          @include white-to-brand-purple();
+        }
+      }
+    }
+  }
+}
+
+.robots__table__row {
+  @include reputation-table-row-hover();
+}

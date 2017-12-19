@@ -1,0 +1,100 @@
+{
+  "name": "access-watch-web",
+  "version": "1.2.4",
+  "description": "Access Watch Web UI",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack-dev-server --hot",
+    "test": "node_modules/jest-cli/bin/jest.js",
+    "test:watch": "node_modules/jest-cli/bin/jest.js --watch",
+    "lint": "eslint './src/**/*.{js,jsx}' './__tests__/**/*.js'",
+    "build": "NODE_ENV=production webpack",
+    "build:staging": "NODE_ENV=staging webpack",
+    "clean": "rm -rf ./dist",
+    "prettier": "node_modules/prettier/bin/prettier.js --write '**/*'",
+    "prettier:watch": "node_modules/prettier/bin/prettier.js --watch '**/*'"
+  },
+  "dependencies": {
+    "access-watch-ui-components": "^1.0.0",
+    "blacklist": "^1.1.4",
+    "classnames": "^2.2.5",
+    "country-data": "0.0.31",
+    "date-fns": "^1.15.1",
+    "director": "^1.2.8",
+    "elemental": "git+ssh://git@github.com:access-watch/elemental.git#build",
+    "hastscript": "^3.1.0",
+    "prop-types": "^15.6.0",
+    "qs": "^6.3.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-transition-group": "^1.2.1",
+    "rxjs": "^5.0.0-rc.3",
+    "timeago.js": "^3.0.2",
+    "url-loader": "^0.5.9",
+    "whatwg-fetch": "^2.0.1"
+  },
+  "devDependencies": {
+    "assets-webpack-plugin": "^3.5.1",
+    "autoprefixer": "^7.0.1",
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^8.0.2",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-jest": "^21.2.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-optimize": "^1.0.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "core-js": "^2.4.1",
+    "css-loader": "^0.28.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "2.4.0",
+    "eslint-plugin-react": "^7.5.1",
+    "file-loader": "^1.1.5",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-cli": "^21.2.1",
+    "json-loader": "^0.5.4",
+    "lerna": "^2.5.1",
+    "node-sass": "^4.5.2",
+    "postcss-loader": "^2.0.3",
+    "prettier": "1.9.2",
+    "raw-loader": "^0.5.1",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "sass-loader": "^6.0.3",
+    "source-map-loader": "^0.2.1",
+    "style-loader": "^0.19.1",
+    "svg-react-loader": "^0.4.5",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "jest": {
+    "bail": true,
+    "resetModules": true,
+    "timers": "fake",
+    "globals": {
+      "__DEV__": true
+    },
+    "moduleFileExtensions": ["js", "jsx", "json"],
+    "transform": {
+      ".*": "./jest/preprocessor.js"
+    },
+    "moduleNameMapper": {
+      "^!raw-loader!(.+)$": "<rootDir>/jest/empty.js",
+      "^.+\\.(css|scss)$": "identity-obj-proxy"
+    },
+    "setupFiles": ["./jest/setup.js"],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/src/rx",
+      "<rootDir>/node_modules/rxjs"
+    ]
+  }
+}

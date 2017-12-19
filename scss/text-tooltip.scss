@@ -1,0 +1,50 @@
+@import './vars';
+
+.text-tooltip {
+  position: fixed;
+  margin-top: 12px;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease, z-index 0.2s linear;
+  background-color: $tooltip-text-bg;
+  border-radius: 4px;
+  opacity: 0;
+  z-index: -1;
+  color: #fff;
+  padding: 12px;
+  font-size: 14px;
+  word-wrap: break-word;
+  max-width: 450px;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 0px;
+    background-color: transparent;
+    border: 6px solid transparent;
+    border-bottom: 6px solid $tooltip-text-bg;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--left {
+    transform: translateX(-5%);
+    &::before {
+      left: 5%;
+    }
+  }
+
+  &--right {
+    transform: translateX(-90%);
+    &::before {
+      left: 90%;
+    }
+  }
+
+  &--visible {
+    opacity: 0.8;
+    z-index: $z-modal + 1; // on top of everything
+  }
+}

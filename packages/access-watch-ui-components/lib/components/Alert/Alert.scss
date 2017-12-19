@@ -1,0 +1,57 @@
+@import '../vars';
+@import '../mixins';
+
+$alert-padding: 8px;
+$alert-close-arrow-size: 12px;
+$alert-close-arrow-thickness: 1px;
+
+.aw-alert {
+  position: fixed;
+  top: $navbar-height + 10px;
+  right: 10px;
+  //height: 80px;
+  overflow: hidden;
+  background-color: #eee;
+  border-radius: 10px;
+  min-width: 450px;
+  min-height: 50px;
+  padding: $alert-padding;
+  font-size: 12px;
+  color: $main-color;
+  animation: alert-slide-in 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@keyframes alert-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+.aw-alert__close {
+  @include cross($alert-padding + 2px, $alert-close-arrow-size, $alert-close-arrow-thickness, $main-color);
+}
+
+.aw-alert--success {
+  padding-left: 50px;
+  background-color: #def3d5;
+  &:before {
+    position: absolute;
+    content: ' ';
+    background-image: url(./checkmark-green.svg);
+    background-size: cover;
+    background-position: center;
+    height: 25px;
+    width: 25px;
+    top: 50%;
+    left: 12.5px;
+    transform: translateY(-50%);
+  }
+}

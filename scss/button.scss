@@ -1,0 +1,7 @@
+@import './vars';
+@import './mixins.scss';
+
+.btn {
+  @extend %btn-default;
+  position: relative;
+}

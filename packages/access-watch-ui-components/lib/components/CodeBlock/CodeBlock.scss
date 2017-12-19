@@ -1,0 +1,27 @@
+@import '../vars';
+
+.code-block {
+  position: relative;
+}
+
+.code-block__copy {
+  display: none;
+  position: absolute;
+  height: 18px;
+  width: 30px;
+  cursor: pointer;
+  right: -25px;
+  padding-left: 15px;
+  top: calc(50% - 18px);
+  svg {
+    width: 18px;
+  }
+  svg .cls-1 {
+    fill: $main-color;
+  }
+}
+
+.code-block__copy:hover,
+.code-block:hover .code-block__copy {
+  display: block;
+}

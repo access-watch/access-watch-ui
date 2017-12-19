@@ -1,0 +1,79 @@
+@import 'vars';
+@import 'mixins';
+
+.page-header-card__value--clickable,
+.checkbox-robots--clickable {
+  display: inline-flex;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.page-header-card__value--robots {
+  font-size: $robot-percentage-main-font-size;
+  font-family: $robot-percentage-main-font;
+}
+
+.page-header-card__sub-value--robots {
+  font-size: $robot-percentage-sub-font-size;
+}
+
+.checkbox-robots {
+  display: flex;
+  justify-content: center;
+}
+
+.checkbox-robots__text {
+  text-transform: capitalize;
+}
+
+.checkbox-robots__checkbox {
+  position: relative;
+  display: inline-block;
+  border-radius: 3px;
+  height: 15px;
+  width: 15px;
+  margin-right: 5px;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  input {
+    display: none;
+  }
+
+  @each $status, $color in $statuses {
+    &--#{$status} {
+      border-color: $color;
+    }
+  }
+}
+
+.checkbox-robots__checkbox--none-checked {
+  @each $status, $color in $statuses {
+    &.checkbox-robots__checkbox--#{$status} {
+      background-color: $color;
+    }
+  }
+}
+
+.checkbox-robots__checkbox--checked {
+  @each $status, $color in $statuses {
+    &.checkbox-robots__checkbox--#{$status} {
+      background-color: $color;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    fill: $brand-purple;
+    background-image: url(../assets/checkmark-white.svg);
+    @include white-to-brand-purple();
+    background-size: 100%;
+  }
+}

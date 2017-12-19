@@ -1,0 +1,41 @@
+@import '../vars';
+
+.sessions {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  //overflow: hidden;
+  &__items {
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
+    background-color: $brand-purple;
+  }
+  &__details {
+    margin: 1px;
+  }
+
+  .aw-table {
+    background-color: white;
+    color: $brand-purple;
+    .aw-table__body__cell--activity {
+      width: 150px;
+      font-size: 0;
+      .spark-line {
+        display: inline-block;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.loading-box {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 1px;
+  background-color: $brand-purple;
+  text-align: center;
+  color: white;
+}

@@ -1,0 +1,29 @@
+@import 'vars';
+
+.side-panel {
+  &__content,
+  &__overlay {
+    // fixed positioned so that it's in the view regardless of page scroll pos!
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  &__content {
+    background-color: #fff;
+    z-index: $z-modal;
+    padding: 0;
+    width: 75%;
+    min-width: 640px;
+    transition: transform 0.2s ease-in-out;
+    overflow-y: auto;
+  }
+
+  &__overlay {
+    background-color: rgba(0, 0, 35, 0.5);
+    left: 0;
+    z-index: $z-overlay;
+    transition: opacity 0.2s ease-in-out;
+  }
+}

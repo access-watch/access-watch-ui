@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "7"
+notifications:
+  slack: access-watch:W8G0ZKWHdoQTEB1fs7RvM05u
+script:
+  - npm run lint
+  - npm run test
+  - npm run build
+
+deploy:
+  provider: script
+  script: ./deploy.sh $TRAVIS_BUILD_DIR
+  skip_cleanup: true
+  on:
+    branch: dev

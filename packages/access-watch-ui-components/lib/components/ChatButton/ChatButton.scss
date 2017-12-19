@@ -1,0 +1,15 @@
+@import '../vars';
+
+.chat-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  svg {
+    height: 100%;
+    width: 100%;
+    fill: $main-color;
+  }
+}

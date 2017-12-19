@@ -1,0 +1,252 @@
+{
+  "logs": [
+    {
+      "id": "AVTfKO-u34ziKRPY_q9Z",
+      "time": "2016-05-23T19:48:02.000Z",
+      "request": {
+        "scheme": "http",
+        "method": "GET",
+        "host": "visible-learning.org",
+        "port": 80,
+        "url": "/hattie-ranking-influences-effect-sizes-learning-achievement/",
+        "headers": {
+          "accept":
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "upgrade-insecure-requests": "1",
+          "user-agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+          "accept-encoding": "gzip, deflate, sdch",
+          "accept-language": "en-US,en;q=0.8"
+        }
+      },
+      "response": {
+        "status": 200
+      },
+      "identity": {
+        "id": "1c32b7017665f1696ef2b741cf8e562c",
+        "type": "browser",
+        "label": "browser"
+      },
+      "address": {
+        "id": "f660e8f06065e69f3dca9387188ee563",
+        "value": "152.15.113.7",
+        "hostname": null,
+        "label": "152.15.113.7",
+        "as_number": "81",
+        "network_name": "UNCC-NET",
+        "country_code": "US",
+        "flags": []
+      },
+      "signature": {
+        "id": "e91c5fea63dec2291b00507cbd7aa154",
+        "language_code": "en",
+        "country_code": "US"
+      },
+      "user_agent": {
+        "id": "834eb6fd80254372b51601697c5d3599",
+        "type": "browser",
+        "agent": {
+          "name": "chrome",
+          "icon": "chrome",
+          "label": "Chrome 50.0.2661.102"
+        },
+        "system": {
+          "name": "macosx",
+          "icon": "macosx",
+          "label": "MacOS X 10.10.5"
+        }
+      },
+      "reputation": {
+        "threats": [],
+        "status": "nice"
+      }
+    },
+    {
+      "id": "AVTfKMQD34ziKRPY_q8B",
+      "time": "2016-05-23T19:47:50.000Z",
+      "request": {
+        "scheme": "http",
+        "method": "GET",
+        "host": "visible-learning.org",
+        "port": 80,
+        "url": "/glossary/",
+        "headers": {
+          "accept":
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "upgrade-insecure-requests": "1",
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+          "referer":
+            "http://visible-learning.org/hattie-ranking-influences-effect-sizes-learning-achievement/",
+          "accept-encoding": "gzip, deflate, sdch",
+          "accept-language": "en-US,en;q=0.8"
+        }
+      },
+      "response": {
+        "status": 200
+      },
+      "identity": {
+        "id": "cba29173fb546e40193a4e0075c67634",
+        "type": "browser",
+        "label": "browser"
+      },
+      "address": {
+        "id": "e45fb4bfe53af102fc01ceecb2eaaff7",
+        "value": "90.200.101.188",
+        "hostname": "5ac865bc.bb.sky.com",
+        "label": "5ac865bc.bb.sky.com",
+        "as_number": "5607",
+        "network_name": "NET-90-200-0-0-SX",
+        "country_code": "GB",
+        "flags": []
+      },
+      "signature": {
+        "id": "2a90a33078ebabb8a6c7646b5007a5ed",
+        "language_code": "en",
+        "country_code": "US"
+      },
+      "user_agent": {
+        "id": "670a5ab763d60c1df0e16a2a74951c56",
+        "type": "browser",
+        "agent": {
+          "name": "chrome",
+          "icon": "chrome",
+          "label": "Chrome 50.0.2661.102"
+        },
+        "system": {
+          "name": "windows7",
+          "icon": "windows7",
+          "label": "Windows 7"
+        }
+      },
+      "reputation": {
+        "threats": [],
+        "status": "nice"
+      }
+    },
+    {
+      "id": "AVTfKKBI34ziKRPY_q7O",
+      "time": "2016-05-23T19:47:42.000Z",
+      "request": {
+        "scheme": "http",
+        "method": "GET",
+        "host": "visible-learning.org",
+        "port": 80,
+        "url": "/hattie-ranking-influences-effect-sizes-learning-achievement/",
+        "headers": {
+          "accept":
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "upgrade-insecure-requests": "1",
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+          "referer": "http://visible-learning.org/category/infographics/",
+          "accept-encoding": "gzip, deflate, sdch",
+          "accept-language": "en-US,en;q=0.8"
+        }
+      },
+      "response": {
+        "status": 200
+      },
+      "identity": {
+        "id": "cba29173fb546e40193a4e0075c67634",
+        "type": "browser",
+        "label": "browser"
+      },
+      "address": {
+        "id": "e45fb4bfe53af102fc01ceecb2eaaff7",
+        "value": "90.200.101.188",
+        "hostname": "5ac865bc.bb.sky.com",
+        "label": "5ac865bc.bb.sky.com",
+        "as_number": "5607",
+        "network_name": "NET-90-200-0-0-SX",
+        "country_code": "GB",
+        "flags": []
+      },
+      "signature": {
+        "id": "2a90a33078ebabb8a6c7646b5007a5ed",
+        "language_code": "en",
+        "country_code": "US"
+      },
+      "user_agent": {
+        "id": "670a5ab763d60c1df0e16a2a74951c56",
+        "type": "browser",
+        "agent": {
+          "name": "chrome",
+          "icon": "chrome",
+          "label": "Chrome 50.0.2661.102"
+        },
+        "system": {
+          "name": "windows7",
+          "icon": "windows7",
+          "label": "Windows 7"
+        }
+      },
+      "reputation": {
+        "threats": [],
+        "status": "nice"
+      }
+    },
+    {
+      "id": "AVTfKISN34ziKRPY_q6i",
+      "time": "2016-05-23T19:47:34.000Z",
+      "request": {
+        "scheme": "http",
+        "method": "GET",
+        "host": "visible-learning.org",
+        "port": 80,
+        "url": "/category/infographics/",
+        "headers": {
+          "accept":
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "upgrade-insecure-requests": "1",
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+          "referer": "http://visible-learning.org/category/news/",
+          "accept-encoding": "gzip, deflate, sdch",
+          "accept-language": "en-US,en;q=0.8"
+        }
+      },
+      "response": {
+        "status": 200
+      },
+      "identity": {
+        "id": "cba29173fb546e40193a4e0075c67634",
+        "type": "browser",
+        "label": "browser"
+      },
+      "address": {
+        "id": "e45fb4bfe53af102fc01ceecb2eaaff7",
+        "value": "90.200.101.188",
+        "hostname": "5ac865bc.bb.sky.com",
+        "label": "5ac865bc.bb.sky.com",
+        "as_number": "5607",
+        "network_name": "NET-90-200-0-0-SX",
+        "country_code": "GB",
+        "flags": []
+      },
+      "signature": {
+        "id": "2a90a33078ebabb8a6c7646b5007a5ed",
+        "language_code": "en",
+        "country_code": "US"
+      },
+      "user_agent": {
+        "id": "670a5ab763d60c1df0e16a2a74951c56",
+        "type": "browser",
+        "agent": {
+          "name": "chrome",
+          "icon": "chrome",
+          "label": "Chrome 50.0.2661.102"
+        },
+        "system": {
+          "name": "windows7",
+          "icon": "windows7",
+          "label": "Windows 7"
+        }
+      },
+      "reputation": {
+        "threats": [],
+        "status": "nice"
+      }
+    }
+  ]
+}

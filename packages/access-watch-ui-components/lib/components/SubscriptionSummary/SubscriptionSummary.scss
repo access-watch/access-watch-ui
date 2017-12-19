@@ -1,0 +1,25 @@
+@import '../vars';
+@import '../mixins';
+
+.subscription-summary {
+  color: white;
+  font-size: 12px;
+  background-color: $main-color;
+  a {
+    cursor: pointer;
+  }
+}
+
+.subscription-summary__main {
+  font-size: 14px;
+  font-family: $default-bold-font;
+}
+
+.subscription-summary__update-link {
+  text-decoration: underline;
+  margin: 0 4px;
+}
+
+.subscription-summary__status {
+  @include subscription-limit();
+}

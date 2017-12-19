@@ -1,0 +1,133 @@
+@import '../vars.scss';
+
+$small-text: 12px;
+$intermediate-text: 14px;
+$big-text: 18px;
+
+$request-info__label-width: 80px;
+$request-info__label-margin-right: 8px;
+$request-info__dd-margin-left: 24px;
+
+.request-info {
+  margin: 0;
+  padding-top: 6px;
+  position: relative;
+  color: $gray-blue;
+  font-size: $small-text;
+  dd {
+    margin-left: $request-info__dd-margin-left;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+}
+
+.request-info__value {
+  word-break: break-all;
+  font-family: monospace;
+}
+
+.request-info__value--empty {
+  opacity: 0.5;
+}
+
+.request-info__label {
+  font-weight: bold;
+  min-width: $request-info__label-width - $request-info__label-margin-right;
+  margin-right: $request-info__label-margin-right;
+  width: auto;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.request-info__sub-section--queryStringParameters {
+  .request-info__label {
+    text-transform: none;
+  }
+}
+
+.request-info__header {
+  font-weight: bold;
+  font-size: $big-text;
+  margin: 0 0 8px;
+}
+
+.request-info__section {
+  padding: 6px 36px 12px;
+  border-bottom: 1px solid $gray;
+}
+
+.request-info__section:last-child {
+  border-bottom: 0;
+}
+
+.request-info__sub-section {
+  .request-info__label {
+    min-width: $request-info__label-width - $request-info__label-margin-right -
+      $request-info__dd-margin-left;
+  }
+
+  .request-info__header {
+    font-size: $intermediate-text;
+  }
+}
+
+.request-info__status-code::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 8px;
+  border-radius: 50%;
+  margin-bottom: -2px;
+}
+
+.request-info__status-code--yellow::before {
+  background-color: $orange;
+}
+
+.request-info__status-code--green::before {
+  background-color: $green;
+}
+
+.request-info__status-code--red::before {
+  background-color: $red;
+}
+
+.request-info__close:hover {
+  opacity: 0.8;
+}
+
+.btn.request-info__close {
+  line-height: 1;
+  color: $gray-blue;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0 20px;
+  padding: 0;
+  border: 0;
+  &::after {
+    content: '+';
+    transform: rotateZ(45deg);
+    display: block;
+    font-size: 45px;
+  }
+}
+
+.request-info__bubble {
+  background-color: #dbdcf6;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: $small-text - 1px;
+}
+
+.request-info__section {
+  a {
+    &,
+    &:visited,
+    &:active,
+    &:hover {
+      color: inherit;
+    }
+  }
+}

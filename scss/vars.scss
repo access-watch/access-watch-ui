@@ -1,0 +1,81 @@
+$v-light-gray: #eeefff;
+$light-gray: #edf1f5;
+$gray: #a3b1bf;
+$gray3: #7a8a99;
+$dark-gray: #3d5266;
+$gray-blue: #233445;
+$light-blue: lighten(#ccebff, 5%);
+
+$brand-blue: #59f;
+$brand-purple: #46396a;
+$brand-light-gray: #f6f5f7;
+
+$green: #00bf50;
+
+$orange: #ffbc44;
+$red: #f35;
+
+$light-white-bg: rgba(255, 255, 255, 0.3);
+$x-light-white-bg: rgba(255, 255, 255, 0.1);
+
+$statuses: (
+  bad: #ff3b6e,
+  suspicious: #ecf15c,
+  ok: #c8c0de,
+  nice: #5c71f1
+);
+
+$type-map: (
+  robot: #1ac9d4,
+  browser: #914cd6
+);
+
+$default-font: Raleway;
+$default-light-font: Raleway200, $default-font;
+$default-bold-font: Raleway700, $default-font;
+
+$robot-percentage-main-font-size: 24px;
+$robot-percentage-sub-font-size: 14px;
+$robot-percentage-main-font: $default-light-font;
+
+$statuses-strong: (
+  nice: map-get($statuses, 'nice'),
+  ok: map-get($statuses, 'ok'),
+  suspicious: #f3dc19,
+  bad: map-get($statuses, 'bad')
+);
+
+// defaults
+$text-color: $dark-gray;
+$default-bg: white;
+
+// tooltips
+$tooltip-text-bg: #172533;
+
+$navbar-bg: $brand-purple;
+$navbar-text-color: $light-white-bg;
+
+// logs
+$logs-row-colors: (
+  nice: $light-blue,
+  ok: #edf0f3,
+  suspicious: #fff3d9,
+  bad: #ffe9ed,
+  browser: transparentize(lighten(map-get($type-map, 'browser'), 30%), 0.6)
+);
+
+$z-overlay: 900;
+$z-modal: 1000;
+$z-tooltip: 1100;
+
+$desktop-width: 980px;
+
+$small-text: 12px;
+
+$rounded-table-border-radius: 25px;
+
+$reputation-preview-width: 15px;
+$reputation-preview-colors: map-merge(
+  $statuses-strong,
+   (browser: map-get($type-map, 'browser'))
+);

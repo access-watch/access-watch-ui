@@ -1,0 +1,42 @@
+@import './vars';
+
+.tooltip {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: $z-tooltip;
+  position: fixed;
+}
+
+.tooltip__message {
+  background-color: $tooltip-text-bg;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  left: 0;
+  margin-top: 12px;
+  padding: 12px;
+  pointer-events: none;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip__message::before {
+  background-color: transparent;
+  border: 6px solid transparent;
+  border-bottom: 6px solid $tooltip-text-bg;
+  bottom: 100%;
+  content: '';
+  display: block;
+  height: 0px;
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 0px;
+}
+
+.tooltip--visible {
+  opacity: 1;
+}

@@ -1,0 +1,13 @@
+---
+extends: "../.eslintrc.yml"
+env:
+  jest: true
+  jasmine: true
+rules:
+  global-require: 0
+  one-var-declaration-per-line: 0
+  one-var: 0
+  import/no-dynamic-require: 0
+  import/newline-after-import: 0
+  import/imports-first: 0
+  import/first: 0

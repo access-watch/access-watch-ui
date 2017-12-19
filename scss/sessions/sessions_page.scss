@@ -1,0 +1,9 @@
+.page--sessions {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  .sessions {
+    flex-grow: 1;
+  }
+}

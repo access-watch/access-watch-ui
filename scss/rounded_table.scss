@@ -1,0 +1,30 @@
+@import './vars';
+
+.rounded-table__header,
+.rounded-table__body__row {
+  display: flex;
+  padding-left: $rounded-table-border-radius;
+  padding-right: $rounded-table-border-radius;
+  border-radius: $rounded-table-border-radius;
+}
+
+.rounded-table {
+  font-size: 14px;
+}
+
+.rounded-table__header__cell,
+.rounded-table__body__cell {
+  text-align: left;
+}
+
+.rounded-table__header {
+  font-family: $default-bold-font;
+  margin: 15px 0;
+}
+
+.rounded-table__body__row {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: $brand-light-gray;
+  margin: 10px 0;
+}

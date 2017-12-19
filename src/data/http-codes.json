@@ -1,0 +1,310 @@
+[
+  {
+    "code": "1xx",
+    "phrase": "**Informational**"
+  },
+  {
+    "code": "100",
+    "phrase": "Continue"
+  },
+  {
+    "code": "101",
+    "phrase": "Switching Protocols"
+  },
+  {
+    "code": "102",
+    "phrase": "Processing"
+  },
+  {
+    "code": "2xx",
+    "phrase": "**Successful**"
+  },
+  {
+    "code": "200",
+    "phrase": "OK"
+  },
+  {
+    "code": "201",
+    "phrase": "Created"
+  },
+  {
+    "code": "202",
+    "phrase": "Accepted"
+  },
+  {
+    "code": "203",
+    "phrase": "Non-Authoritative Information"
+  },
+  {
+    "code": "204",
+    "phrase": "No Content"
+  },
+  {
+    "code": "205",
+    "phrase": "Reset Content"
+  },
+  {
+    "code": "206",
+    "phrase": "Partial Content"
+  },
+  {
+    "code": "207",
+    "phrase": "Multi-Status"
+  },
+  {
+    "code": "210",
+    "phrase": "Content Different"
+  },
+  {
+    "code": "226",
+    "phrase": "IM Used"
+  },
+  {
+    "code": "3xx",
+    "phrase": "**Redirection**"
+  },
+  {
+    "code": "300",
+    "phrase": "Multiple Choices"
+  },
+  {
+    "code": "301",
+    "phrase": "Moved Permanently"
+  },
+  {
+    "code": "302",
+    "phrase": "Found"
+  },
+  {
+    "code": "303",
+    "phrase": "See Other"
+  },
+  {
+    "code": "304",
+    "phrase": "Not Modified"
+  },
+  {
+    "code": "305",
+    "phrase": "Use Proxy"
+  },
+  {
+    "code": "307",
+    "phrase": "Temporary Redirect"
+  },
+  {
+    "code": "308",
+    "phrase": "Permanent Redirect"
+  },
+  {
+    "code": "310",
+    "phrase": "Too many Redirects"
+  },
+  {
+    "code": "4xx",
+    "phrase": "**Client Error**"
+  },
+  {
+    "code": "400",
+    "phrase": "Bad Request"
+  },
+  {
+    "code": "401",
+    "phrase": "Unauthorized"
+  },
+  {
+    "code": "402",
+    "phrase": "Payment Required"
+  },
+  {
+    "code": "403",
+    "phrase": "Forbidden"
+  },
+  {
+    "code": "404",
+    "phrase": "Not Found"
+  },
+  {
+    "code": "405",
+    "phrase": "Method Not Allowed"
+  },
+  {
+    "code": "406",
+    "phrase": "Not Acceptable"
+  },
+  {
+    "code": "407",
+    "phrase": "Proxy Authentication Required"
+  },
+  {
+    "code": "408",
+    "phrase": "Request Timeout"
+  },
+  {
+    "code": "409",
+    "phrase": "Conflict"
+  },
+  {
+    "code": "410",
+    "phrase": "Gone"
+  },
+  {
+    "code": "411",
+    "phrase": "Length Required"
+  },
+  {
+    "code": "412",
+    "phrase": "Precondition Failed"
+  },
+  {
+    "code": "413",
+    "phrase": "Payload Too Large"
+  },
+  {
+    "code": "414",
+    "phrase": "URI Too Long"
+  },
+  {
+    "code": "415",
+    "phrase": "Unsupported Media Type"
+  },
+  {
+    "code": "416",
+    "phrase": "Range Not Satisfiable"
+  },
+  {
+    "code": "417",
+    "phrase": "Expectation Failed"
+  },
+  {
+    "code": "418",
+    "phrase": "I'm a teapot"
+  },
+  {
+    "code": "421",
+    "phrase": "Bad mapping / Misdirected Request"
+  },
+  {
+    "code": "422",
+    "phrase": "Unprocessable entity"
+  },
+  {
+    "code": "423",
+    "phrase": "Locked"
+  },
+  {
+    "code": "424",
+    "phrase": "Method failure"
+  },
+  {
+    "code": "425",
+    "phrase": "Unordered Collection"
+  },
+  {
+    "code": "426",
+    "phrase": "Upgrade Required"
+  },
+  {
+    "code": "428",
+    "phrase": "Precondition Required"
+  },
+  {
+    "code": "429",
+    "phrase": "Too Many Requests"
+  },
+  {
+    "code": "431",
+    "phrase": "Request Header Fields Too Large"
+  },
+  {
+    "code": "444",
+    "phrase": "No Response"
+  },
+  {
+    "code": "449",
+    "phrase": "Retry With"
+  },
+  {
+    "code": "450",
+    "phrase": "Blocked by Windows Parental Controls"
+  },
+  {
+    "code": "451",
+    "phrase": "Unavailable For Legal Reasons"
+  },
+  {
+    "code": "456",
+    "phrase": "Unrecoverable Error"
+  },
+  {
+    "code": "495",
+    "phrase": "SSL Certificate Error"
+  },
+  {
+    "code": "496",
+    "phrase": "SSL Certificate Required"
+  },
+  {
+    "code": "497",
+    "phrase": "HTTP Request Sent to HTTPS Port"
+  },
+  {
+    "code": "499",
+    "phrase": "Client Closed Request"
+  },
+  {
+    "code": "5xx",
+    "phrase": "**Server Error**"
+  },
+  {
+    "code": "500",
+    "phrase": "Internal Server Error"
+  },
+  {
+    "code": "501",
+    "phrase": "Not Implemented"
+  },
+  {
+    "code": "502",
+    "phrase": "Bad Gateway"
+  },
+  {
+    "code": "503",
+    "phrase": "Service Unavailable"
+  },
+  {
+    "code": "504",
+    "phrase": "Gateway Time-out"
+  },
+  {
+    "code": "505",
+    "phrase": "HTTP Version Not Supported"
+  },
+  {
+    "code": "506",
+    "phrase": "Variant Also Negotiates"
+  },
+  {
+    "code": "507",
+    "phrase": "Insufficient storage"
+  },
+  {
+    "code": "508",
+    "phrase": "Loop detected"
+  },
+  {
+    "code": "509",
+    "phrase": "Bandwidth Limit Exceeded"
+  },
+  {
+    "code": "510",
+    "phrase": "Not extended"
+  },
+  {
+    "code": "511",
+    "phrase": "Network authentication required"
+  },
+  {
+    "code": "7xx",
+    "phrase": "**Developer Error**"
+  }
+]

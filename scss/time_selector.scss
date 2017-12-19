@@ -1,0 +1,91 @@
+@import 'vars';
+
+$close-btn-size: 18px;
+
+.timerange-selector {
+  position: relative;
+  text-align: right;
+  width: 350px;
+}
+
+.timerange-selector__curve {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  display: block;
+  padding-right: $close-btn-size + 5px;
+}
+
+.timerange-selector__smooth-curve-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  g.smooth-curve__curve {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.timerange-selector__curve__close-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: $close-btn-size;
+  width: $close-btn-size;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: ' ';
+    height: 60%;
+    top: 20%;
+    width: 2px;
+    background-color: $brand-purple;
+    right: 45%;
+  }
+
+  &:before {
+    transform: rotateZ(45deg);
+  }
+
+  &:after {
+    transform: rotateZ(-45deg);
+  }
+}
+
+.time-selector-switch-enter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.time-selector-switch-enter.time-selector-switch-enter-active {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+
+.time-selector-switch-leave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  opacity: 1;
+}
+
+.time-selector-switch-leave.time-selector-switch-leave-active {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition: opacity 0.5s;
+  opacity: 0;
+}

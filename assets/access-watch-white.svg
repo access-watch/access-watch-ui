@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>access-watch</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="3---design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="aw-login-2" transform="translate(-622.000000, -48.000000)" fill="#FFFFFF">
+            <g id="Group-2" transform="translate(467.000000, 48.000000)">
+                <path d="M179,36 L189.498958,36 C189.914349,36 190.289991,35.8313086 190.561594,35.5586449 C190.830111,35.2887198 191,34.9134593 191,34.4989581 L191,1.50104195 C191,1.08520774 190.831866,0.709207243 190.560173,0.437536526 C190.290378,0.170640415 189.914375,0 189.498958,0 L156.501042,0 C155.671204,0 155,0.669578397 155,1.49554521 L155,10.5044548 C155,11.3204455 155.672039,12 156.501042,12 L179,12 L179,18 L156.501042,18 C155.671204,18 155,18.6732339 155,19.5037099 L155,34.4962901 C155,35.338023 155.672039,36 156.501042,36 L167,36 L167,30.7551341 C167,30.3380851 167.333473,30 167.750654,30 L178.249346,30 C178.663921,30 179,30.3374616 179,30.7551341 L179,36 Z" id="access-watch"></path>
+            </g>
+        </g>
+    </g>
+</svg>

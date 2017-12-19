@@ -1,0 +1,16 @@
+@import '../mixins';
+
+$identity-icon-size: 15px;
+$identity-icon-margin: 8px;
+.aw-table__identity-cell {
+  position: relative;
+  padding-left: $identity-icon-size + $identity-icon-margin;
+}
+.aw-table__identity-cell__icon {
+  position: absolute;
+  left: 0;
+  top: calc(50% - #{$identity-icon-size / 2});
+  @include white-to-brand-purple();
+  height: $identity-icon-size;
+  width: $identity-icon-size;
+}

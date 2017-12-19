@@ -1,0 +1,131 @@
+@import '../vars';
+@import '../mixins';
+
+@keyframes springish {
+  0.00% {
+    transform: scale(0);
+  }
+  17.57% {
+    transform: scale(1.2344);
+  }
+  38.18% {
+    transform: scale(0.9513);
+  }
+  58.78% {
+    transform: scale(1.0101);
+  }
+  79.39% {
+    transform: scale(0.9979);
+  }
+  100.00% {
+    transform: scale(1.0004);
+  }
+}
+
+.session-block {
+  text-decoration: none;
+  position: absolute;
+  word-wrap: break-word;
+  overflow: hidden;
+  color: #fff;
+
+  &__content {
+    position: relative;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    padding: 10px;
+    background-color: lighten(#000, 32%);
+    cursor: pointer;
+    height: calc(100% - 2px);
+    margin: 1px;
+    overflow: hidden;
+    &:hover {
+      background-color: lighten(#000, 42%);
+    }
+
+    &--blocked {
+      &::before {
+        content: '';
+        height: 12px;
+        border-bottom: 12px dotted #000;
+        opacity: 0.2;
+        transform: skewX(-45deg);
+        position: absolute;
+        bottom: 0;
+        right: -24px;
+        left: -24px;
+      }
+    }
+  }
+
+  &__identity,
+  &__details {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &__details {
+    line-height: 1.4em;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8em;
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+    svg {
+      fill: #fff;
+    }
+  }
+
+  &--medium {
+    font-size: 13px;
+  }
+  &--large {
+    font-size: 14px;
+  }
+}
+
+.session-block__content {
+  transition: background-color 0.1s;
+}
+
+@each $name, $color in $statuses {
+  .session-block--#{$name} {
+    .session-block__content {
+      background-color: darken($color, 5%);
+      &:hover {
+        background-color: darken($color, 0%);
+      }
+    }
+
+    &.session-block--highlight .session-block__content {
+      background-color: $color;
+    }
+  }
+}
+
+.session-block-- {
+  &suspicious,
+  &ok {
+    color: $brand-purple;
+    .session-block__details {
+      color: $brand-purple;
+    }
+  }
+}
+
+.session-block--medium .session-block__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.session-block--small .session-block__icon {
+  width: 16px;
+  height: 16px;
+}

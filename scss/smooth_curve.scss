@@ -1,0 +1,157 @@
+@import 'vars';
+
+$tooltip-bg: rgba(0, 0, 0, 0.6);
+$arrow-size: 6px;
+$arrow-size-offset: 2px;
+$border-radius: 6px;
+$tooltip-content-margin: 15px;
+$tooltip-content-padding: 6px;
+
+.smooth-curve {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  overflow: hidden;
+}
+
+.smooth-curve__svg {
+  width: 100%;
+}
+
+.smooth-curve__tooltip {
+  transition: opacity 0.2s ease-in;
+  position: relative;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  &:before {
+    content: '';
+    width: 3px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0)
+    );
+  }
+}
+
+.smooth-curve__tooltip__content {
+  background-color: $tooltip-bg;
+  margin: 0 $tooltip-content-margin;
+  padding: $tooltip-content-padding;
+  border-radius: $border-radius;
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: $default-bold-font;
+  text-align: left;
+  min-width: 100px;
+}
+
+.activity-tooltip__date-time {
+  margin-bottom: 8px;
+}
+
+.activity-tooltip__date {
+  font-size: 10px;
+  font-family: $default-light-font;
+}
+
+.activity-tooltip__value {
+  margin-bottom: 3px;
+}
+
+.smooth-curve__tooltip__animation-enter {
+  opacity: 0.01;
+  &-active {
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+}
+
+.smooth-curve__tooltip__animation-leave {
+  opacity: 1;
+  &.smooth-curve__tooltip__animation-leave-active {
+    opacity: 0.01;
+    transition: opacity 0.3s;
+  }
+}
+
+.smooth-curve__tooltip--right {
+  .smooth-curve__tooltip__content {
+    transform: translateX(-100%)
+      translateX(-($tooltip-content-padding + $tooltip-content-margin));
+  }
+}
+
+.smooth-curve__tooltip__title {
+  border-radius: $border-radius $border-radius 0 0;
+  font-family: $default-bold-font;
+}
+
+g.smooth-curve__curve {
+  transform-origin: bottom;
+  opacity: 0;
+  pointer-events: none;
+  stroke-width: 2;
+  //Delay is added here since animation seems to be computationally expensive and the transform-origin
+  //may take some time to strike in somehow
+  animation: step-up 1s 0.4s ease-in-out none,
+    fill-in 0.5s 1.2s ease-in-out forwards;
+}
+
+@keyframes step-up {
+  from {
+    transform: scaleY(0);
+    opacity: 1;
+    fill: transparent;
+  }
+  to {
+    opacity: 1;
+    fill: transparent;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fill-in {
+  from {
+    stroke-width: 2;
+    fill: transparent;
+    opacity: 1;
+  }
+  to {
+    stroke-width: 0;
+    pointer-events: auto;
+    opacity: 1;
+  }
+}
+
+.smooth-curve__tooltip__title,
+.smooth-curve__tooltip__values {
+  padding: 5px 12px;
+}
+
+.smooth-curve__tooltip__values {
+  div {
+    margin: 2px 0;
+  }
+}
+
+.smooth-curve__tooltip__x-value {
+  font-family: $default-light-font;
+}
+
+.smooth-curve__loading {
+  position: absolute;
+  height: 60px;
+  width: 60px;
+  right: 50%;
+  top: 50%;
+  transform: translateX(50%);
+  .loader__circle {
+    background-color: white;
+  }
+}

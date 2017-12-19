@@ -1,0 +1,12 @@
+@import 'vars';
+@import 'mixins';
+
+.addresses-table__flag-icon {
+  .flag-icon {
+    margin-right: 5px;
+  }
+}
+
+.addresses__table__row {
+  @include reputation-table-row-hover();
+}

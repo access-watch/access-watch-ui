@@ -1,0 +1,20 @@
+---
+parser: "babel-eslint"
+extends:
+  - "airbnb"
+  - "plugin:prettier/recommended"
+env:
+  jest: true
+  browser: true
+globals:
+  __DEV__: false
+  process: false
+rules:
+  func-names: 0
+  no-plusplus: 0
+  no-unused-vars:
+    - 2
+    - argsIgnorePattern: "^_$"
+  prefer-template: 0
+  jsx-a11y/no-static-element-interactions: 0
+  react/jsx-filename-extension: 0

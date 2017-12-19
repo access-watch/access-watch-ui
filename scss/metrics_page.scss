@@ -1,0 +1,257 @@
+@import './vars';
+
+$circle-chart-size: 180px;
+$metrics-chart-label-color: #bbe;
+
+.metrics-card {
+  padding-top: 20px;
+}
+
+.metrics-card--reputation {
+  border-right: solid 1px $v-light-gray;
+}
+
+.metrics-card--country-dist {
+  .loading-icon {
+    color: $brand-purple;
+    svg {
+      fill: $brand-purple;
+    }
+  }
+}
+
+.metrics-card__label {
+  line-height: 1.6;
+  color: $metrics-chart-label-color;
+  font-size: $small-text;
+  display: inline-block;
+  .dropdown_label {
+    font-family: $default-bold-font;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-top: 0;
+  }
+}
+
+.styled-number--metrics {
+  .styled-number__fraction-sign,
+  .styled-number__fraction {
+    color: lighten($brand-purple, 30%);
+  }
+}
+
+$metrics-header-height: 150px;
+
+.page-header.page-header--metrics {
+  .page-header-card__value {
+    position: relative;
+    margin: $metrics-header-height/2 0;
+    z-index: 1;
+    mix-blend-mode: color-dodge;
+    pointer-events: none;
+  }
+
+  .page-header-card {
+    border-right: solid 1px $x-light-white-bg;
+  }
+}
+
+.page-header__header--metrics {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.smooth-curve__tooltip--metrics {
+  z-index: 2;
+}
+
+.left-offset-15 {
+  margin-left: 15%;
+}
+
+.Worldmap {
+  position: relative;
+  padding: 24px;
+  text-align: center;
+  font-size: $small-text;
+}
+
+.chart-labels {
+  &__label-wrap {
+    $border-style: $v-light-gray solid 1px;
+    min-width: 105px;
+    width: 35%;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    line-height: 1.6;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    &:nth-child(odd) {
+      border-right: $border-style;
+    }
+    &:nth-child(n + 3) {
+      border-top: $border-style;
+    }
+  }
+
+  &__value {
+    font-size: $robot-percentage-main-font-size;
+    font-family: $robot-percentage-main-font;
+  }
+
+  &__label {
+    $triangle-size: 8px;
+    position: relative;
+    padding-left: $triangle-size/2;
+    font-size: $robot-percentage-sub-font-size;
+
+    &::before {
+      position: absolute;
+      top: 2px;
+      left: - $triangle-size*2;
+      width: 0;
+      height: 0;
+      content: '';
+      border-left: $triangle-size solid transparent;
+      border-right: $triangle-size solid transparent;
+    }
+
+    &--triangle-up {
+      &::before {
+        border-bottom: $triangle-size solid;
+      }
+    }
+
+    &--triangle-down {
+      &::before {
+        border-top: $triangle-size solid;
+      }
+    }
+
+    &--robots {
+      &::before {
+        color: map-get($type-map, 'robot');
+      }
+    }
+
+    &--humans {
+      &::before {
+        color: map-get($type-map, 'browser');
+      }
+    }
+
+    @each $status, $color in $statuses {
+      &--#{$status} {
+        &::before {
+          color: $color;
+        }
+      }
+    }
+  }
+}
+
+.circle-chart--metrics {
+  position: relative;
+  margin: 0 26px 26px;
+  height: $circle-chart-size;
+  width: $circle-chart-size;
+}
+
+@mixin super-color($color) {
+  color: $color;
+  fill: $color;
+}
+
+@mixin color-bot() {
+  // bots vs. humans
+  &--robots {
+    @include super-color(map-get($type-map, 'robot'));
+  }
+
+  &--humans {
+    @include super-color(map-get($type-map, 'browser'));
+  }
+
+  @each $status, $color in $statuses {
+    &--#{$status} {
+      @include super-color($color);
+    }
+  }
+}
+
+.pie-chart__chunk {
+  stroke: #fff;
+  stroke-width: 0px; // distances between chunks
+  fill: $light-gray;
+  cursor: pointer;
+  @include color-bot();
+}
+
+.pie-chart__mask {
+  fill: #fff;
+}
+
+//Over specification since dropdown is included after metrics_page
+.metrics-card--country-dist .dropdownItem-active {
+  .dropdownItem_label {
+    @include color-bot();
+
+    &--all {
+      color: $brand-purple;
+    }
+  }
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem_label.dropdownItem_label,
+.dropdown_label {
+  @include color-bot();
+  &--all {
+    color: $brand-purple;
+  }
+}
+
+.dropdownItem_label {
+  //Make the robots being under robots
+  @each $robot-status, $u in $statuses {
+    &--#{$robot-status} {
+      padding-left: 16px;
+    }
+  }
+}
+
+.smooth-curve {
+  position: absolute;
+  bottom: 0;
+}
+
+.smooth-curve__curve {
+  @each $status, $color in $statuses {
+    &--#{$status} {
+      stroke: $color;
+      fill: $color;
+    }
+  }
+  &--browser {
+    stroke: map-get($type-map, 'browser');
+    fill: map-get($type-map, 'browser');
+  }
+}
+
+.activity-tooltip__value {
+  @each $type, $color in $type-map {
+    &--#{$type} {
+      color: $color;
+    }
+  }
+
+  @each $status, $color in $statuses {
+    &--#{$status} {
+      color: $color;
+    }
+  }
+}

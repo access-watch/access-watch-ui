@@ -1,0 +1,73 @@
+@import '../vars';
+
+$active-border-size: 5px;
+$triangle-size: $active-border-size * 4;
+$checkmark-size: $triangle-size * 0.7;
+$active-border-color: $aw-sub-color;
+
+.integration-picker {
+  display: flex;
+  justify-content: center;
+}
+
+.integration-picker * {
+  box-sizing: border-box;
+}
+
+.integration-picker__language-stack {
+  display: flex;
+  flex-direction: column;
+  margin: $active-border-size;
+}
+
+.integration-picker__item {
+  position: relative;
+  padding: 10px 20px;
+  text-align: center;
+  border: solid 2px $light-gray;
+  border-radius: 18px;
+  margin: $active-border-size;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - #{$active-border-size});
+}
+
+/*.integration-picker__item--active {
+  border: solid $active-border-size $active-border-color;
+  &:before {
+    position: absolute;
+    content: ' ';
+    top: 0;
+    right: 0;
+    border: solid $triangle-size transparent;
+    border-bottom: solid $triangle-size $active-border-color;
+    transform-origin: center;
+    transform: translate(50%, -50%) rotateZ(45deg);
+  }
+
+  &:after {
+    position: absolute;
+    content: ' ';
+    top: 0;
+    right: 0;
+    background-image: url(../assets/checkmark-white.svg);
+    background-position: center center;
+    background-size: contain;
+    height: $checkmark-size;
+    width: $checkmark-size;
+  }
+}*/
+
+.integration-picker__item__link {
+  &:visited, &:hover, &:active, &:link {
+    text-decoration: none;
+    color: $main-color;
+  }
+}
+
+.integration-picker__item__logo {
+  width: 60px;
+  height: 60px;
+}

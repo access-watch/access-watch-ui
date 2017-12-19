@@ -1,0 +1,218 @@
+@import 'vars';
+@import 'mixins';
+
+$filter-text-size: 14px;
+$filter-panel-row-margin: 10px;
+$filter-height: 50px;
+$current-filter-cross-size: 8px;
+$current-filter-cross-thickness: 2px;
+$filter-background-color: #655984;
+
+@mixin add-row-margin($row-margin) {
+  margin-top: $row-margin;
+  margin-bottom: $row-margin;
+}
+
+@mixin filter-with-circle($global, $text-size, $horizontal-padding, $vertical-padding, $colors-map) {
+  &--#{$global} {
+    padding-left: $text-size + $vertical-padding;
+    &::before {
+      content: '';
+      width: $text-size;
+      height: $text-size;
+      border-radius: 50%;
+      position: absolute;
+      left: $vertical-padding/2;
+      top: $text-size/2 - $horizontal-padding/2;
+    }
+  }
+  @each $key, $color in $colors-map {
+    &--#{$key} {
+      &::before {
+        background-color: $color;
+      }
+    }
+  }
+}
+
+.logs-filter {
+  background-color: $filter-background-color;
+  display: flex;
+  align-items: center;
+  height: $filter-height;
+}
+
+.logs-filter__btn {
+  height: $filter-height;
+  width: $filter-height * 1.1;
+  background-color: $brand-blue;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 40%;
+    width: 100%;
+    background-image: url(../assets/filter.svg);
+    background-size: contain;
+    background-position: 45% 50%;
+    background-repeat: no-repeat;
+  }
+
+  $filter-btn-arrow-size: 4px;
+  &:after {
+    content: '';
+    position: absolute;
+    border: solid 2px $brand-purple;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+    top: calc(50% - #{$filter-btn-arrow-size * 0.5});
+    height: $filter-btn-arrow-size;
+    width: $filter-btn-arrow-size;
+    right: $filter-btn-arrow-size * 1.5;
+  }
+}
+
+.logs-filter__current-filters {
+  position: relative;
+  display: inline-flex;
+  padding: 0 10px;
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.logs-filter__current-filters__filter {
+  display: inline-block;
+  &:first-child {
+    margin-left: 15px;
+  }
+}
+
+$current-filter-side-margin: 5px;
+$current-filter-horizontal-padding: 3px;
+$current-filter-vertical-padding: 8px;
+$current-filter-bg-color: white;
+$current-filter-color: $brand-purple;
+$current-filter-font-size: 11px;
+
+.logs-filter__current-filters__filter-value {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: $current-filter-side-margin;
+  margin-right: $current-filter-side-margin;
+  padding: $current-filter-horizontal-padding $current-filter-vertical-padding;
+  padding-right: $current-filter-cross-size + $current-filter-vertical-padding;
+  background-color: $current-filter-bg-color;
+  color: $current-filter-color;
+  border-radius: 10px;
+  font-family: $default-bold-font;
+  font-size: $current-filter-font-size;
+  position: relative;
+
+  &-remove-container {
+    @include cross(2px, $current-filter-cross-size, $current-filter-cross-thickness, $current-filter-color);
+    top: calc(55% - #{$current-filter-cross-size * 0.5});
+    padding-left: $current-filter-cross-size * 1.2 * 0.25;
+    width: $current-filter-cross-size * 1.2;
+  }
+
+  @include filter-with-circle('reputation', $current-filter-font-size, $current-filter-horizontal-padding, $current-filter-vertical-padding, $statuses);
+
+  @include filter-with-circle('type', $current-filter-font-size, $current-filter-horizontal-padding, $current-filter-vertical-padding, $type-map);
+}
+
+.logs-filter--disabled {
+  .logs-filter__current-filters__filter-value {
+    opacity: 0.3;
+  }
+}
+
+.logs-filter__switch {
+  display: flex;
+  font-size: 13px;
+  font-family: $default-light-font;
+  align-items: center;
+}
+
+.logs-filter__switch-btn {
+  margin: 0 10px;
+  &:before {
+    background-color: $filter-background-color;
+  }
+  &--no-filters {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.logs-filter__filters-panel {
+  position: absolute;
+  cursor: default;
+  font-size: $filter-text-size;
+  white-space: nowrap;
+  background-color: white;
+  color: $brand-purple;
+  left: 45%;
+  top: 95%;
+  z-index: 1;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: -3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.logs-filter__filters-panel__title {
+  font-family: $default-bold-font;
+  @include add-row-margin($filter-panel-row-margin);
+}
+
+.logs-filter__filters-panel__filter {
+  @include add-row-margin($filter-panel-row-margin);
+  &-label {
+    display: inline-block;
+    font-family: $default-bold-font;
+    width: 80px;
+  }
+  &-value {
+    $horizontal-padding: 4px;
+    $vertical-padding: 8px;
+    display: inline-block;
+    padding: $horizontal-padding $vertical-padding;
+    position: relative;
+    cursor: pointer;
+    border-radius: 20px;
+
+    &:hover {
+      background-color: rgba(100, 100, 100, 0.1);
+    }
+
+    &--active {
+      background-color: rgba(100, 100, 100, 0.2);
+    }
+
+    @include filter-with-circle('reputation', $filter-text-size, $horizontal-padding, $vertical-padding, $statuses);
+
+    @include filter-with-circle('type', $filter-text-size, $horizontal-padding, $vertical-padding, $type-map);
+  }
+}
+
+$triangle-size: 5px;
+
+.triangle-down {
+  height: 0;
+  width: 0;
+  border: solid $triangle-size transparent;
+  border-top: solid $triangle-size white;
+  display: inline-block;
+  transform: translateY($triangle-size/2);
+  margin-left: $triangle-size/2;
+}
+
+.logs-filter__filters-panel__close-btn {
+  @include cross(12px, 12px, 2px, $brand-purple);
+  //right: 5px;
+}

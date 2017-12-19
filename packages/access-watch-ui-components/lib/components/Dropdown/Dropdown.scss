@@ -1,0 +1,117 @@
+@import '../vars';
+
+$arrow-size: 4px;
+
+.dropdown {
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown_label {
+  background: none;
+  margin-top: 20px;
+  border: 0;
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding: 2px 0px 2px 8px;
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: $default-font;
+  font-size: inherit;
+}
+
+.dropdown_button {
+  cursor: pointer;
+}
+
+.dropdown_icon {
+  display: inline-block;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  border: solid $arrow-size transparent;
+  border-top: solid $arrow-size;
+  margin-left: $arrow-size;
+  transform: translateY(20%);
+  &.open{
+    border-top: solid $arrow-size transparent;
+  }
+}
+
+.dropdownItem {
+  position: relative;
+  padding-left: 16px;
+  padding: 2px 0;
+  display: block;
+  text-decoration: none;
+  padding-left: 24px;
+  background: none;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(163, 177, 191, 0.2);
+  }
+
+  &-active {
+    &::before {
+      display: block;
+      position: absolute;
+      left: 14px;
+      top: 10px;
+      width: 14px;
+      height: 14px;
+      content: '';
+      background-image: url('./checkmark.svg');
+    }
+  }
+}
+
+.dropdownItem_label {
+  display: block;
+  margin: 0 16px;
+  line-height: 32px;
+  font-size: 14px;
+}
+
+.dropdown_items,
+.dropdown_children-wrapper{
+  position: absolute;
+  background-color: rgba(255,255,255,0.95);
+  box-shadow: $box-shadow-default;
+  margin-top: 4px;
+  z-index: 2;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.dropdown_items {
+  list-style: none;
+  width: 220px;
+  padding: 6px 0;
+}
+
+.dropdown_children-wrapper {
+  transform: translateX(-50%);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.transition_dropdown-enter {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+.transition_dropdown-enter.transition_dropdown-enter-active {
+  opacity: 1;
+}
+.transition_dropdown-leave {
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+.transition_dropdown-leave.transition_dropdown-leave-active {
+  opacity: 0;
+}

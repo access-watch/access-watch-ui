@@ -1,0 +1,62 @@
+@import 'vars';
+@import 'mixins';
+
+.rules {
+  padding: 80px 40px;
+}
+
+.rules__title {
+  font-size: 25px;
+  padding-left: $rounded-table-border-radius;
+  margin: 25px 0;
+}
+
+.rules {
+  .rounded-table__header__cell,
+  .rounded-table__body__cell {
+    &--type {
+      width: 150px;
+      font-family: $default-bold-font;
+    }
+    &--value {
+      width: 200px;
+    }
+    @each $match-type in ('blocked', 'passed') {
+      &--#{$match-type} {
+        @include activityResolver();
+      }
+    }
+    &--created {
+      width: 150px;
+    }
+    &--remove {
+      position: relative;
+      width: 30px;
+    }
+  }
+  .rounded-table__body__cell {
+    &--blocked {
+      color: $green;
+    }
+    &--passed {
+      color: map-get($statuses, 'bad');
+    }
+  }
+}
+
+.btn.rules__rule__remove-btn {
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  border: none;
+  background-image: url('../assets/trash.svg');
+  font-size: 0;
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.4;
+  &:hover {
+    opacity: 1;
+  }
+}

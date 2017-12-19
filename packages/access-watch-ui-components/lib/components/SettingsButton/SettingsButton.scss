@@ -1,0 +1,83 @@
+@import '../vars';
+
+$default-size: 35px;
+
+.settings-button {
+  height: $default-size;
+  width: $default-size;
+
+  .dropdown {
+    height: 100%;
+    width: 100%;
+  }
+
+  .dropdown_button {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: $main-color;
+    outline: none;
+  }
+
+  .dropdown_children-wrapper {
+    min-width: 350px;
+    transform: unset;
+    border-radius: 0;
+    padding: 0;
+    background-color: white;
+    margin: 0;
+  }
+
+  .dropdownItem_label {
+    font-size: 12px;
+    line-height: 26px;
+  }
+
+  .avatar {
+    display: flex;
+    padding: 15px;
+    background-color: $v-light-gray;
+    margin: 0;
+  }
+
+  .avatar__img {
+    height: 60px;
+    width: 60px;
+  }
+
+  .avatar__legend {
+    text-align: left;
+    margin: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .avatar__name {
+    margin-bottom: 5px;
+    font-size: 15px;
+  }
+}
+
+.settings-button__actions {
+  padding: 20px;
+  font-size: 13px;
+}
+
+.settings-button__action {
+  font-family: $default-bold-font;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.settings-button__action--log_out {
+  text-transform: uppercase;
+  color: red;
+  margin: 20px 0 0;
+}

@@ -1,0 +1,40 @@
+$main-color: #46396a;
+$aw-sub-color: #59f;
+$reveal-main-color: #58ecb9;
+$reveal-sub-color: #23dbcb;
+$reveal-dark-color: #27c2bc;
+
+$dark-gray: #7d7398;
+$gray: #8e8eae;
+$light-gray: #eeefff;
+$v-light-gray: #f6f5f7;
+
+$orange: #ffbc44;
+
+$statuses: (
+  bad: #ff3b6e,
+  suspicious: #ecf15c,
+  ok: #c8c0de,
+  nice: #5c71f1,
+);
+
+$type-map: (
+  robot: #1ac9d4,
+  browser: #914cd6
+);
+
+$box-shadow-default: 0 1px 3px 0 rgba(82, 105, 127, .2);
+
+$navbar-bg: $reveal-main-color;
+$navbar-height: 44px;
+$navbar-active-link-bg: $main-color;
+$navbar-active-link-color: $navbar-bg;
+$navbar-text-color: $main-color;
+$btn-default-color: $aw-sub-color;
+
+$big-page-header: 240px;
+$medium-page-header: 180px;
+
+$default-font: Raleway;
+$default-light-font: Raleway200, $default-font;
+$default-bold-font: Raleway700, $default-font;

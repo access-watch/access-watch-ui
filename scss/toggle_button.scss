@@ -1,0 +1,31 @@
+@import 'vars';
+
+$toggle-button-height: 16px;
+$toggle-button-width: 30px;
+$toggle-button-circle-ratio: 0.8;
+
+.toggle-button {
+  position: relative;
+  border-radius: 20px;
+  height: $toggle-button-height;
+  width: $toggle-button-width;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: $brand-blue;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.toggle-button:before {
+  content: '';
+  height: $toggle-button-height * $toggle-button-circle-ratio;
+  width: $toggle-button-height * $toggle-button-circle-ratio;
+  border-radius: 100%;
+  background-color: $brand-purple;
+}
+
+.toggle-button--disabled {
+  justify-content: flex-end;
+  background-color: $v-light-gray;
+}

@@ -1,0 +1,110 @@
+@import 'vars';
+
+.requests-page {
+  background-color: darken($light-gray, 5%);
+  color: $text-color;
+  box-shadow: 0 1px 3px 0 rgba(82, 105, 127, 0.2);
+  border-radius: 2px;
+  position: relative;
+
+  .logs {
+    background: repeating-linear-gradient(
+      0deg,
+      #eee,
+      #eee 30px,
+      #fff 30px,
+      #fff 60px
+    );
+  }
+  thead .logs__row {
+    background-color: rgba(241, 244, 247, 1);
+  }
+}
+
+.logs-filters-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.search-logs {
+  position: relative;
+  margin: 40px 0 0 0; // extra margin-top to make the metrics visible
+  padding: 16px 24px 16px 24px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.search-logs__form {
+  width: 100%;
+
+  input {
+    color: rgba(255, 255, 255, 0.9);
+    color: $text-color;
+    font-size: 16px;
+    background-color: transparent;
+    border: 0;
+    display: block;
+    outline: none;
+    width: 100%;
+  }
+}
+
+::placeholder {
+  font-style: italic;
+  font-weight: normal;
+  color: $gray;
+}
+
+.search-logs__clear {
+  position: absolute;
+  top: 0;
+  right: 24px;
+  display: none;
+  background: none;
+  border: 0;
+  line-height: 47px;
+  font-size: 18px;
+  cursor: pointer;
+  outline: none;
+
+  &::before {
+    content: '✕';
+  }
+}
+.search-logs__clear--visible {
+  display: inline-block;
+}
+
+.requests-metrics {
+  text-align: center;
+  line-height: 24px;
+  margin: 20px 0;
+
+  p {
+    margin: 0;
+  }
+}
+
+.requests-metrics__minute {
+  font-size: 14px;
+}
+
+.requests-metrics__day {
+  margin-top: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.logs-empty {
+  height: 360px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.4);
+
+  .logs-empty__content {
+    flex: 1;
+    text-align: center;
+  }
+}

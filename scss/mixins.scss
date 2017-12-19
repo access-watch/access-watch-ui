@@ -1,0 +1,142 @@
+@import 'vars';
+
+$btn-bg: #fff;
+$btn-default-color: $dark-gray;
+
+%btn-default {
+  // make sure there's space around for the box-shadow
+  margin: 3px;
+  outline: none;
+  border: solid 1px $btn-default-color;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+  padding: 6px 15px;
+  vertical-align: middle;
+  line-height: 1.6;
+  color: $btn-default-color;
+  font-family: inherit;
+  font-size: 14px;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+%btn-link {
+  border: 0;
+  padding: inherit;
+  vertical-align: inherit;
+  font-size: inherit;
+}
+
+@mixin btn-link-color($color) {
+  color: $color;
+
+  &:focus,
+  &:hover {
+    color: darken($color, 5%);
+  }
+
+  &:active {
+    color: darken($color, 15%);
+  }
+}
+
+%btn-opacity {
+  opacity: 0.4;
+
+  &:focus,
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 1;
+  }
+}
+
+@mixin btn-type($color, $bg: $btn-bg) {
+  border-color: $color;
+  background-color: $bg;
+  color: $color;
+
+  &:hover,
+  &:focus {
+    background-color: mix($color, $bg, 5%);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px mix($color, $bg, 10%);
+  }
+
+  &:active {
+    box-shadow: none;
+    background-color: mix($color, $bg, 14%);
+  }
+}
+
+@mixin white-to-brand-purple() {
+  fill: white;
+  filter: brightness(25%) sepia(100%) hue-rotate(200deg);
+}
+
+@mixin cross($position, $size, $thickness, $color) {
+  position: absolute;
+  top: $position;
+  right: $position;
+  height: $size;
+  width: $size;
+  cursor: pointer;
+  &:before,
+  &:after {
+    content: ' ';
+    position: absolute;
+    height: 100%;
+    width: $thickness;
+    background-color: $color;
+  }
+
+  &:before {
+    transform: rotateZ(45deg);
+  }
+
+  &:after {
+    transform: rotateZ(-45deg);
+  }
+}
+
+@mixin table-row-hover($suffix, $color) {
+  &--#{$suffix} {
+    &:hover {
+      background-color: darken($color, 7%);
+    }
+  }
+}
+
+@mixin reputation-table-row-hover() {
+  @each $status, $color in $logs-row-colors {
+    @include table-row-hover($status, $color);
+  }
+  @each $status in ('suspicious', 'bad') {
+    &--#{$status} {
+      background-color: map-get($logs-row-colors, $status);
+    }
+  }
+}
+
+@mixin activityResolver() {
+  text-align: right;
+  margin-right: 20px;
+  width: 90px;
+  &Activity {
+    width: 150px;
+    margin-right: 20px;
+  }
+  &Speed {
+    width: 90px;
+    margin-right: 30px;
+  }
+}

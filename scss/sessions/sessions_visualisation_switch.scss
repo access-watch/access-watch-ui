@@ -1,0 +1,23 @@
+.sessions-visualisation-switch {
+  display: flex;
+  justify-content: flex-end;
+  height: 20px;
+  &__icon {
+    height: 100%;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 10px;
+    fill: white;
+    opacity: 0.6;
+    &--active {
+      opacity: 1;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &:hover {
+      opacity: 0.8;
+    }
+    transition: opacity 0.2s;
+  }
+}

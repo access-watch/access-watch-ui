@@ -1,0 +1,67 @@
+.conversation__body {
+  border:none;
+  background:#46396a;
+}
+.conversation__header {
+  width:353px;
+  height:36px;
+  box-shadow:none;
+  background:#46396a;
+  left:0;
+  right:inherit;
+  z-index: 200;
+}
+.app__team {
+  display:none;
+}
+.app__text {
+  border:none;
+  padding:15px 0 0;
+  font-size: 14px;
+}
+.header__button--conversations {
+  display:none;
+}
+.header__button--minimize .button__icon, .header__button--close .button__icon {
+  width:16px;
+  height:16px;
+  border-radius:8px;
+  opacity:.8;
+}
+.header__button--minimize, .header__button--close {
+  float:left;
+}
+.header__button--close {
+  margin:10px 0 0 15px;
+}
+.header__button--minimize {
+  margin:10px 0 0 10px;
+}
+.header__button--minimize .button__icon {
+  background:#ebf13d;
+}
+.header__button--close .button__icon {
+  background:#f54f6a;
+}
+.textarea__button {
+  top:28px;
+  right:5px;
+}
+.admin__name {
+  height:20px;
+  padding-top:3px;
+}
+.app__admins {
+  padding-top:15px;
+}
+.part__comment--admin .comment__body, .profile__app {
+  border-radius:10px;
+  box-shadow:none;
+}
+.launcher__button {
+  background:#59f !important;
+  border:none !important;
+}
+.kwikchat__launcher {
+  display: none;
+}

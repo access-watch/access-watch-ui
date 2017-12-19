@@ -1,0 +1,40 @@
+@import 'vars';
+@import 'button'; // need those mixins :s
+
+@mixin btn-icon ($icon) {
+  &::before {
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-bottom: -2px;
+    margin-right: 6px;
+    content: '';
+    background-image: $icon;
+  }
+}
+
+$session-details-action-color: #fff;
+
+.rule-button {
+  @include btn-type(white, transparent);
+
+  &--block {
+    @include btn-icon(url('../assets/blocked-white.svg'));
+    border-radius: 2px;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: $red;
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    &:hover {
+      border-color: inherit;
+    }
+  }
+}

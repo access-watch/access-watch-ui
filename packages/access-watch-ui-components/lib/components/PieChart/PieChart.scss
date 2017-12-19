@@ -1,0 +1,10 @@
+@import '../vars';
+
+.pie-chart__empty {
+  fill: $v-light-gray;
+  cursor: not-allowed;
+}
+
+.pie-chart__mask {
+  fill: white;
+}

@@ -1,0 +1,60 @@
+@import 'vars';
+@import 'table_mixins';
+
+$horizontal-cell-padding: 7px;
+$vertical-cell-padding: 10px;
+$cell-padding: $horizontal-cell-padding $vertical-cell-padding;
+
+.aw-table {
+  font-size: 11px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.aw-table__header {
+  text-align: left;
+  background-color: rgba(241, 244, 247, 1);
+  border-bottom: solid 1px $v-light-gray;
+}
+
+.aw-table__header__row {
+  height: 30px;
+  //background-color: $v-light-gray;
+}
+
+.aw-table__header__cell {
+  padding: $cell-padding;
+  &--sortable {
+    cursor: pointer;
+    &:after {
+      $arrow-size: 5px;
+      $arrow-margin: 5px;
+      content: '';
+      display: inline-block;
+      margin-left: $arrow-size;
+      margin-bottom: -#{$arrow-size * 0.8};
+      height: 0;
+      width: 0;
+      border: solid $arrow-size transparent;
+      border-top-color: inherit;
+      opacity: 0.5;
+    }
+  }
+  &--sorted {
+    &:after {
+      opacity: 1;
+    }
+  }
+}
+
+.aw-table__body__row--clickable {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.aw-table__body__cell {
+  padding: $cell-padding;
+  border-bottom: solid 1px $v-light-gray;
+}

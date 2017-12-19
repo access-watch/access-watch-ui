@@ -1,0 +1,30 @@
+@mixin font-src($fontName, $fontFileName) {
+  $fontsPath: '../assets/fonts/';
+  src: url($fontsPath + $fontFileName + '.eot'); /* IE9 Compat Modes */
+  src: local($fontName),
+    url($fontsPath + $fontFileName + '.eot?#iefix') format('embedded-opentype'),
+    url($fontsPath + $fontFileName + '.woff2') format('woff2'),
+    url($fontsPath + $fontFileName + '.woff') format('woff'),
+    url($fontsPath + $fontFileName + '.svg#' + $fontName) format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Raleway200';
+  font-style: normal;
+  font-weight: 200;
+  @include font-src('Raleway200','raleway-v11-latin-200');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  @include font-src('Raleway','raleway-v11-latin-regular');
+}
+
+@font-face {
+  font-family: 'Raleway700';
+  font-style: normal;
+  font-weight: 700;
+  @include font-src('Raleway700','raleway-v11-latin-700');
+}

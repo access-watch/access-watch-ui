@@ -1,0 +1,28 @@
+@import '../vars';
+@import '../table_mixins';
+
+.aw-table__sessions__reputation-preview {
+  width: $reputation-preview-width;
+  padding: 0;
+  @each $reputation, $color in $reputation-preview-colors {
+    &--#{$reputation} {
+      background-color: $color;
+    }
+  }
+}
+
+@include table-cell() {
+  &--count {
+    text-align: right;
+    margin-right: 10px;
+  }
+  &--reputationPreview {
+    padding: 0;
+  }
+}
+
+@include table-body-cell() {
+  &--count {
+    padding-right: 25px;
+  }
+}
