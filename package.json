@@ -102,6 +102,9 @@
       "^.+\\.(css|scss)$": "identity-obj-proxy"
     },
     "setupFiles": ["./jest/setup.js"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/packages"
+    ],
     "unmockedModulePathPatterns": [
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"

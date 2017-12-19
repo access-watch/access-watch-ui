@@ -39,7 +39,7 @@ describe('metrics', () => {
         type: TYPE_INITIAL,
         activity: ACTIVITY_INITIAL,
         graphActivity: ACTIVITY_INITIAL,
-        requests: { total: 0, speed: 0, avgSpeed: 0 },
+        requests: { count: 0, speed: 0, avgSpeed: 0 },
         status: STATUS_INITIAL,
         worldmap: {},
       });
@@ -70,7 +70,7 @@ describe('metrics', () => {
         activity: ACTIVITY_INITIAL,
         graphActivity: ACTIVITY_INITIAL,
         type: TYPE_INITIAL,
-        requests: { total: 0, speed: 0, avgSpeed: 0 },
+        requests: { count: 0, speed: 0, avgSpeed: 0 },
         status: STATUS_INITIAL,
         worldmap: {},
       });
