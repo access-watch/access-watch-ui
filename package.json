@@ -93,11 +93,7 @@
     "globals": {
       "__DEV__": true
     },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json"
-    ],
+    "moduleFileExtensions": ["js", "jsx", "json"],
     "transform": {
       ".*": "./jest/preprocessor.js"
     },
@@ -105,9 +101,7 @@
       "^!raw-loader!(.+)$": "<rootDir>/jest/empty.js",
       "^.+\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupFiles": [
-      "./jest/setup.js"
-    ],
+    "setupFiles": ["./jest/setup.js"],
     "unmockedModulePathPatterns": [
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
