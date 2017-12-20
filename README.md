@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/access-watch/access-watch-web.svg?token=yjWeuyCCabyh8U1gC95A&branch=master)](https://travis-ci.com/access-watch/access-watch-web)
-
 ## Usage
 
 * `npm start`: Runs a webpack dev server. Point browser to
