@@ -6,6 +6,15 @@
   "files": [
     "dist"
   ],
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Access Watch Technologies GmbH",
+    "email": "team@access.watch"
+  },
+  "contributors": [
+    "Jean Duthon <jean@access.watch>",
+    "François Hodierne <francois@access.watch>"
+  ],
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --hot",
