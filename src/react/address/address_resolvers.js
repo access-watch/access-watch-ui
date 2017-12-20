@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { FlagIcon, countries, addressTypeResolver } from 'access-watch-ui-components';
+import {
+  FlagIcon,
+  countries,
+  addressTypeResolver,
+} from 'access-watch-ui-components';
 
 import {
   tableResolvers as sessionTableResolvers,
