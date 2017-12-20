@@ -18,14 +18,14 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --hot",
-    "test": "node_modules/jest-cli/bin/jest.js",
-    "test:watch": "node_modules/jest-cli/bin/jest.js --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint './src/**/*.{js,jsx}' './__tests__/**/*.js'",
     "build": "NODE_ENV=production webpack",
     "build:staging": "NODE_ENV=staging webpack",
     "clean": "rm -rf ./dist",
-    "prettier": "node_modules/prettier/bin/prettier.js --write '**/*'",
-    "prettier:watch": "node_modules/prettier/bin/prettier.js --watch '**/*'",
+    "prettier": "prettier --write '**/*'",
+    "prettier:watch": "prettier --watch '**/*'",
     "prepublish": "npm run build"
   },
   "devDependencies": {
