@@ -25,8 +25,8 @@ const getFill = (cc, metrics, color) => {
     gradientFactor,
     colorMin,
     color,
-    metrics.percentage,
-    percentMax
+    metrics.percentage / 100,
+    percentMax / 100
   );
 };
 

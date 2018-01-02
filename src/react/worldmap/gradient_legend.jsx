@@ -25,10 +25,6 @@ export default class GradientLegend extends React.Component {
       reverse,
     } = this.props;
 
-    const calculateCurrentPercent = function(step, steps) {
-      return step / steps * 100;
-    };
-
     const getStopColor = function(percentage) {
       const cMin = reverse ? colorMax : colorMin;
       const cMax = reverse ? colorMin : colorMax;
@@ -52,8 +48,8 @@ export default class GradientLegend extends React.Component {
             {precisionRange.map(x => (
               <stop
                 key={x}
-                offset={`${calculateCurrentPercent(x, precision)}%`}
-                stopColor={getStopColor(calculateCurrentPercent(x, precision))}
+                offset={`${x / precision * 100}%`}
+                stopColor={getStopColor(x / precision)}
               />
             ))}
           </linearGradient>

@@ -9,9 +9,11 @@ export const stringToRGB = function(colorString) {
   return rgbObj;
 };
 
+const toColorHex = c => `${c < 16 ? '0' : ''}${c.toString(16)}`;
+
 export const rgbToString = function(RGBObj) {
-  return `#${RGBObj.R.toString(16)}${RGBObj.G.toString(16)}${RGBObj.B.toString(
-    16
+  return `#${toColorHex(RGBObj.R)}${toColorHex(RGBObj.G)}${toColorHex(
+    RGBObj.B
   )}`;
 };
 
@@ -38,7 +40,7 @@ export const calculateColorGradient = (
   minColor,
   maxColor,
   percentage,
-  maxPercent = 100
+  maxPercent = 1
 ) => {
   if (!percentage) {
     return minColor;
