@@ -216,8 +216,7 @@ class LogsPage extends React.Component {
       logEnd,
       activity,
     } = this.props;
-    const perMinute =
-      metrics.requests.speed && metrics.requests.speed.perMinute;
+    const { count, speed = 0 } = metrics.requests;
     const { fullTextSearchOpened } = this.state;
 
     return (
@@ -237,14 +236,14 @@ class LogsPage extends React.Component {
                   <p className="requests-metrics__day">
                     {metrics.loading && 'Loading'}
                     {!metrics.loading &&
-                      formatNumber(metrics.requests.count, {
+                      formatNumber(count, {
                         maximumFractionDigits: 2,
                       })}
                     {' requests'}
                   </p>
                   <p className="requests-metrics__minute">
                     {metrics.loading && 'Loading requests speed...'}
-                    {!metrics.loading && `${formatNumber(perMinute || 0)}/min`}
+                    {!metrics.loading && `${formatNumber(speed)}/min`}
                   </p>
                 </div>
               </Col>
