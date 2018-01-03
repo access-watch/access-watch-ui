@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-jest.unmock('../../../src/react/utilities/styled_number');
-
 import StyledNumber from '../../../src/react/utilities/styled_number';
 
 describe('StyledNumber', () => {
