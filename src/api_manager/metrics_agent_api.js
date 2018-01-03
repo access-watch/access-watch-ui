@@ -305,7 +305,7 @@ export const getMetricsSummaryObs = (p, interval) =>
 
 export const getMetricsSpeed = ({
   timeFilter = {
-    start: new Date().getTime() - 5 * 60 * 1000,
+    start: new Date().getTime() - 15 * 60 * 1000,
     end: new Date().getTime(),
     step: 10,
   },
