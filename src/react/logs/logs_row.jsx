@@ -170,14 +170,12 @@ export default class LogsRow extends React.Component {
               'logs__col',
               `logs__col--${key.replace('.', '-')}`,
               {
-                [`logs__col--${key.replace('.', '-')}--${
-                  entry.reputation.status
-                }`]: entry.reputation,
+                [`logs__col--${key.replace('.', '-')}--${entry.reputation &&
+                  entry.reputation.status}`]: entry.reputation,
               },
               {
-                [`logs__col--${key.replace('.', '-')}--${
-                  entry.identity.type
-                }`]: entry.identity,
+                [`logs__col--${key.replace('.', '-')}--${entry.identity &&
+                  entry.identity.type}`]: entry.identity,
               }
             )}
           >

@@ -25,7 +25,7 @@ const IdentityIcon = ({ robot, reputation, user_agent: ua, className }) => {
   }
   if (!icon) {
     icon =
-      identityIcons[robot ? 'robot' : ua.type || 'unknown'][
+      identityIcons[robot ? 'robot' : (ua && ua.type) || 'unknown'][
         reputation.status || 'ok'
       ];
   }
