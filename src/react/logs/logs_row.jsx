@@ -99,16 +99,9 @@ const columnValue = {
     </span>
   ),
   // eslint-disable-next-line
-  identity: ({ robot, reputation, user_agent: ua }) =>
-    robot || ua ? (
-      <IdentityTableCell
-        robot={robot}
-        reputation={reputation}
-        user_agent={ua}
-      />
-    ) : (
-      ''
-    ),
+  identity: ({ robot, reputation, user_agent: ua }) => (
+    <IdentityTableCell robot={robot} reputation={reputation} user_agent={ua} />
+  ),
 };
 
 const rowBaseClass = 'logs__row';
