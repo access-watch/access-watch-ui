@@ -12,7 +12,7 @@ const hasRobotIcon = robot => robot && robot.icon;
 const hasUaName = ua => ua && ua.agent && ua.agent.name;
 
 export const getIdentityLabel = ({ robot, ua }) =>
-  (robot && robot.name) || (ua && ua.agent && ua.agent.label) || '';
+  (robot && robot.name) || (ua && ua.agent && ua.agent.label) || 'Unknown';
 
 const IdentityIcon = ({ robot, reputation, user_agent: ua, className }) => {
   let icon;
@@ -25,7 +25,7 @@ const IdentityIcon = ({ robot, reputation, user_agent: ua, className }) => {
   }
   if (!icon) {
     icon =
-      identityIcons[robot ? 'robot' : ua.type || 'unknown'][
+      identityIcons[robot ? 'robot' : (ua && ua.type) || 'unknown'][
         reputation.status || 'ok'
       ];
   }
