@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "The Access Watch User Interface",
   "main": "dist/main.js",
   "files": [
@@ -93,7 +93,11 @@
     "globals": {
       "__DEV__": true
     },
-    "moduleFileExtensions": ["js", "jsx", "json"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
     "transform": {
       ".*": "./jest/preprocessor.js"
     },
@@ -101,7 +105,9 @@
       "^!raw-loader!(.+)$": "<rootDir>/jest/empty.js",
       "^.+\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupFiles": ["./jest/setup.js"],
+    "setupFiles": [
+      "./jest/setup.js"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/packages"
     ],
