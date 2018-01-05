@@ -303,18 +303,22 @@ export const getMetricsObs = (
 export const getMetricsSummaryObs = (p, interval) =>
   getMetricsObs(p, interval).map(createSummary);
 
+const latestFullMinute = _ => {
+  const now = msToS(new Date().getTime());
+  return sToMs(now - now % 60);
+};
+
+// Other speed are calculated rounded to minutes, so do the same here by default
 export const getMetricsSpeed = ({
   timeFilter = {
-    start: new Date().getTime() - 5 * 60 * 1000,
-    end: new Date().getTime(),
-    step: 10,
+    start: latestFullMinute() - 15 * 60 * 1000,
+    end: latestFullMinute(),
+    step: 60,
   },
   ...restProps
 }) =>
   getMetricsObs({ ...restProps, timeFilter }).map(timeSerie => {
-    const { start, end } = timeSerie.length
-      ? getTimeSerieBoundaries(timeSerie)
-      : { ...timeFilter };
+    const { start, end } = timeFilter;
     // If time is 0, step was apparently too big, so estimate it with end being now
     const time = msToS(end - start || new Date().getTime() - start);
     return calcSpeedFromTimeSerie(time)(timeSerie);
