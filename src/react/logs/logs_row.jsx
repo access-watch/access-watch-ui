@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { FlagIcon } from 'access-watch-ui-components';
-
 import { V_SHOW_TEXT_TOOLTIP, dispatch } from '../../event_hub';
 import SVGIcon from '../utilities/svg_icon';
 import { formatDateAndTime, formatOnlyHour } from '../../i18n';
 
 import IdentityTableCell from '../sessions/identity_table_cell';
 import { logPropType } from '../prop_types';
+import AddressLabel from '../address/address_label';
 
 const handleHover = e => {
   // attach the tooltip to the table cell to get it properly centered
@@ -41,13 +40,16 @@ const columnValue = {
   time: entry => formatDateAndTime(entry.time),
   timeH: entry => formatOnlyHour(entry.time),
 
-  'address.label': entry => (
-    <span onMouseEnter={handleHover}>
-      {entry.countryCode && (
-        <FlagIcon cc={entry.countryCode} title={entry.country} />
-      )}
-      {entry.address.label}
-    </span>
+  // eslint-disable-next-line
+  'address.label': ({ address, countryCode, country }) => (
+    <AddressLabel
+      onMouseEnter={handleHover}
+      address={{
+        ...address,
+        countryCode,
+        country,
+      }}
+    />
   ),
 
   'request.url': entry => (

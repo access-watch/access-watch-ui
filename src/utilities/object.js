@@ -10,6 +10,22 @@ export const convertBackendKeys = obj =>
     {}
   );
 
+export const convertBackendKeysRecursive = item => {
+  if (typeof item === 'object' && item) {
+    if (Array.isArray(item)) {
+      return item.slice().map(convertBackendKeysRecursive);
+    }
+    return Object.keys(item).reduce(
+      (acc, key) => ({
+        ...acc,
+        [upperCaseUnderscores(key)]: convertBackendKeysRecursive(item[key]),
+      }),
+      {}
+    );
+  }
+  return item;
+};
+
 // pick keys from object, omitting the rest
 export const pickKeys = keys => obj =>
   keys.reduce(
