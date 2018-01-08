@@ -105,7 +105,7 @@ class LogsPage extends React.Component {
         q: route.q || '',
         filters: (route.filtersEnabled && route.filters) || null,
         beforeTime: (logs.length >= 1
-          ? new Date(logs[logs.length - 1].time)
+          ? new Date(logs[logs.length - 1].request.time)
           : new Date()
         ).toISOString(),
       });
@@ -187,11 +187,11 @@ class LogsPage extends React.Component {
     );
     let previousDate;
     if (i > 0) {
-      previousDate = new Date(logs[i - 1].time);
+      previousDate = new Date(logs[i - 1].request.time);
     } else {
       previousDate = new Date();
     }
-    const currentDate = new Date(row.time);
+    const currentDate = new Date(row.request.time);
     if (!dayEquality(currentDate, previousDate)) {
       const separatorDate = getPureDayFromDate(currentDate);
       return [

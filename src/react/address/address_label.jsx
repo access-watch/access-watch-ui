@@ -10,7 +10,7 @@ const AddressLabel = ({ address, ...htmlProps }) => (
     {address.countryCode && (
       <FlagIcon cc={address.countryCode} title={address.country} />
     )}
-    {address.label || address.hostname || address.value}
+    {address.hostname || address.value}
   </span>
 );
 
@@ -18,7 +18,6 @@ AddressLabel.propTypes = {
   address: PropTypes.shape({
     countryCode: PropTypes.string,
     country: PropTypes.string,
-    label: PropTypes.string,
     hostname: PropTypes.string,
     value: PropTypes.string.isRequired,
   }).isRequired,
