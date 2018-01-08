@@ -42,20 +42,35 @@ const filterLogs = (logs, filters) => {
   return filteredLogs;
 };
 
+let websocket$;
+let websocketStatus$;
+
+const getWebsocket = api => {
+  if (!websocket$) {
+    websocketStatus$ = new Subject().distinctUntilChanged();
+    const handleStreamOpen = _ => websocketStatus$.next(true);
+    const handleStreamClose = _ => {
+      websocketStatus$.next(false);
+      websocket$ = null;
+      websocketStatus$ = null;
+    };
+    websocket$ = api.ws
+      .createSocket('/logs', null, handleStreamOpen, handleStreamClose)
+      .bufferTime(100);
+  }
+  return { ws$: websocket$, wsStatus$: websocketStatus$.asObservable() };
+};
+
 export default ({ api, transformLog, store: logsStore = {} }) => {
   // creates a stream of logs using websocket or polling as fallback
   const streamLogs = params => {
-    const open$ = new Subject().distinctUntilChanged();
-    const handleStreamOpen = _ => open$.next(true);
-    const handleStreamClose = _ => open$.next(false);
-    const logs$ = api.ws
-      .createSocket('/logs', null, handleStreamOpen, handleStreamClose)
-      .bufferTime(100)
+    const { ws$, wsStatus$ } = getWebsocket(api);
+    const logs$ = ws$
       .filter(entries => entries.length > 0)
       .map(slogs => filterLogs(slogs, params.filters))
       .map(logs => logs.map(transformLog));
 
-    return [logs$, open$.asObservable()];
+    return [logs$, wsStatus$];
   };
 
   // store logs that can be shown at a later state
