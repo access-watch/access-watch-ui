@@ -249,7 +249,11 @@ class LogsPage extends React.Component {
               </Col>
               <Col md="40%">
                 <div className="page-header__time-selector">
-                  <TimeSelector activity={activity.activity} route={route} />
+                  <TimeSelector
+                    activity={activity.activity}
+                    route={route}
+                    hideTimerange
+                  />
                 </div>
               </Col>
             </Row>

@@ -13,6 +13,16 @@ const data = Object.keys(domStringMap).reduce(
   {}
 );
 
+const windowConfig = {
+  time: {
+    sliderValues: ['auto', 30, 60, 360, 1440],
+  },
+  metrics: {
+    expiration: 24 * 3600,
+  },
+  ...(window.config || {}),
+};
+
 const config = Object.assign(
   {
     // Base url for assets
@@ -23,6 +33,7 @@ const config = Object.assign(
 
     websocket: process.env.WEBSOCKET_BASE_URL || 'ws://localhost:3000',
   },
+  windowConfig,
   data
 );
 

@@ -1,0 +1,53 @@
+@import 'vars';
+
+$default-color: $light-white-bg;
+$active-color: #5c96ff;
+$dark-active-color: #446eb9;
+
+.slider {
+  width: 100%;
+}
+
+.slider__track-container {
+  cursor: pointer;
+}
+
+.slider__track {
+  position: relative;
+  background-color: $default-color;
+  border-radius: 12px;
+  height: 100%;
+}
+
+.slider__steps {
+  display: flex;
+  font-size: 14px;
+}
+
+.slider__step {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  color: $default-color;
+}
+
+.slider__step--active {
+  color: $active-color;
+  font-weight: bold;
+}
+
+.slider__handler {
+  position: absolute;
+  background-color: $dark-active-color;
+  background-image: linear-gradient(
+    to left,
+    $dark-active-color,
+    lighten($active-color, 5%)
+  );
+  border: $active-color solid 1px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: -3px 3px 6px rgba(0, 0, 0, 0.3);
+  transition: left 0.41s cubic-bezier(0.17, 0.47, 0.17, 1.24);
+}

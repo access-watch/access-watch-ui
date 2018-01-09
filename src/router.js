@@ -30,10 +30,12 @@ const ROUTE_STATE_LOCAL_STORAGE_ID = 'aw-route-state';
 const timerangeProps = {
   timerangeFrom: 'g',
   timerangeTo: 'g',
+  timeSlider: 'g',
 };
 
 const DEFAULT_TIMERANGE_PROPS = {
   ticks: 150,
+  timeSlider: 'auto',
 };
 
 const timeProps = {

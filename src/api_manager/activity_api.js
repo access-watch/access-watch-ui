@@ -7,6 +7,10 @@ import { routeChange$, metricsRoute$ } from '../router';
 
 import { dataEvents, D_ACTIVITY } from '../event_hub';
 
+import config from '../app_config';
+
+const METRICS_RETENTION = config.metrics.expiration;
+
 // The possible amount of time by which activity data will be grouped
 const possibleSteps = [
   1,
@@ -63,8 +67,14 @@ const activityDetailsPollStart$ = Observable.merge(metricsRoute$)
 
 const activityPollStart$ = Observable.merge(metricsRoute$, routeWithTimerange$)
   .combineLatest(serverDataStartTime$.startWith(undefined))
-  .map(([{ hours = 24, ticks }, serverDataStartTime]) => {
-    const start = serverDataStartTime || new Date().getTime() - hours * 3600000;
+  .map(([{ timeSlider, ticks }, serverDataStartTime]) => {
+    let start = serverDataStartTime;
+    // If no auto, we want the full timespan
+    if (timeSlider !== 'auto') {
+      start = new Date().getTime() - timeSlider * 60000;
+    } else if (!start) {
+      start = new Date().getTime() - METRICS_RETENTION * 1000;
+    }
     return {
       start,
       step: findPossibleStep((new Date().getTime() - start) / 3600000, ticks),
@@ -93,7 +103,7 @@ const activityResFactory = (obs, takeUntil) =>
 
 let startSlidingIntervalTimeout;
 
-const startSlidingInterval = ({ step, start, hours, ticks, obs }) => {
+const startSlidingInterval = ({ step, start, ticks, obs }) => {
   if (startSlidingIntervalTimeout) {
     window.clearTimeout(startSlidingIntervalTimeout);
     startSlidingIntervalTimeout = null;
@@ -102,7 +112,7 @@ const startSlidingInterval = ({ step, start, hours, ticks, obs }) => {
   const nextTimeInterval = nextStep * ticks * 1000;
   const startDelta = new Date().getTime() - new Date(start).getTime();
   const nextQuerying = nextTimeInterval - startDelta;
-  if (startDelta >= hours * 3600000) {
+  if (startDelta >= METRICS_RETENTION * 1000) {
     obs.next(null);
     startSlidingIntervalTimeout = null;
     return;
@@ -112,7 +122,6 @@ const startSlidingInterval = ({ step, start, hours, ticks, obs }) => {
     startSlidingInterval({
       step: nextStep,
       start,
-      hours,
       ticks,
       obs,
     });
@@ -124,7 +133,7 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
   serverDataStartTime$,
 ])
   .withLatestFrom(Observable.merge(metricsRoute$, routeWithTimerange$))
-  .filter(([{ activity, query }, { hours = 24, ticks, timerangeFrom }]) => {
+  .filter(([{ activity, query }, { timeSlider, ticks, timerangeFrom }]) => {
     // We don't modify at all the query with a timerange
     if (timerangeFrom) {
       return true;
@@ -134,7 +143,7 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
       const firstActivityTime = activity[0][0];
       const timeDelta = Math.abs(new Date(start).getTime() - firstActivityTime);
       // If firstActivityTime/start parameter delta is different more than the step asked for
-      if (timeDelta > step * 1000) {
+      if (timeDelta > step * 1000 && timeSlider === 'auto') {
         serverDataStartTimeObserver.next(firstActivityTime);
         startSlidingInterval({
           step: findPossibleStep(
@@ -142,16 +151,38 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
             ticks
           ),
           start: firstActivityTime,
-          hours,
           ticks,
           obs: serverDataStartTimeObserver,
         });
         return false;
       }
+      if (timeSlider !== 'auto') {
+        if (startSlidingIntervalTimeout) {
+          window.clearTimeout(startSlidingIntervalTimeout);
+          startSlidingIntervalTimeout = null;
+        }
+      }
     }
     return true;
   })
-  .map(([realRes]) => realRes);
+  .map(([realRes, { timeSlider }]) => {
+    // If slider is not on auto, we want the full timeline with 0 activity
+    if (timeSlider !== 'auto') {
+      const { query, activity } = realRes;
+      const { start, step } = query;
+      const firstActivityDelta = Math.floor((activity[0][0] - start) / 1000);
+      if (firstActivityDelta > step) {
+        const missingActivity = new Array(Math.floor(firstActivityDelta / step))
+          .fill(0)
+          .map((_, i) => [start + i * step, {}]);
+        return {
+          query,
+          activity: [...missingActivity, ...activity],
+        };
+      }
+    }
+    return realRes;
+  });
 
 export const activityDetailRes$ = activityResFactory(
   activityDetailsPollStart$,
