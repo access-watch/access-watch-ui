@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "The Access Watch User Interface",
   "main": "dist/main.js",
   "files": [
