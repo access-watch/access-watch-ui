@@ -27,7 +27,7 @@ const SessionDetails = ({
     if (logs.logs.length) {
       [session] = logs.logs;
       session.count = logs.logs.length;
-      session.updated = logs.logs[0].time;
+      session.updated = logs.logs[0].request.time;
     } else {
       // FIXME In case of an old human session, this loading might be forever
       return (

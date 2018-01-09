@@ -83,7 +83,7 @@ export default class RequestInfo extends Component {
             'Method',
             <span className="request-info__bubble">{request.method}</span>
           )}
-          {dd('Host', request.host)}
+          {dd('Host', request.headers && request.headers.host)}
           {dd('Path', path)}
           {dd('Protocol', request.protocol)}
           <dd className="request-info__sub-section">

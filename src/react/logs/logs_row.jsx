@@ -37,8 +37,8 @@ const handleHover = e => {
 // some special column with additional data or functionality.
 const columnValue = {
   updated: entry => formatDateAndTime(entry.updated),
-  time: entry => formatDateAndTime(entry.time),
-  timeH: entry => formatOnlyHour(entry.time),
+  time: entry => formatDateAndTime(entry.request.time),
+  timeH: entry => formatOnlyHour(entry.request.time),
 
   // eslint-disable-next-line
   'address.label': ({ address, countryCode, country }) => (
@@ -50,6 +50,11 @@ const columnValue = {
         country,
       }}
     />
+  ),
+
+  // eslint-disable-next-line react/prop-types
+  'request.host': ({ request = {} }) => (
+    <span> {request.headers && request.headers.host} </span>
   ),
 
   'request.url': entry => (
