@@ -89,7 +89,7 @@ timeSelector.propTypes = {
 };
 
 timeSelector.defaultProps = {
-  hideTimerange: false,
+  hideTimerange: true,
 };
 
 export default timeSelector;
