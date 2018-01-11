@@ -21,3 +21,10 @@ If you are developing on the project, you may find yourself wanting to modify
 some components coming from the shared components library `access-watch-ui-components`.
 To install `node_modules` for both projects, you can `lerna bootstrap`.
 You can easily link the dependency with lerna (`lerna link`) to see your modifications in the main ui.
+
+### Publishing
+
+To publish a new version to npm, you should use `lerna publish`.
+Though in most cases, you will only have modified the UI itself, not the `access-watch-ui-components` package.
+In such case, you want to only publish this package.
+You can do so with `lerna publish --scope access-watch-ui`.
