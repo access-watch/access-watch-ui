@@ -1,4 +1,4 @@
-import { Observable, Subject, Scheduler } from 'rxjs';
+import { Observable, ReplaySubject, Scheduler } from 'rxjs';
 import { extractTimerange } from '../api_manager/utils';
 
 // maximum requests that we can have renedered at the same time.
@@ -47,7 +47,7 @@ let websocketStatus$;
 
 const getWebsocket = api => {
   if (!websocket$) {
-    websocketStatus$ = new Subject().distinctUntilChanged();
+    websocketStatus$ = new ReplaySubject(1);
     const handleStreamOpen = _ => websocketStatus$.next(true);
     const handleStreamClose = _ => {
       websocketStatus$.next(false);
