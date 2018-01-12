@@ -128,9 +128,6 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
     delete p.name; // unused
 
     if (initialLogs.length > 0) {
-      // we already have logs initially, use the latest entry time as after
-      // param
-      p.after = new Date(initialLogs[0].time).toISOString();
       delete p.offset;
     }
 
