@@ -125,6 +125,9 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
     return [logs$, wsStatus$];
   };
 
+  const getSelection = logsParams =>
+    'logs:' + (logsParams.filters ? JSON.stringify(logsParams.filters) : '');
+
   // store logs that can be shown at a later state
   // for instance instead of loading
   const storeLogs = logsParams => state => {
@@ -133,9 +136,6 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
       logsStore[getSelection(logsParams)] = state.logs;
     }
   };
-
-  const getSelection = logsParams =>
-    'logs:' + (logsParams.filters ? JSON.stringify(logsParams.filters) : '');
 
   const getInitialLogs = logsParams => {
     // the current bucket or selection of logs
