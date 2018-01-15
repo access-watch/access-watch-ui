@@ -141,7 +141,6 @@ export default class SmoothCurve extends Component {
     super(props, defaultProps);
 
     this.domCurves = {};
-    this.movingAverageFactor = 5;
     this.CPS = null;
     this.limitY = props.height;
     this.state = { activeCurve: null, rangeSelectionInProgress: false };
@@ -326,6 +325,7 @@ export default class SmoothCurve extends Component {
         .map((_, i) =>
           newDataSeriesName.reduce((acc, dsn) => acc + data[dsn][i][1], 0)
         )
+        .filter(a => a > 0)
         .sort();
 
       const aggregatedMean = Math.max(
