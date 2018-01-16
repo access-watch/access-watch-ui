@@ -63,11 +63,6 @@ const activityDetailsPollStart$ = Observable.merge(metricsRoute$)
     start,
     step: findPossibleStep((end - start) / 3600000, ticks),
   }))
-  .map(({ end, start, step }) => ({
-    step,
-    end: end - end % (step * 1000),
-    start: start - start % (step * 1000),
-  }))
   .share();
 
 const activityPollStart$ = Observable.merge(metricsRoute$, routeWithTimerange$)
@@ -134,7 +129,9 @@ const startSlidingInterval = ({ step, start, ticks, obs }) => {
 };
 
 const getFullActivity = ({ query, activity }) => {
-  const { start, end, step } = query;
+  const { step } = query;
+  const start = query.start - query.start % (step * 1000);
+  const end = query.end - query.end % (step * 1000);
   const firstActivityDelta = Math.floor((activity[0][0] - start) / 1000);
   const lastActivityDelta = Math.floor(
     (end - activity[activity.length - 1][0]) / 1000
