@@ -67,9 +67,7 @@ const columnValue = {
 
   'identity.combined': entry => {
     const combinedIdentity =
-      (entry.robot && entry.robot.name) ||
-      entry.identity.name ||
-      entry.identity.label;
+      (entry.robot && entry.robot.name) || entry.identity.label;
     const shouldDisplayUaLabel =
       !combinedIdentity || combinedIdentity === entry.identity.label;
     const uaLabel =

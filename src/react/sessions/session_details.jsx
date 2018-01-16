@@ -59,8 +59,6 @@ const SessionDetails = ({
   let title;
   if (robot && robot.name) {
     title = robot.name;
-  } else if (identity && identity.name) {
-    title = identity.name;
   } else if (ua && ua.agent && ua.agent.label) {
     title = ua.agent.label;
   }
