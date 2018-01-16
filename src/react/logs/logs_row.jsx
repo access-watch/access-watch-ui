@@ -63,35 +63,6 @@ const columnValue = {
 
   'reputation.preview': _ => <span />,
 
-  'identity.label': entry => <span>{entry.identity.label}</span>,
-
-  'identity.combined': entry => {
-    const combinedIdentity =
-      (entry.robot && entry.robot.name) || entry.identity.label;
-    const shouldDisplayUaLabel =
-      !combinedIdentity || combinedIdentity === entry.identity.label;
-    const uaLabel =
-      entry.user_agent &&
-      entry.user_agent.agent &&
-      entry.user_agent.agent.label;
-    return (
-      <span>
-        {combinedIdentity && (
-          <span className="logs__col--identity-combined__identity">
-            {combinedIdentity}
-          </span>
-        )}
-        {shouldDisplayUaLabel &&
-          uaLabel && (
-            <span className="logs__col--identity-combined__user-agent">
-              {combinedIdentity && ' - '}
-              {uaLabel}
-            </span>
-          )}
-      </span>
-    );
-  },
-
   'user_agent.agent.label': entry => (
     <span onMouseEnter={handleHover}>
       {entry.agentIcon && (
