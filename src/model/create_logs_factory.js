@@ -108,10 +108,12 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
       initLogsObs = Observable.of(initLogs);
     } else {
       initLogsObs = api.request(_ =>
-        api.http.get('/logs', {
-          ...pickParamsKeys(params),
-          ...querySearchFactory(params.filters, params.q),
-        })
+        api.http
+          .get('/logs', {
+            ...pickParamsKeys(params),
+            ...querySearchFactory(params.filters, params.q),
+          })
+          .then(logs => logs.map(transformLog))
       );
     }
     const { ws$, wsStatus$ } = getWebsocket(api);
