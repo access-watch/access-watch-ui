@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { ObjectPropertiesEqual } from '../../utilities/object';
+import { arrayValuesEquals } from '../../utilities/array';
+
 const defaultMax = dataPoints =>
   dataPoints.reduce((max, v) => Math.max(max, v), 0);
 
@@ -23,7 +26,12 @@ const getMaskId = id => `spark-line__mask__${id}`;
 const getGradientId = id => `spark-line__gradient__${id}`;
 
 class SparkLine extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.handleHover = this.handleHover.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+  }
 
   componentDidMount() {
     const { parentElement } = this.dom;
@@ -31,21 +39,37 @@ class SparkLine extends React.Component {
     const padding =
       parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
     const width = parentElement.offsetWidth - padding;
-    // TODO FIXME Setting state in componentDidMount is not great,
-    // should find something better like an HOC which will give in the width
+    // Setting state in didMount is normally not advisable, but here our render
+    // as long as this state is not ready is blank, so it's fine performance-wise
     // eslint-disable-next-line
     this.setState({ width });
   }
 
-  handleHover = (x, y, { clientX, clientY }) => {
+  shouldComponentUpdate(props, nextState) {
+    const { intensityGradient, dataPoints } = this.props;
+    if (!ObjectPropertiesEqual(this.state, nextState)) {
+      return true;
+    }
+    if (intensityGradient.id !== props.intensityGradient.id) {
+      return true;
+    }
+    const regularValues = ['height', 'max', 'length'];
+    const regValueChanged = regularValues.reduce(
+      (bool, k) => bool || props[k] !== this.props[k],
+      false
+    );
+    return regValueChanged || !arrayValuesEquals(dataPoints, props.dataPoints);
+  }
+
+  handleHover(x, y, { clientX, clientY }) {
     this.setState({
       currentHover: { x, y, clientX, clientY },
     });
-  };
+  }
 
-  handleMouseLeave = _ => {
+  handleMouseLeave() {
     this.setState({ currentHover: null });
-  };
+  }
 
   render() {
     const { width = 0, currentHover } = this.state;
@@ -54,6 +78,22 @@ class SparkLine extends React.Component {
       dataPoints: origDataPoints,
       intensityGradient,
     } = this.props;
+    const svgProps = {
+      viewBox: `0 0 ${width} ${height}`,
+      height,
+      width,
+      className: 'spark-line',
+      ref: ref => {
+        this.dom = ref;
+      },
+      style: {
+        overflow: 'visible',
+        cursor: 'default',
+      },
+    };
+    if (!width) {
+      return <svg {...svgProps} />;
+    }
     const max = this.props.max || defaultMax(origDataPoints);
     const length = this.props.length || origDataPoints.length;
     const dataPoints = origDataPoints.map((y, x) => ({
@@ -70,19 +110,7 @@ class SparkLine extends React.Component {
     };
 
     return (
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        height={height}
-        width={width}
-        className="spark-line"
-        ref={ref => {
-          this.dom = ref;
-        }}
-        style={{
-          overflow: 'visible',
-          cursor: 'default',
-        }}
-      >
+      <svg {...svgProps}>
         {intensityGradient && (
           <defs>
             <mask id={getMaskId(intensityGradient.id)}>
