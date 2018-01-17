@@ -11,7 +11,7 @@ const lightColor = '#5599ff';
 const ActivitySparkLine = ({ id, speeds: { perMinute } }) => (
   <SparkLine
     height={15}
-    dataPoints={[...perMinute, ...Array(14 - perMinute.length).fill(0)]}
+    dataPoints={perMinute}
     intensityGradient={{
       id,
       stops: [

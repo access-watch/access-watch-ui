@@ -10,12 +10,12 @@ const sumArray = arr => arr.reduce((sum, v) => sum + v, 0);
 
 export const getAvgSpeedAndCount = ({ speed: originalSpeed }) => {
   const speeds = convertBackendKeys(originalSpeed);
-  // First speed returned is always an approximation, so ignore it if we have others
-  if (speeds.perMinute.length > 1) {
-    speeds.perMinute.shift();
-  }
+  speeds.perMinute = [
+    ...speeds.perMinute,
+    ...Array(15 - (speeds.perMinute ? speeds.perMinute.length : 0)).fill(0),
+  ];
   const { perMinute, perHour } = speeds;
-  const speed = perMinute.length ? sumArray(perMinute) / perMinute.length : 0;
+  const speed = sumArray(perMinute) / perMinute.length;
   const count = sumArray(perHour);
   return {
     speeds,
