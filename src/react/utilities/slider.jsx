@@ -5,13 +5,21 @@ import { Observable } from 'rxjs';
 
 import '../../../scss/slider.scss';
 
+const getKeyIndex = (values, key) => values.findIndex(({ id }) => id === key);
+const getOffset = (values, key, handlerSize) =>
+  `calc(${getKeyIndex(values, key) /
+    (values.length - 1) *
+    100}% - ${handlerSize / 2}px)`;
+
 export default class Slider extends React.Component {
   static propTypes = {
-    activeKey: PropTypes.string.isRequired,
+    activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
     values: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+          .isRequired,
+        label: PropTypes.string,
       })
     ).isRequired,
     onChange: PropTypes.func.isRequired,
@@ -34,14 +42,11 @@ export default class Slider extends React.Component {
     };
     this.onTrackClick = this.onTrackClick.bind(this);
     this.getTrackMargin = this.getTrackMargin.bind(this);
-    this.changeHandlerPosTo = this.changeHandlerPosTo.bind(this);
     this.getSliderProperties = this.getSliderProperties.bind(this);
-    this.setHandlerToRightPos = this.setHandlerToRightPos.bind(this);
   }
 
   componentDidMount() {
     this.initDragAndDrop();
-    this.setHandlerToRightPos();
   }
 
   componentWillUnmount() {
@@ -57,7 +62,6 @@ export default class Slider extends React.Component {
       numberOfSteps
     );
     this.setState({ noTransition: false });
-    this.changeHandlerPosTo(newActiveStep);
     this.handleChange(this.props.values[newActiveStep].id);
   };
 
@@ -72,7 +76,6 @@ export default class Slider extends React.Component {
         newPosition = Math.max(currentPosition - 1, 0);
       }
       if (newPosition !== currentPosition) {
-        this.changeHandlerPosTo(newPosition);
         this.handleChange(values[newPosition].id);
       }
     }
@@ -84,20 +87,6 @@ export default class Slider extends React.Component {
     const { left, width } = this.track.getBoundingClientRect();
     const numberOfSteps = this.props.values.length - 1;
     return { left, width, numberOfSteps };
-  }
-
-  setHandlerToRightPos() {
-    const { values, activeKey } = this.props;
-    const activePos = values.findIndex(({ id }) => id === activeKey);
-    this.changeHandlerPosTo(activePos);
-  }
-
-  changeHandlerPosTo(newActiveStep) {
-    const { width, numberOfSteps } = this.getSliderProperties();
-    this.setState({
-      handlerPosition:
-        newActiveStep * width / numberOfSteps - this.props.handlerSize / 2,
-    });
   }
 
   initDragAndDrop() {
@@ -126,7 +115,7 @@ export default class Slider extends React.Component {
     this.changeActiveKeySub = handlerMouseDown$
       .flatMap(_ => mouseUp$.take(1))
       .subscribe(e => {
-        this.setState({ noTransition: false });
+        this.setState({ noTransition: false, handlerPosition: null });
         this.onTrackClick(e);
       });
   }
@@ -151,8 +140,9 @@ export default class Slider extends React.Component {
     const { handlerPosition, noTransition } = this.state;
     const trackMargin = this.getTrackMargin();
     const transition = noTransition ? 'none' : false;
+    const left = handlerPosition || getOffset(values, activeKey, handlerSize);
     const handlerStyle = {
-      left: `${handlerPosition}px`,
+      left,
       width: `${handlerSize}px`,
       height: `${handlerSize}px`,
       top: `${trackHeight / 2 - handlerSize / 2}px`,

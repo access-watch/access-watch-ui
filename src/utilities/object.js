@@ -56,13 +56,16 @@ export const ObjectPropertiesEqual = (a, b) => {
   }
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
-  return (
-    keysA.length === keysB.length &&
-    keysA.reduce(
-      (diff, k) => diff && keysB.indexOf(k) !== -1 && a[k] === b[k],
-      true
-    )
-  );
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+  for (let i = 0; i < keysA.length; i++) {
+    const k = keysA[i];
+    if (a[k] !== b[k]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 export const convertObjValues = fn => obj =>
