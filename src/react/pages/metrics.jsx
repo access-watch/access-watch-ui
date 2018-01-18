@@ -125,7 +125,7 @@ class MetricsPage extends React.Component {
 
     return (
       <div className="metrics">
-        <div className="page-header page-header--metrics">
+        <div className="page-header page-header--metrics page-header--big">
           <div className="page-header__header page-header__header--metrics">
             <Row gutter={0}>
               <Col md="50%" />

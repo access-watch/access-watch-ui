@@ -11,12 +11,11 @@ import {
 } from '../sessions/resolvers';
 
 import Sessions from '../sessions/sessions';
-import RobotsRowHeader from '../robots/robots_row_header';
+import SessionToolbar from '../sessions/session_toolbar';
 import IdentityTableCell from '../sessions/identity_table_cell';
-import SessionsVisualisationSwitch from '../sessions/sessions_visualisation_switch';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
-import { robotsMetricsPropType, robotSessionsPropType } from '../prop_types';
+import { robotSessionsPropType } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
 import '../../../scss/sessions/sessions_page.scss';
@@ -70,7 +69,7 @@ const rowClassResolver = robot => {
   return status ? `robots__table__row--${status}` : '';
 };
 
-const RobotsPage = ({ route, metrics, robots }) => (
+const RobotsPage = ({ route, robots }) => (
   <div className="robots-page page--sessions">
     <div className="page-header page-header--robots">
       <div className="page-header__header">
@@ -80,12 +79,9 @@ const RobotsPage = ({ route, metrics, robots }) => (
               Top Robots {`(${timeDisplay()})`}
             </span>
           </Col>
-          <Col md="50%">
-            <SessionsVisualisationSwitch route={route} />
-          </Col>
         </Row>
       </div>
-      <RobotsRowHeader metrics={metrics} route={route} />
+      <SessionToolbar route={route} />
     </div>
     <Sessions
       sessions={robots}
@@ -105,7 +101,6 @@ RobotsPage.propTypes = {
   ).isRequired,
   // cf : https://github.com/yannickcr/eslint-plugin-react/issues/1389
   /* eslint-disable react/no-typos */
-  metrics: robotsMetricsPropType.isRequired,
   robots: robotSessionsPropType.isRequired,
   /* eslint-enable react/no-typos */
 };
