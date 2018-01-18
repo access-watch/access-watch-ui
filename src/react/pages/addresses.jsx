@@ -9,14 +9,12 @@ import {
   reputationResolver,
 } from '../address/address_resolvers';
 
-import TimeSelector from '../time/time_selector';
 import RobotsRowHeader from '../robots/robots_row_header';
 import Sessions from '../sessions/sessions';
 import SessionsVisualisationSwitch from '../sessions/sessions_visualisation_switch';
 import {
   routePropType,
   addressSessionsPropType,
-  activityPropType,
   robotsMetricsPropType,
 } from '../prop_types';
 
@@ -28,20 +26,17 @@ const rowClassResolver = address => {
   return status ? `addresses__table__row--${status}` : '';
 };
 
-const AddressesPage = ({ route, activity, addresses, robotsMetrics }) => (
+const AddressesPage = ({ route, addresses, robotsMetrics }) => (
   <div className="addresses-page page--sessions">
     <div className="page-header page-header--addresses">
       <div className="page-header__header">
         <Row gutter={0}>
           <Col md="50%">
             <span className="page-header__header-title">
-              Top Addresses {timeDisplay(route) && `(${timeDisplay(route)})`}
+              Top Addresses {`(${timeDisplay()})`}
             </span>
           </Col>
           <Col md="50%">
-            <div className="page-header__time-selector">
-              <TimeSelector activity={activity.activity} route={route} />
-            </div>
             <SessionsVisualisationSwitch route={route} />
           </Col>
         </Row>
@@ -65,7 +60,6 @@ const AddressesPage = ({ route, activity, addresses, robotsMetrics }) => (
 AddressesPage.propTypes = {
   route: routePropType.isRequired,
   addresses: addressSessionsPropType.isRequired,
-  activity: activityPropType.isRequired,
   robotsMetrics: robotsMetricsPropType.isRequired,
 };
 /* eslint-enable react/no-typos */

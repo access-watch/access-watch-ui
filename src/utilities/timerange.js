@@ -75,7 +75,11 @@ const timerangeDisplay = (from, to) => {
   } interval`;
 };
 
-export const timeDisplay = ({ timerangeFrom, timerangeTo, timeSlider }) =>
+export const timeDisplay = ({
+  timerangeFrom,
+  timerangeTo,
+  timeSlider = 'auto',
+} = {}) =>
   (timerangeFrom && timerangeDisplay(timerangeFrom, timerangeTo)) ||
   'last ' +
     secondsToHumanDisplay(

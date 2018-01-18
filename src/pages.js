@@ -48,38 +48,29 @@ globalLogs$.connect();
  * Observable that emits the Sessions overview page.
  * @fires Pages#PageChange
  */
-export const onRobotsPage = robots$
-  .combineLatest(globalActivity$.takeUntil(routeChange$))
-  .map(
-    ([
-      { route, routeDetails, robots, robotDetails, robotsMetrics },
-      activity,
-    ]) => ({
-      element: (
-        <RobotsPageComponent
-          robots={robots}
-          route={route}
-          activity={activity}
-          metrics={robotsMetrics}
-        />
-      ),
-      name: 'robots',
-      ...(robotDetails
-        ? {
-            sidePanel: {
-              element: (
-                <SessionDetailsComponent
-                  {...robotDetails}
-                  route={routeDetails}
-                />
-              ),
-              BEMblock: 'session-details',
-              bgRoute: 'robots',
-            },
-          }
-        : {}),
-    })
-  );
+export const onRobotsPage = robots$.map(
+  ({ route, routeDetails, robots, robotDetails, robotsMetrics }) => ({
+    element: (
+      <RobotsPageComponent
+        robots={robots}
+        route={route}
+        metrics={robotsMetrics}
+      />
+    ),
+    name: 'robots',
+    ...(robotDetails
+      ? {
+          sidePanel: {
+            element: (
+              <SessionDetailsComponent {...robotDetails} route={routeDetails} />
+            ),
+            BEMblock: 'session-details',
+            bgRoute: 'robots',
+          },
+        }
+      : {}),
+  })
+);
 
 /**
  * @fires Pages#PageChange
@@ -211,35 +202,29 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
   name: 'status',
 }));
 
-export const onAddressesPage = addresses$
-  .combineLatest(globalActivity$.takeUntil(routeChange$))
-  .map(
-    ([
-      { route, routeDetails, addresses, addressDetails, robotsMetrics },
-      activity,
-    ]) => ({
-      element: (
-        <AddressesPageComponent
-          addresses={addresses}
-          route={route}
-          activity={activity}
-          robotsMetrics={robotsMetrics}
-        />
-      ),
-      name: 'addresses',
-      ...(addressDetails
-        ? {
-            sidePanel: {
-              element: (
-                <AddressDetails {...addressDetails} route={routeDetails} />
-              ),
-              BEMblock: 'session-details',
-              bgRoute: 'addresses',
-            },
-          }
-        : {}),
-    })
-  );
+export const onAddressesPage = addresses$.map(
+  ({ route, routeDetails, addresses, addressDetails, robotsMetrics }) => ({
+    element: (
+      <AddressesPageComponent
+        addresses={addresses}
+        route={route}
+        robotsMetrics={robotsMetrics}
+      />
+    ),
+    name: 'addresses',
+    ...(addressDetails
+      ? {
+          sidePanel: {
+            element: (
+              <AddressDetails {...addressDetails} route={routeDetails} />
+            ),
+            BEMblock: 'session-details',
+            bgRoute: 'addresses',
+          },
+        }
+      : {}),
+  })
+);
 
 export const onRulesPage = rules$.map(({ rules }) => ({
   element: <RulesPageComponent rules={rules} />,

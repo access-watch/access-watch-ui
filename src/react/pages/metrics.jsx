@@ -131,11 +131,7 @@ class MetricsPage extends React.Component {
               <Col md="50%" />
               <Col md="50%">
                 <div className="page-header__time-selector">
-                  <TimeSelector
-                    activity={activity.activity}
-                    route={route}
-                    hideTimerange={false}
-                  />
+                  <TimeSelector activity={activity.activity} route={route} />
                 </div>
               </Col>
             </Row>

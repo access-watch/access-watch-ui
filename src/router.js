@@ -62,7 +62,6 @@ const routerStateStoreConfig = {
     worldMapFilters: 'p',
   },
   [ROUTE_ROBOTS]: {
-    ...timeProps,
     ...sessionProps,
     reputation: 'p',
   },
@@ -79,7 +78,6 @@ const routerStateStoreConfig = {
     ...timeProps,
   },
   [ROUTE_ADDRESSES]: {
-    ...timeProps,
     ...sessionProps,
     reputation: 'p',
   },
@@ -95,7 +93,6 @@ const routerStateStore = new RouterStateStore(
 // default query params to use if none was specified
 // these are overridden by params in window.location
 export const ROBOTS_DEFAULT_PARAMS = {
-  ...DEFAULT_TIME_PROPS,
   ...DEFAULT_SESSION_PROPS,
 };
 
@@ -114,7 +111,6 @@ export const METRICS_DEFAULT_PARAMS = {
 };
 
 export const ADDRESSES_DEFAULT_PARAMS = {
-  ...DEFAULT_TIME_PROPS,
   ...DEFAULT_SESSION_PROPS,
   visType: 'table',
 };

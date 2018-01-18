@@ -11,17 +11,12 @@ import {
 } from '../sessions/resolvers';
 
 import Sessions from '../sessions/sessions';
-import TimeSelector from '../time/time_selector';
 import RobotsRowHeader from '../robots/robots_row_header';
 import IdentityTableCell from '../sessions/identity_table_cell';
 import SessionsVisualisationSwitch from '../sessions/sessions_visualisation_switch';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
-import {
-  robotsMetricsPropType,
-  activityPropType,
-  robotSessionsPropType,
-} from '../prop_types';
+import { robotsMetricsPropType, robotSessionsPropType } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
 import '../../../scss/sessions/sessions_page.scss';
@@ -75,20 +70,17 @@ const rowClassResolver = robot => {
   return status ? `robots__table__row--${status}` : '';
 };
 
-const RobotsPage = ({ route, activity, metrics, robots }) => (
+const RobotsPage = ({ route, metrics, robots }) => (
   <div className="robots-page page--sessions">
     <div className="page-header page-header--robots">
       <div className="page-header__header">
         <Row gutter={0}>
           <Col md="50%">
             <span className="page-header__header-title">
-              Top Robots {timeDisplay(route) && `(${timeDisplay(route)})`}
+              Top Robots {`(${timeDisplay()})`}
             </span>
           </Col>
           <Col md="50%">
-            <div className="page-header__time-selector">
-              <TimeSelector activity={activity.activity} route={route} />
-            </div>
             <SessionsVisualisationSwitch route={route} />
           </Col>
         </Row>
@@ -114,7 +106,6 @@ RobotsPage.propTypes = {
   // cf : https://github.com/yannickcr/eslint-plugin-react/issues/1389
   /* eslint-disable react/no-typos */
   metrics: robotsMetricsPropType.isRequired,
-  activity: activityPropType.isRequired,
   robots: robotSessionsPropType.isRequired,
   /* eslint-enable react/no-typos */
 };
