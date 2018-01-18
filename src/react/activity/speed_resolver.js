@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { capitalize } from '../../utilities/string';
-import { formatNumber, formatSpeedMin } from '../../i18n';
+import { formatNumber } from '../../i18n';
 
-import ActivitySparkLine from './activity_spark_line';
+import ActivityCell from './activity_cell';
 
 const createSpeedResolvers = ({ id, label = capitalize(id) }) => [
   {
@@ -15,16 +15,12 @@ const createSpeedResolvers = ({ id, label = capitalize(id) }) => [
     id: `${id}Activity`,
     label: 'Activity',
     resolver: obj => (
-      <ActivitySparkLine
+      <ActivityCell
         id={`${obj.id}${capitalize(id)}`}
         speeds={obj[id].speeds}
+        speed={obj[id].speed}
       />
     ),
-  },
-  {
-    id: `${id}Speed`,
-    label: 'Speed',
-    resolver: obj => formatSpeedMin(obj[id]),
   },
 ];
 

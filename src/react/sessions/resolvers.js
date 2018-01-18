@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { formatNumber, formatSpeedMin } from '../../i18n';
-import ActivitySparkLine from '../activity/activity_spark_line';
+import ActivityCell from '../activity/activity_cell';
 
 import '../../../scss/sessions/aw-table_sessions.scss';
 
@@ -27,13 +27,7 @@ export const tableResolvers = [
   {
     id: 'activity',
     label: 'Activity (last 15m)',
-    resolver: ActivitySparkLine,
-  },
-  {
-    id: 'speed',
-    label: 'Speed',
-    resolver: formatSpeedMin,
-    sortable: true,
+    resolver: ActivityCell,
   },
 ];
 
