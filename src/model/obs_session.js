@@ -7,10 +7,11 @@ import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
 import rules$ from '../store/obs_rules_store';
+import { getIn } from '../utilities/object';
 
 export const createSessionDetailsObs = ({
   routeId,
-  logIdentifier,
+  logMapping,
   sessionDetails$,
   lastSessions,
   type,
@@ -28,7 +29,9 @@ export const createSessionDetailsObs = ({
         .switchMap(session =>
           Observable.of(session).combineLatest(
             createLogs({
-              filters: logIdentifier(session),
+              filters: {
+                [logMapping]: [getIn(session, logMapping.split('.'))],
+              },
               filtersEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
@@ -60,7 +63,7 @@ export const createSessions$ = ({
   createFilter,
   type,
   routeId,
-  logIdentifier,
+  logMapping,
 }) => {
   let lastSessions = [];
 
@@ -102,7 +105,7 @@ export const createSessions$ = ({
   });
   const detailsSessions$ = createSessionDetailsObs({
     routeId,
-    logIdentifier,
+    logMapping,
     lastSessions,
     sessionDetails$,
     type,

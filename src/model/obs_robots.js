@@ -20,7 +20,7 @@ const robotSessions$ = createSessions$({
   createFilter,
   type,
   routeId: 'robot',
-  logIdentifier: ({ robot }) => ({ robot: robot.id }),
+  logMapping: 'robot.id',
 });
 
 const allRobotsRoute$ = Observable.merge(robotsRoute$, robotDetailsRoute$);
