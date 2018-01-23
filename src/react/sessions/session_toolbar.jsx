@@ -39,49 +39,43 @@ class SessionToolbar extends React.Component {
     const { route } = this.props;
     const { reputation } = route;
     return (
-      <div className="page-header__body">
-        <Row gutter={0} className="session-toolbar">
-          <Col md="16.66%" />
+      <div className="session-toolbar">
+        <div className="session-toolbar__checkboxes">
           {['nice', 'ok', 'suspicious', 'bad'].map(rep => (
-            <Col md="16.67%" key={rep}>
-              <span>
-                <div
-                  onClick={_ => this.handleReputationClick(rep)}
-                  onKeyPress={_ => this.handleReputationClick(rep)}
-                  className="session-toolbar__checkbox"
-                >
-                  <label
-                    htmlFor={rep}
-                    className={cx(
-                      `session-toolbar__checkbox__checkbox session-toolbar__checkbox__checkbox--${rep}`,
-                      {
-                        'session-toolbar__checkbox__checkbox--checked':
-                          reputation && reputation.includes(rep),
-                      },
-                      {
-                        'session-toolbar__checkbox__checkbox--none-checked': !reputation,
-                      }
-                    )}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={reputation ? reputation.includes(rep) : false}
-                      onChange={this.handleReputationChange}
-                      ref={checkbox => {
-                        this.reputations[rep] = checkbox;
-                      }}
-                      id={rep}
-                    />
-                  </label>
-                  <span className="session-toolbar__checkbox__text">{rep}</span>
-                </div>
-              </span>
-            </Col>
+            <div
+              onClick={_ => this.handleReputationClick(rep)}
+              onKeyPress={_ => this.handleReputationClick(rep)}
+              className="session-toolbar__checkbox"
+              key="rep"
+            >
+              <label
+                htmlFor={rep}
+                className={cx(
+                  `session-toolbar__checkbox__checkbox session-toolbar__checkbox__checkbox--${rep}`,
+                  {
+                    'session-toolbar__checkbox__checkbox--checked':
+                      reputation && reputation.includes(rep),
+                  },
+                  {
+                    'session-toolbar__checkbox__checkbox--none-checked': !reputation,
+                  }
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={reputation ? reputation.includes(rep) : false}
+                  onChange={this.handleReputationChange}
+                  ref={checkbox => {
+                    this.reputations[rep] = checkbox;
+                  }}
+                  id={rep}
+                />
+              </label>
+              <span className="session-toolbar__checkbox__text">{rep}</span>
+            </div>
           ))}
-          <Col md="16.66%" style={{ alignSelf: 'flex-start' }}>
-            <SessionsVisualisationSwitch route={route} />
-          </Col>
-        </Row>
+        </div>
+        <SessionsVisualisationSwitch route={route} />
       </div>
     );
   }

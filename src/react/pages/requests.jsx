@@ -225,27 +225,11 @@ class LogsPage extends React.Component {
         <div className="page-header page-header--requests">
           <div className="page-header__header">
             <Row gutter={0}>
-              <Col md="40%">
+              <Col md="60%">
                 <span className="page-header__header-title">
                   {!route.timerangeFrom && 'Latest'} Requests{' '}
                   {timeDisplay(route) && `(${timeDisplay(route)})`}
                 </span>
-              </Col>
-              <Col md="20%">
-                <div className="requests-metrics">
-                  <p className="requests-metrics__day">
-                    {metrics.loading && 'Loading'}
-                    {!metrics.loading &&
-                      formatNumber(count, {
-                        maximumFractionDigits: 2,
-                      })}
-                    {' requests'}
-                  </p>
-                  <p className="requests-metrics__minute">
-                    {metrics.loading && 'Loading requests speed...'}
-                    {!metrics.loading && `${formatNumber(speed)}/min`}
-                  </p>
-                </div>
               </Col>
               <Col md="40%">
                 <div className="page-header__time-selector">

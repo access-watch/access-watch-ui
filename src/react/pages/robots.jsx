@@ -79,9 +79,11 @@ const RobotsPage = ({ route, robots }) => (
               Top Robots {`(${timeDisplay()})`}
             </span>
           </Col>
+          <Col md="50%" style={{ alignItems: 'center' }}>
+            <SessionToolbar route={route} />
+          </Col>
         </Row>
       </div>
-      <SessionToolbar route={route} />
     </div>
     <Sessions
       sessions={robots}
