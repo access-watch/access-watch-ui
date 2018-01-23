@@ -9,6 +9,7 @@ import TimeAgo from '../utilities/time_ago';
 import RuleButton from '../rules/rule_button';
 import createSpeedResolvers from '../activity/speed_resolver';
 import ConditionDisplay from '../rules/condition_display';
+import ExportButton from '../rules/export_button';
 
 import '../../../scss/rules_page.scss';
 
@@ -42,11 +43,17 @@ const rulesResolvers = [
   },
 ];
 
+const EXPORTS_OPTIONS = ['nginx', 'apache'];
+
 const RulesPage = ({ rules }) => {
   const rulesValues = Object.values(rules.rules);
   return (
     <div className="rules">
       <div className="rules__title">Rules</div>
+      <div className="rules__export">
+        Export :
+        {EXPORTS_OPTIONS.map(id => <ExportButton id={id} key={id} />)}
+      </div>
       {rulesValues.length > 0 && (
         <RoundedTable entries={rulesValues} resolvers={rulesResolvers} />
       )}
