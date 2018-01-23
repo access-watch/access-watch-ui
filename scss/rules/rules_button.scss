@@ -1,5 +1,5 @@
-@import 'vars';
-@import 'button'; // need those mixins :s
+@import '../vars';
+@import '../button'; // need those mixins :s
 
 @mixin btn-icon ($icon) {
   &::before {
@@ -21,7 +21,7 @@ $session-details-action-color: #fff;
   @include btn-type(white, transparent);
 
   &--block {
-    @include btn-icon(url('../assets/blocked-white.svg'));
+    @include btn-icon(url('../../assets/blocked-white.svg'));
     border-radius: 2px;
     transition: border-color 0.2s ease;
 
