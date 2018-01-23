@@ -100,7 +100,7 @@ class LogsPage extends React.Component {
     const { earlierLoading, route, logs } = this.props;
     if (!this.state.earlierLoading || !earlierLoading) {
       // TODO FIXME if we put back the earlier logs, uncomment this
-      //this.setState({ earlierLoading: true });
+      // this.setState({ earlierLoading: true });
       dispatch({
         type: 'view.req_earlier_logs',
         q: route.q || '',
