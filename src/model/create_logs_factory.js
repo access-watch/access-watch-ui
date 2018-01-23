@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject, Scheduler } from 'rxjs';
 import { extractTimerange } from '../api_manager/utils';
-import { pickKeys } from '../utilities/object';
+import { pickKeys, getIn } from '../utilities/object';
 
 // maximum requests that we can have renedered at the same time.
 const MAX_REQUESTS = 50000;
@@ -10,69 +10,30 @@ const REQUESTS_LIMIT = 50;
 const hasNoStorageParam = params =>
   NO_STORAGE_PARAMS.reduce((acc, k) => acc || params[k], false);
 
-// append b to a and ensure no dupes.
 const append = (a, b) => a.concat(b);
 
-const filtersMethods = {
-  address: ({ address }) => l => l.address.value === address,
-  method: ({ method }) => l => method.indexOf(l.request.method) !== -1,
-  reputation: ({ reputation }) => l =>
-    reputation.indexOf(l.reputation.status) !== -1,
-  robot: ({ robot }) => l => l.robot && l.robot.id === robot,
-  status: ({ status }) => l => status.indexOf('' + l.response.status) !== -1,
-  type: ({ type }) => l => type.indexOf(l.identity.type) !== -1,
-};
-
-const filterLogs = (logs, filters) => {
+const filterLogs = (logs, filters = {}) => {
   if (!logs) {
     return [];
   }
-  if (!filters) {
-    return logs;
-  }
-  return Object.keys(filtersMethods).reduce(
-    (filteredLogs, filterKey) => {
-      if (filters[filterKey]) {
-        const currentFilter = filtersMethods[filterKey](filters);
-        return filteredLogs.filter(currentFilter);
-      }
-      return filteredLogs;
-    },
+  return Object.keys(filters).reduce(
+    (filtered, key) =>
+      filtered.filter(
+        l => filters[key].indexOf('' + getIn(l, key.split('.'))) !== -1
+      ),
     [...logs]
   );
 };
 
-const filtersMatchingURL = {
-  address: 'address',
-  method: 'request_method',
-  reputation: 'reputation_status',
-  robot: 'robot',
-  status: 'response_status',
-  type: 'identity_type',
-};
-
-const querySearchFactory = (filters, qParams) => {
-  const searchObject = {};
-  let q = '';
-  if (filters) {
-    Object.keys(filters).forEach(k => {
-      if (filtersMatchingURL[k]) {
-        if (Array.isArray(filters[k])) {
-          searchObject[filtersMatchingURL[k]] = filters[k].join(',');
-        } else {
-          searchObject[filtersMatchingURL[k]] = filters[k];
-        }
-      }
-    });
-  }
-  if (qParams) {
-    if (q.length > 0) {
-      q = q.concat(' ' + qParams);
-    } else {
-      q = qParams;
-    }
-  }
-  return { ...searchObject, ...(q.length > 0 && { q }) };
+const querySearchFactory = (filters = {}, q = '') => {
+  const searchObject = Object.keys(filters).reduce(
+    (acc, k) => ({
+      ...acc,
+      [k]: filters[k].join(','),
+    }),
+    {}
+  );
+  return { ...searchObject, ...(q.length > 0 ? { q } : {}) };
 };
 
 const pickParamsKeys = pickKeys(['offset', 'limit', 'before', 'after']);
