@@ -81,3 +81,11 @@ export const convertObjKeyValues = ({ keys, convertFn }) => o => ({
   ...o,
   ...convertObjValues(convertFn)(pickKeys(keys)(o)),
 });
+
+export const getIn = (obj, keys) => {
+  if (keys.length === 0) {
+    return obj;
+  }
+  const cur = obj[keys[0]];
+  return cur ? getIn(cur, keys.slice(1)) : cur;
+};

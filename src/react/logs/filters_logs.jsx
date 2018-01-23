@@ -15,11 +15,8 @@ const methodFilters = ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'];
 const statusFilters = ['200', '301', '302', '403', '404', '500', '503'];
 
 const createStandardFilter = i => ({
-  label: ('' + i)
-    .split(',')
-    .map(capitalize)
-    .join(' & '),
-  classname: ('' + i).replace(',', '-'),
+  label: capitalize('' + i),
+  className: '' + i,
   value: i,
 });
 
@@ -45,24 +42,29 @@ const createFiltersFromObject = obj =>
   );
 
 const Filters = {
-  type: {
+  'identity.type': {
     label: 'Type',
+    className: 'type',
     unique: true,
     values: { ...createFiltersFromObject(typeFilters) },
   },
-  reputation: {
-    label: 'Identity',
+  'reputation.status': {
+    label: 'Reputation',
+    className: 'reputation',
     values: { ...createStandardFiltersFromArray(reputationFilters) },
   },
-  method: {
+  'request.method': {
     label: 'Method',
     values: { ...createStandardFiltersFromArray(methodFilters) },
   },
-  status: {
+  'response.status': {
     label: 'Status',
     values: { ...createStandardFiltersFromArray(statusFilters) },
   },
 };
+
+const generateFilterCn = (cn, f, val) =>
+  cx(cn, `${cn}--${f.className}`, val ? `${cn}--${val.className}` : '');
 
 export default class FiltersLogs extends React.Component {
   static propTypes = {
@@ -196,11 +198,11 @@ export default class FiltersLogs extends React.Component {
                       <div
                         key={filterKey}
                         className={cx(
-                          'logs-filter__filters-panel__filter-value',
-                          `logs-filter__filters-panel__filter-value--${k}`,
-                          `logs-filter__filters-panel__filter-value--${
-                            filter.classname
-                          }`,
+                          generateFilterCn(
+                            'logs-filter__filters-panel__filter-value',
+                            Filters[k],
+                            filter
+                          ),
                           {
                             'logs-filter__filters-panel__filter-value--active':
                               internalCurrentFilters &&
@@ -232,12 +234,19 @@ export default class FiltersLogs extends React.Component {
             Object.keys(internalCurrentFilters).map(k => (
               <div
                 key={k}
-                className={`logs-filter__current-filters__filter logs-filter__current-filters__filter--${k}`}
+                className={generateFilterCn(
+                  'logs-filter__current-filters__filter',
+                  Filters[k]
+                )}
               >
                 {internalCurrentFilters[k].map(filter => (
                   <div
                     key={`${k}_${filter}`}
-                    className={`logs-filter__current-filters__filter-value logs-filter__current-filters__filter-value--${k} logs-filter__current-filters__filter-value--${filter}`}
+                    className={generateFilterCn(
+                      'logs-filter__current-filters__filter-value',
+                      Filters[k],
+                      Filters[k].values[filter]
+                    )}
                   >
                     {Filters[k].values[filter].label}
                     <span

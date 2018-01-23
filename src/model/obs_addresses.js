@@ -17,7 +17,7 @@ const addressSessions$ = createSessions$({
   createFilter,
   type: 'address',
   routeId: 'address',
-  logFilter: ({ log, session }) => log.address.value === session.id,
+  logMapping: 'address.value',
 });
 
 const allAddressesRoute$ = Observable.merge(
