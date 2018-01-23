@@ -99,15 +99,15 @@ $metrics-header-height: 150px;
   }
 
   &__value {
-    font-size: $robot-percentage-main-font-size;
-    font-family: $robot-percentage-main-font;
+    font-size: 24px;
+    font-family: $default-light-font;
   }
 
   &__label {
     $triangle-size: 8px;
     position: relative;
     padding-left: $triangle-size/2;
-    font-size: $robot-percentage-sub-font-size;
+    font-size: 14px;
 
     &::before {
       position: absolute;

@@ -34,10 +34,6 @@ $default-font: Raleway;
 $default-light-font: Raleway200, $default-font;
 $default-bold-font: Raleway700, $default-font;
 
-$robot-percentage-main-font-size: 24px;
-$robot-percentage-sub-font-size: 14px;
-$robot-percentage-main-font: $default-light-font;
-
 $statuses-strong: (
   nice: map-get($statuses, 'nice'),
   ok: map-get($statuses, 'ok'),
