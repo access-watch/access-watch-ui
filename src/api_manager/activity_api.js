@@ -128,6 +128,33 @@ const startSlidingInterval = ({ step, start, ticks, obs }) => {
   }, nextQuerying);
 };
 
+const getFullActivity = ({ query, activity }) => {
+  const { step } = query;
+  const start = query.start - query.start % (step * 1000);
+  const end = query.end - query.end % (step * 1000);
+  const firstActivityDelta = Math.floor((activity[0][0] - start) / 1000);
+  const lastActivityDelta = Math.floor(
+    (end - activity[activity.length - 1][0]) / 1000
+  );
+  let newActivity = [...activity];
+  if (firstActivityDelta > step) {
+    const missingActivity = new Array(Math.floor(firstActivityDelta / step))
+      .fill(0)
+      .map((_, i) => [new Date(start).getTime() + i * step * 1000, {}]);
+    newActivity = missingActivity.concat(newActivity);
+  }
+  if (lastActivityDelta > step) {
+    const missingActivity = new Array(Math.floor(lastActivityDelta / step))
+      .fill(0)
+      .map((_, i, arr) => [
+        new Date(end).getTime() - (arr.length - i) * step * 1000,
+        {},
+      ]);
+    newActivity = newActivity.concat(missingActivity);
+  }
+  return newActivity;
+};
+
 export const activityRes$ = activityResFactory(activityPollStart$, [
   routeChange$,
   serverDataStartTime$,
@@ -168,18 +195,10 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
   .map(([realRes, { timeSlider }]) => {
     // If slider is not on auto, we want the full timeline with 0 activity
     if (timeSlider !== 'auto') {
-      const { query, activity } = realRes;
-      const { start, step } = query;
-      const firstActivityDelta = Math.floor((activity[0][0] - start) / 1000);
-      if (firstActivityDelta > step) {
-        const missingActivity = new Array(Math.floor(firstActivityDelta / step))
-          .fill(0)
-          .map((_, i) => [start + i * step, {}]);
-        return {
-          query,
-          activity: [...missingActivity, ...activity],
-        };
-      }
+      return {
+        ...realRes,
+        activity: getFullActivity(realRes),
+      };
     }
     return realRes;
   });
@@ -187,7 +206,10 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
 export const activityDetailRes$ = activityResFactory(
   activityDetailsPollStart$,
   [routeChange$]
-);
+).map(res => ({
+  ...res,
+  activity: getFullActivity(res),
+}));
 
 export const loading$ = (obs, obsRes) =>
   obs

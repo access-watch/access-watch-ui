@@ -33,12 +33,9 @@ const treemapResolvers = {
     React.cloneElement(iconResolver(s), {
       className: 'session-block__icon inline',
     }),
-  title: ({ robot, identity, user_agent: ua }) => {
+  title: ({ robot, user_agent: ua }) => {
     if (robot && robot.name) {
       return robot.name;
-    }
-    if (identity && identity.name) {
-      return identity.name;
     }
     if (ua && ua.agent && ua.agent.label) {
       return ua.agent.label;
