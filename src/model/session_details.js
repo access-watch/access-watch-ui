@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { createSessionDetailsObs } from './obs_session';
 import createLogs from './create_logs';
 import { getSessionDetails } from '../api_manager/api_agent_sessions';
-import { type, logFilter } from './obs_robots';
+import { type, logMapping } from './obs_robots';
 
 const createSessionLogs = id =>
   createLogs({}).map(({ logs, ...rest }) => ({
@@ -23,7 +23,7 @@ export default ({ session: id }) =>
       if (s) {
         return createSessionDetailsObs({
           routeId: 'session',
-          logFilter,
+          logMapping,
           sessionDetails$: Observable.of(s),
           lastSessions: [],
           type,
