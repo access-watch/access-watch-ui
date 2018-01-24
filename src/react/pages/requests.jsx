@@ -18,8 +18,7 @@ import LogsSeparator from '../logs/logs_separator';
 import SearchLogs from '../logs/search_logs';
 import FiltersLogs from '../logs/filters_logs';
 import TimeSelector from '../time/time_selector';
-import { formatNumber } from '../../i18n';
-import { logPropType, activityPropType, metricsPropType } from '../prop_types';
+import { logPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/requests_page.scss';
 
@@ -50,7 +49,6 @@ class LogsPage extends React.Component {
       route: PropTypes.string,
       filtersEnabled: PropTypes.bool,
     }).isRequired,
-    metrics: metricsPropType.isRequired,
     logEnd: PropTypes.bool,
     activity: activityPropType.isRequired,
   };
@@ -210,14 +208,12 @@ class LogsPage extends React.Component {
   render() {
     const {
       route,
-      metrics,
       logs,
       loading,
       earlierLoading,
       logEnd,
       activity,
     } = this.props;
-    const { count, speed = 0 } = metrics.requests;
     const { fullTextSearchOpened } = this.state;
 
     return (
@@ -225,27 +221,11 @@ class LogsPage extends React.Component {
         <div className="page-header page-header--requests">
           <div className="page-header__header">
             <Row gutter={0}>
-              <Col md="40%">
+              <Col md="60%">
                 <span className="page-header__header-title">
                   {!route.timerangeFrom && 'Latest'} Requests{' '}
                   {timeDisplay(route) && `(${timeDisplay(route)})`}
                 </span>
-              </Col>
-              <Col md="20%">
-                <div className="requests-metrics">
-                  <p className="requests-metrics__day">
-                    {metrics.loading && 'Loading'}
-                    {!metrics.loading &&
-                      formatNumber(count, {
-                        maximumFractionDigits: 2,
-                      })}
-                    {' requests'}
-                  </p>
-                  <p className="requests-metrics__minute">
-                    {metrics.loading && 'Loading requests speed...'}
-                    {!metrics.loading && `${formatNumber(speed)}/min`}
-                  </p>
-                </div>
               </Col>
               <Col md="40%">
                 <div className="page-header__time-selector">

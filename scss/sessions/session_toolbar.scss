@@ -1,20 +1,24 @@
 @import '../vars';
 @import '../mixins';
 
-$checkbox-size: 20px;
+$checkbox-size: 15px;
 
 .session-toolbar {
-  flex-grow: 1;
   display: flex;
   align-items: center;
   font-family: $default-light-font;
+  justify-content: flex-end;
+}
+
+.session-toolbar__checkboxes {
+  margin: 0 20px;
 }
 
 .session-toolbar__checkbox {
   display: inline-flex;
   cursor: pointer;
-  font-size: 20px;
   align-items: center;
+  margin-right: 20px;
 }
 
 .session-toolbar__checkbox-robots__text {

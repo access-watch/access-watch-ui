@@ -31,9 +31,11 @@ const AddressesPage = ({ route, addresses }) => (
               Top Addresses {`(${timeDisplay()})`}
             </span>
           </Col>
+          <Col md="50%">
+            <SessionToolbar route={route} />
+          </Col>
         </Row>
       </div>
-      <SessionToolbar route={route} />
     </div>
     <Sessions
       sessions={addresses}
