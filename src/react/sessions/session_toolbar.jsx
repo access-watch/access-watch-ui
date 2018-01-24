@@ -1,6 +1,4 @@
 import React from 'react';
-import Col from 'elemental/lib/components/Col';
-import Row from 'elemental/lib/components/Row';
 import cx from 'classnames';
 
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
