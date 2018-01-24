@@ -13,7 +13,6 @@ export const transformLog = log => {
   const sessionId = (robot && robot.id) || (identity && identity.id);
   return {
     ...log,
-    // logs on the websocket don't have an id. so let's compute an alternative
     id: uuid,
     robot: robot || (identity && identity.robot),
     agentIcon: getUserAgentIconSvg(log),
