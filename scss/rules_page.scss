@@ -11,6 +11,14 @@
   margin: 25px 0;
 }
 
+.rules__export {
+  padding-left: $rounded-table-border-radius;
+  padding-bottom: 15px;
+  border-bottom: solid 1px $light-gray;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
 .rules {
   .rounded-table__header__cell,
   .rounded-table__body__cell {

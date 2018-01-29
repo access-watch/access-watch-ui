@@ -9,18 +9,37 @@ import { speedPropType } from '../prop_types';
 
 import '../../../scss/status_page.scss';
 
-const statusResolvers = [
+const createSpeedsResolvers = speedIds =>
+  speedIds.reduce(
+    (arr, speedId) => [
+      ...arr,
+      ...createSpeedResolvers({ id: speedId }).map(({ resolver, ...rest }) => ({
+        ...rest,
+        resolver: ({ id, speeds }) => resolver({ id, ...speeds }),
+      })),
+    ],
+    []
+  );
+
+const createStatusResolvers = speedsResolvers => [
   {
     id: 'name',
   },
-  ...createSpeedResolvers({ id: 'accepted' }),
-  ...createSpeedResolvers({ id: 'rejected' }),
+  ...speedsResolvers,
   {
     id: 'status',
   },
 ];
 
-const renderStatusData = (title, entries, resolvers = statusResolvers) => (
+const inputResolvers = createStatusResolvers(
+  createSpeedsResolvers(['accepted', 'rejected'])
+);
+
+const outputResolvers = createStatusResolvers(
+  createSpeedsResolvers(['processed'])
+);
+
+const renderStatusData = (title, entries, resolvers) => (
   <div className="status__section">
     <div className="status__section__title">{title}</div>
     <RoundedTable
@@ -33,17 +52,25 @@ const renderStatusData = (title, entries, resolvers = statusResolvers) => (
 const StatusPage = ({ status, statusLoading }) => (
   <div className="status">
     {statusLoading && <Loader />}
-    {renderStatusData('Input', status)}
+    {renderStatusData(
+      'Input',
+      status.filter(({ type }) => type === 'input'),
+      inputResolvers
+    )}
+    {renderStatusData(
+      'Output',
+      status.filter(({ type }) => type === 'output'),
+      outputResolvers
+    )}
   </div>
 );
 
 StatusPage.propTypes = {
   status: PropTypes.arrayOf(
     PropTypes.shape({
-      accepted: speedPropType.isRequired,
+      speeds: PropTypes.objectOf(speedPropType).isRequired,
       name: PropTypes.string.isRequired,
       rejected: speedPropType.isRequired,
-      status: PropTypes.string.isRequired,
     })
   ).isRequired,
   statusLoading: PropTypes.bool,
