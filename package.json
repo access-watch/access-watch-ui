@@ -35,7 +35,7 @@
     "babel-core": "^6.24.1",
     "babel-eslint": "^8.0.2",
     "babel-loader": "^7.0.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-jest": "^21.2.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-optimize": "^1.0.1",
@@ -115,5 +115,8 @@
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
     ]
+  },
+  "dependencies": {
+    "babel-preset-env": "^1.6.1"
   }
 }
