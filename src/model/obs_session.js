@@ -20,14 +20,18 @@ export const createSessionDetailsObs = ({
     .map(r => lastSessions.find(({ id }) => id === r[routeId]))
     .switchMap(sessionOrig =>
       Observable.merge(
-        sessionDetails$.take(1),
+        sessionDetails$,
         getSessionDetailsObs({ type, id: p[routeId] })
       )
+        .take(1)
         .startWith(sessionOrig)
         // In case this is a direct access, lastSessions might have returned undefined
         .filter(session => session)
         .switchMap(session =>
-          Observable.of(session).combineLatest(
+          Observable.merge(
+            Observable.of(session),
+            getSessionDetailsObs({ type, id: p[routeId] })
+          ).combineLatest(
             createLogs({
               filters: {
                 [logMapping]: [getIn(session, logMapping.split('.'))],
