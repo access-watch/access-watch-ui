@@ -6,8 +6,12 @@ import { Loader } from 'access-watch-ui-components';
 import createSpeedResolvers from '../activity/speed_resolver';
 import RoundedTable from '../table/rounded_table';
 import { speedPropType } from '../prop_types';
+import config from '../../app_config';
 
 import '../../../scss/status_page.scss';
+
+const interpolateStatusString = str =>
+  str.replace('#API_WEBSOCKET_URL#', config.websocket);
 
 const createSpeedsResolvers = speedIds =>
   speedIds.reduce(
@@ -28,6 +32,7 @@ const createStatusResolvers = speedsResolvers => [
   ...speedsResolvers,
   {
     id: 'status',
+    resolver: ({ status }) => interpolateStatusString(status),
   },
 ];
 
