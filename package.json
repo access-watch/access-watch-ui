@@ -115,8 +115,5 @@
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
     ]
-  },
-  "dependencies": {
-    "babel-preset-env": "^1.6.1"
   }
 }
