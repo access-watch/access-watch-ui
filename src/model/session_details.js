@@ -23,10 +23,10 @@ export default ({ session: id }) =>
       if (s) {
         return createSessionDetailsObs({
           routeId: 'session',
-          logMapping,
           sessionDetails$: Observable.of(s),
           lastSessions: [],
           type,
+          logMapping,
         })({ session: id });
       }
       return createSessionLogs(id).map(logs => ({ logs, session: {} }));

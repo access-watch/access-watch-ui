@@ -1,5 +1,6 @@
 import { countries } from 'access-watch-ui-components';
 
+import { handleAction, VIEW_REQUEST_EARLIER_LOGS } from '../event_hub';
 import { request, poll, api, ws } from '../api_manager/api';
 import createLogsFactory from './create_logs_factory';
 import { getUserAgentIconSvg } from '../icons/user_agent';
@@ -34,4 +35,6 @@ export default logsParams =>
     },
     transformLog,
     store: logsStore,
+    handleAction,
+    handleRequestEarlierLogs: handleAction(VIEW_REQUEST_EARLIER_LOGS),
   })(logsParams);

@@ -30,10 +30,6 @@ import {
   ROUTE_REQUESTS,
 } from './router';
 
-const globalLogs$ = createLogs({}).publish();
-
-globalLogs$.connect();
-
 /**
  * @event Pages#PageChange
  * @type {object}
