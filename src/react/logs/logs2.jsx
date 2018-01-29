@@ -113,6 +113,10 @@ export default class Logs extends Component {
       // got brand new logs.. dont do any scrolling
       return;
     }
+    if (this.props.earlierLoading !== nextProps.earlierLoading) {
+      // We got back earlier loading logs, don't do any scrolling either
+      return;
+    }
     // find how many new items will be added with `nextProps` and set `toScroll`
     // accordingly
     const newItemsLength = nextProps.logs.length - this.props.logs.length;

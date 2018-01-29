@@ -9,7 +9,7 @@ import {
   deleteRouteParameter,
 } from '../../utilities/route_utils';
 
-import { keydown, KEY_CODE } from '../../utilities/interaction';
+import { keydown, KEY_CODE, nearPageBottom } from '../../utilities/interaction';
 import Logs from '../logs/logs2';
 import LogsHeader from '../logs/logs_header';
 import LogsRow from '../logs/logs_row';
@@ -46,11 +46,13 @@ class AbstractSessionDetails extends React.Component {
     logs: PropTypes.shape({
       logs: PropTypes.array,
       loading: PropTypes.bool,
+      earlierLoading: PropTypes.bool,
     }).isRequired,
     requestInfo: logPropType,
     route: routePropType.isRequired,
     muteParentEsc: PropTypes.func,
     logsColumns: PropTypes.objectOf(PropTypes.string),
+    handleGetEarlierLogs: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -77,6 +79,15 @@ class AbstractSessionDetails extends React.Component {
   };
 
   componentDidMount() {
+    const { logs } = this.props;
+
+    this.paginateSubscription = nearPageBottom(this.scrollContainer)
+      .filter(
+        // don't do anything while loading
+        _ => !logs.loading || !logs.earlierLoading || !logs.end
+      )
+      .subscribe(this.handleGetEarlierLogs.bind(this));
+
     this.logsContainer$.next(this.scrollContainer);
   }
 
@@ -94,6 +105,9 @@ class AbstractSessionDetails extends React.Component {
       this.setState({ waitForNextLoading: undefined });
     }
 
+    if (nextProps.logs.earlierLoading) {
+      this.earlierLoading = false;
+    }
     if (
       route.hl &&
       currentLogs.logs &&
@@ -118,6 +132,21 @@ class AbstractSessionDetails extends React.Component {
   // Emits container of the logs once its available in the dom
   // This is the scolling element when browsing the logs
   logsContainer$ = new ReplaySubject(1);
+
+  handleGetEarlierLogs = _ => {
+    const { logs, handleGetEarlierLogs } = this.props;
+    if (
+      !logs.earlierLoading &&
+      !logs.loading &&
+      !logs.end &&
+      !this.earlierLoading
+    ) {
+      this.earlierLoading = true;
+      handleGetEarlierLogs(
+        new Date(logs.logs[logs.logs.length - 1].request.time).getTime()
+      );
+    }
+  };
 
   handleLogsRowClick = row => {
     const { route, logs } = this.props;

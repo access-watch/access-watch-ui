@@ -1,10 +1,12 @@
 import { Observable, ReplaySubject, Scheduler } from 'rxjs';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
+import { msToS } from '../utilities/time';
+import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 
 // maximum requests that we can have renedered at the same time.
 const MAX_REQUESTS = 50000;
-const NO_STORAGE_PARAMS = ['timerangeFrom', 'timerangeTo'];
+const NO_STORAGE_PARAMS = ['start', 'end'];
 const REQUESTS_LIMIT = 50;
 
 const hasNoStorageParam = params =>
@@ -36,7 +38,12 @@ const querySearchFactory = (filters = {}, q = '') => {
   return { ...searchObject, ...(q.length > 0 ? { q } : {}) };
 };
 
-const pickParamsKeys = pickKeys(['offset', 'limit', 'before', 'after']);
+const pickParamsKeys = pickKeys(['offset', 'limit', 'start', 'end']);
+const transformTimerange = ({ start, end, ...rest }) => ({
+  ...rest,
+  ...(start ? { start: msToS(start) } : {}),
+  ...(end ? { end: msToS(end) } : {}),
+});
 
 let websocket$;
 let websocketStatus$;
@@ -61,7 +68,7 @@ const getWebsocket = api => {
   return { ws$: websocket$, wsStatus$: websocketStatus$.asObservable() };
 };
 
-export default ({ api, transformLog, store: logsStore = {} }) => {
+export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
   // creates a stream of logs using websocket or polling as fallback
   const streamLogs = initLogs => params => {
     let initLogsObs;
@@ -71,20 +78,25 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
       initLogsObs = api.request(_ =>
         api.http
           .get('/logs', {
-            ...pickParamsKeys(params),
+            ...transformTimerange(pickParamsKeys(params)),
             ...querySearchFactory(params.filters, params.q),
           })
           .then(logs => logs.map(transformLog))
       );
     }
     const { ws$, wsStatus$ } = getWebsocket(api);
-    const logs$ = initLogsObs.switchMap(firstLogs =>
-      ws$
-        .map(slogs => filterLogs(slogs, params.filters))
-        .filter(entries => entries.length > 0)
-        .map(logs => logs.map(transformLog))
-        .startWith(initLogs.length > 0 ? [] : firstLogs)
-    );
+    let logs$;
+    if (params.start) {
+      logs$ = initLogsObs;
+    } else {
+      logs$ = initLogsObs.switchMap(firstLogs =>
+        ws$
+          .map(slogs => filterLogs(slogs, params.filters))
+          .filter(entries => entries.length > 0)
+          .map(logs => logs.map(transformLog))
+          .startWith(initLogs.length > 0 ? [] : firstLogs)
+      );
+    }
     return [logs$, wsStatus$];
   };
 
@@ -108,6 +120,30 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
     return hasNoStorageParam(logsParams) ? [] : logsStore[sel] || [];
   };
 
+  const earlierLogsMatching = p => act =>
+    act.logMapping &&
+    p.filters &&
+    p.filters[act.logMapping] === act.logMappingValue;
+
+  const earlierLogs = p =>
+    handleAction(V_REQUEST_EARLIER_LOGS)
+      .filter(earlierLogsMatching)
+      .switchMap(act =>
+        api.request(_ =>
+          api.http
+            .get('/logs', {
+              ...transformTimerange(pickParamsKeys(p)),
+              end: msToS(act.end),
+              ...querySearchFactory(act.filters, act.q),
+              limit: REQUESTS_LIMIT,
+            })
+            .then(logs => ({
+              logs: logs.map(transformLog),
+              end: msToS(act.end),
+            }))
+        )
+      );
+
   return logsParams => {
     let p = {
       ...logsParams,
@@ -117,6 +153,8 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
       delete p.filters;
       delete p.filtersEnabled;
     }
+
+    p = extractTimerange(p);
 
     const initialLogs = getInitialLogs(p);
 
@@ -139,8 +177,6 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
     // prior logs came
     delete p.after;
 
-    p = extractTimerange(p);
-
     // [Observable<[log]>, Observable<isOpen>]
     const [_logs$, isOpen$] = streamLogs(initialLogs)(p);
 
@@ -158,7 +194,40 @@ export default ({ api, transformLog, store: logsStore = {} }) => {
       logs$.map(logs => state => ({
         ...state,
         logs: append(logs, state.logs).slice(0, MAX_REQUESTS),
-      }))
+      })),
+
+      earlierLogs(p).map(({ logs, end }) => state => {
+        let i = 0;
+        const logsOverlap = logs.filter(
+          ({ request }) => new Date(request.time).getTime() >= (end - 1) * 1000
+        );
+        let newLogs = [...logsOverlap];
+        const getNthLast = x => state.logs[state.logs.length - (x + 1)];
+        let latestLog = getNthLast(0);
+        while (
+          new Date(latestLog.request.time).getTime() <= end * 1000 &&
+          i < state.logs.length
+        ) {
+          // eslint-disable-next-line no-loop-func
+          newLogs = newLogs.filter(l => l.id !== latestLog.id);
+          i++;
+          latestLog = getNthLast(i);
+        }
+        newLogs = logs.slice(logsOverlap.length).concat(newLogs);
+        return {
+          ...state,
+          logs: state.logs.concat(logs.slice(i)).slice(-MAX_REQUESTS),
+          end: logs.length < REQUESTS_LIMIT,
+          earlierLoading: false,
+        };
+      }),
+
+      handleAction(V_REQUEST_EARLIER_LOGS)
+        .filter(earlierLogsMatching)
+        .map(_ => state => ({
+          ...state,
+          earlierLoading: true,
+        }))
     );
 
     return Observable.of(initialState)

@@ -4,7 +4,7 @@ import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { stringify } from 'qs';
 
-import { V_SET_ROUTE, dispatch } from '../../event_hub';
+import { V_SET_ROUTE, dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import {
   dayEquality,
@@ -83,8 +83,8 @@ class LogsPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { logs } = nextProps;
-    if (logs.earlierLoading === true) {
+    const { earlierLoading } = nextProps;
+    if (earlierLoading === true) {
       this.setState({ earlierLoading: false });
     }
   }
@@ -97,18 +97,14 @@ class LogsPage extends React.Component {
   }
 
   handleGetEarlierLogs = _ => {
-    const { earlierLoading, route, logs } = this.props;
-    if (!this.state.earlierLoading || !earlierLoading) {
-      // TODO FIXME if we put back the earlier logs, uncomment this
-      // this.setState({ earlierLoading: true });
+    const { earlierLoading, route, logs, logEnd } = this.props;
+    if (!this.state.earlierLoading && !earlierLoading && !logEnd) {
+      this.setState({ earlierLoading: true });
       dispatch({
-        type: 'view.req_earlier_logs',
+        type: V_REQUEST_EARLIER_LOGS,
         q: route.q || '',
-        filters: (route.filtersEnabled && route.filters) || null,
-        beforeTime: (logs.length >= 1
-          ? new Date(logs[logs.length - 1].request.time)
-          : new Date()
-        ).toISOString(),
+        filters: (route.filtersEnabled && route.filters) || {},
+        end: new Date(logs[logs.length - 1].request.time).getTime(),
       });
     }
   };

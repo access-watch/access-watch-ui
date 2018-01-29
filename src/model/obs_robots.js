@@ -8,7 +8,7 @@ import { robotsMetrics$ } from './obs_robots_metrics';
 import { createSessions$ } from './obs_session';
 
 export const type = 'robot';
-export const logFilter = ({ log, session }) => log.session.id === session.id;
+export const logMapping = 'robot.id';
 
 const createFilter = ({ reputation }) => ({
   ...(reputation ? { filter: `reputation.status:${reputation}` } : {}),
@@ -20,7 +20,7 @@ const robotSessions$ = createSessions$({
   createFilter,
   type,
   routeId: 'robot',
-  logMapping: 'robot.id',
+  logMapping,
 });
 
 const allRobotsRoute$ = Observable.merge(robotsRoute$, robotDetailsRoute$);
