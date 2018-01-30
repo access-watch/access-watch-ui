@@ -26,10 +26,7 @@ const monitoringPollStart$ = statusRoute$;
 export const monitoringRes$ = monitoringPollStart$
   .flatMap(_ =>
     poll(
-      () =>
-        api
-          .get('/monitoring')
-          .then(arr => arr.map(transformSpeeds)),
+      () => api.get('/monitoring').then(arr => arr.map(transformSpeeds)),
       2000
     ).takeUntil(routeChange$)
   )
