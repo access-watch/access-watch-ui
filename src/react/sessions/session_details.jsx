@@ -19,7 +19,9 @@ const handleGetEarlierLogs = ({ robot }) => end =>
   dispatch({
     type: V_REQUEST_EARLIER_LOGS,
     logMapping,
-    logMappingValue: robot.id,
+    filters: {
+      [logMapping]: [robot.id],
+    },
     end,
   });
 
