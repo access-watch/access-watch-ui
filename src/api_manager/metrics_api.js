@@ -16,7 +16,7 @@ import { getMetricsSummaryObs, getMetricsSpeed } from './metrics_agent_api';
 const metricsObs = params => {
   const timeFilter = pickKeys(['start', 'end'])({
     ...{
-      start: new Date().getTime() - 24 * 3600000,
+      start: new Date().getTime() - params.timeSlider * 60000,
     },
     ...params,
   });
@@ -59,8 +59,8 @@ const metricsPollStart$ = Observable.merge(
   requestsRoute$,
   robotsRoute$,
   addressesRoute$
-).map(({ hours, timerangeFrom, timerangeTo }) => ({
-  hours,
+).map(({ timeSlider, timerangeFrom, timerangeTo }) => ({
+  timeSlider,
   ...(timerangeFrom && { start: timerangeFrom }),
   ...(timerangeTo && { end: timerangeTo }),
 }));
