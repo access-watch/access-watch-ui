@@ -45,12 +45,13 @@ import {
  * @fires Pages#PageChange
  */
 export const onRobotsPage = robots$.map(
-  ({ route, routeDetails, robots, robotDetails, robotsMetrics }) => ({
+  ({ route, routeDetails, robots, robotDetails, robotsMetrics, activity }) => ({
     element: (
       <RobotsPageComponent
         robots={robots}
         route={route}
         metrics={robotsMetrics}
+        activity={activity}
       />
     ),
     name: 'robots',

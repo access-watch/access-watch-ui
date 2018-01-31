@@ -4,10 +4,12 @@
 $checkbox-size: 15px;
 
 .session-toolbar {
-  display: flex;
-  align-items: center;
+  display: inline-flex;
   font-family: $default-light-font;
-  justify-content: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-end;
+  margin-bottom: 10px;
 }
 
 .session-toolbar__checkboxes {
