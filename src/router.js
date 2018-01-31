@@ -63,6 +63,7 @@ const routerStateStoreConfig = {
   },
   [ROUTE_ROBOTS]: {
     ...sessionProps,
+    ...timeProps,
     reputation: 'p',
   },
   [ROUTE_ROBOTS_DETAILS]: {
@@ -93,6 +94,7 @@ const routerStateStore = new RouterStateStore(
 // default query params to use if none was specified
 // these are overridden by params in window.location
 export const ROBOTS_DEFAULT_PARAMS = {
+  ...DEFAULT_TIME_PROPS,
   ...DEFAULT_SESSION_PROPS,
 };
 
