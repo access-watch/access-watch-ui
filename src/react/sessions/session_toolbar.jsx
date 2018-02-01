@@ -44,7 +44,7 @@ class SessionToolbar extends React.Component {
               onClick={_ => this.handleReputationClick(rep)}
               onKeyPress={_ => this.handleReputationClick(rep)}
               className="session-toolbar__checkbox"
-              key="rep"
+              key={rep}
             >
               <label
                 htmlFor={rep}
