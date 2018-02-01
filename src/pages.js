@@ -45,14 +45,8 @@ import {
  * @fires Pages#PageChange
  */
 export const onRobotsPage = robots$.map(
-  ({ route, routeDetails, robots, robotDetails, robotsMetrics }) => ({
-    element: (
-      <RobotsPageComponent
-        robots={robots}
-        route={route}
-        metrics={robotsMetrics}
-      />
-    ),
+  ({ route, routeDetails, robots, robotDetails }) => ({
+    element: <RobotsPageComponent robots={robots} route={route} />,
     name: 'robots',
     ...(robotDetails
       ? {
@@ -199,14 +193,8 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
 }));
 
 export const onAddressesPage = addresses$.map(
-  ({ route, routeDetails, addresses, addressDetails, robotsMetrics }) => ({
-    element: (
-      <AddressesPageComponent
-        addresses={addresses}
-        route={route}
-        robotsMetrics={robotsMetrics}
-      />
-    ),
+  ({ route, routeDetails, addresses, addressDetails }) => ({
+    element: <AddressesPageComponent addresses={addresses} route={route} />,
     name: 'addresses',
     ...(addressDetails
       ? {

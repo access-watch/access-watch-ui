@@ -1,10 +1,5 @@
 import { Observable } from 'rxjs';
-import {
-  routeChange$,
-  robotsRoute$,
-  robotDetailsRoute$,
-} from '../../src/router';
-import { robotsMetrics$ } from './obs_robots_metrics';
+import { robotsRoute$, robotDetailsRoute$ } from '../../src/router';
 import { createSessions$ } from './obs_session';
 
 export const type = 'robot';
@@ -23,21 +18,14 @@ const robotSessions$ = createSessions$({
   logMapping,
 });
 
-const allRobotsRoute$ = Observable.merge(robotsRoute$, robotDetailsRoute$);
-
-const obsRobots = Observable.combineLatest(
-  robotSessions$,
-  allRobotsRoute$.switchMap(_ => robotsMetrics$.takeUntil(routeChange$))
-).map(
+const obsRobots = Observable.combineLatest(robotSessions$).map(
   ([
     { sessions: robots, sessionDetails: robotDetails, route, routeDetails },
-    robotsMetrics,
   ]) => ({
     route,
     routeDetails,
     robots,
     robotDetails,
-    robotsMetrics,
   })
 );
 
