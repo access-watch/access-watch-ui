@@ -1,13 +1,7 @@
 import { Observable } from 'rxjs';
 import { pickKeys } from '../utilities/object';
 
-import {
-  routeChange$,
-  metricsRoute$,
-  requestsRoute$,
-  robotsRoute$,
-  addressesRoute$,
-} from '../router';
+import { routeChange$, metricsRoute$ } from '../router';
 
 import { dataEvents, D_METRICS } from '../event_hub';
 import config from '../app_config';
