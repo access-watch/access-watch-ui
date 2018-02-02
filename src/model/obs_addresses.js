@@ -30,7 +30,7 @@ const obsAddresses = Observable.combineLatest(
   allAddressesRoute$.switchMap(_ => robotsMetrics$.takeUntil(routeChange$))
 ).map(
   ([
-    { sessions: addresses, sessionDetails, route, routeDetails },
+    { sessions: addresses, sessionDetails, route, routeDetails, activity },
     robotsMetrics,
   ]) => ({
     route,
@@ -42,6 +42,7 @@ const obsAddresses = Observable.combineLatest(
       rule: sessionDetails.rule,
     },
     robotsMetrics,
+    activity,
   })
 );
 

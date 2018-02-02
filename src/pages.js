@@ -200,12 +200,20 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
 }));
 
 export const onAddressesPage = addresses$.map(
-  ({ route, routeDetails, addresses, addressDetails, robotsMetrics }) => ({
+  ({
+    route,
+    routeDetails,
+    addresses,
+    addressDetails,
+    robotsMetrics,
+    activity,
+  }) => ({
     element: (
       <AddressesPageComponent
         addresses={addresses}
         route={route}
         robotsMetrics={robotsMetrics}
+        activity={activity}
       />
     ),
     name: 'addresses',

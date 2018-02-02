@@ -20,7 +20,7 @@ const windowConfig = {
   metrics: {
     expiration: 24 * 3600,
   },
-  robots: {
+  session: {
     timerange: false,
   },
   ...(window.config || {}),

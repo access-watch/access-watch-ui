@@ -2,16 +2,24 @@ import React from 'react';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 
-import { timeDisplay } from '../../utilities/timerange';
 import {
   tableResolvers,
   treemapResolvers,
   reputationResolver,
 } from '../address/address_resolvers';
+import {
+  getTimerangeTableResolvers,
+  getTimeDisplay,
+} from '../sessions/timerange_utils';
 
+import SessionTimeSelector from '../sessions/session_time_selector';
 import SessionToolbar from '../sessions/session_toolbar';
 import Sessions from '../sessions/sessions';
-import { routePropType, addressSessionsPropType } from '../prop_types';
+import {
+  routePropType,
+  addressSessionsPropType,
+  activityPropType,
+} from '../prop_types';
 
 import '../../../scss/sessions/sessions_page.scss';
 import '../../../scss/addresses_page.scss';
@@ -21,15 +29,18 @@ const rowClassResolver = address => {
   return status ? `addresses__table__row--${status}` : '';
 };
 
-const AddressesPage = ({ route, addresses }) => (
+const AddressesPage = ({ route, addresses, activity }) => (
   <div className="addresses-page page--sessions">
     <div className="page-header page-header--addresses">
       <div className="page-header__header">
         <Row gutter={0}>
           <Col md="50%">
             <span className="page-header__header-title">
-              Top Addresses {`(${timeDisplay()})`}
+              Top Addresses {` (${getTimeDisplay(route)})`}
             </span>
+          </Col>
+          <Col md="50%">
+            <SessionTimeSelector activity={activity} route={route} />
           </Col>
         </Row>
       </div>
@@ -39,7 +50,7 @@ const AddressesPage = ({ route, addresses }) => (
     </div>
     <Sessions
       sessions={addresses}
-      tableResolvers={tableResolvers}
+      tableResolvers={[...tableResolvers, ...getTimerangeTableResolvers(route)]}
       route={route}
       treemapResolvers={treemapResolvers}
       emptyMessage="No addresses seen for this period"
@@ -54,6 +65,7 @@ const AddressesPage = ({ route, addresses }) => (
 AddressesPage.propTypes = {
   route: routePropType.isRequired,
   addresses: addressSessionsPropType.isRequired,
+  activity: activityPropType.isRequired,
 };
 /* eslint-enable react/no-typos */
 

@@ -49,11 +49,13 @@ const DEFAULT_TIME_PROPS = {
 const sessionProps = {
   sort: 'p',
   visType: 'p',
+  ...timerangeProps,
 };
 
 const DEFAULT_SESSION_PROPS = {
   sort: 'speed',
   visType: 'treemap',
+  ...DEFAULT_TIMERANGE_PROPS,
 };
 
 const routerStateStoreConfig = {
