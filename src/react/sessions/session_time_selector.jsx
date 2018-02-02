@@ -19,7 +19,7 @@ const SessionTimeSelector = ({ route, activity }) => {
       {disabledTimerange && (
         <div className="session-time-selector__alert">
           This feature is not supported by your current configuration.{' '}
-          <a href="https://github.com/access-watch/access-watch/blob/master/docs/configuration.md">
+          <a href="https://github.com/access-watch/access-watch/blob/master/docs/session-timerange.md">
             More infos
           </a>
         </div>
