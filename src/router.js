@@ -117,6 +117,7 @@ export const METRICS_DEFAULT_PARAMS = {
 export const ADDRESSES_DEFAULT_PARAMS = {
   ...DEFAULT_SESSION_PROPS,
   visType: 'table',
+  filters: [],
 };
 
 const valueConverters = {

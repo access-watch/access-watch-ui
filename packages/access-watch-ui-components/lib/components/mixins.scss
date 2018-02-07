@@ -185,3 +185,9 @@
     color: map-get($statuses, 'suspicious');
   }
 }
+
+@mixin reset-btn-style() {
+  border: none;
+  background-color: unset;
+  border-radius: 0;
+}

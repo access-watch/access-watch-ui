@@ -1,0 +1,50 @@
+@import '../vars';
+@import '../mixins';
+
+.smart-filter {
+  display: flex;
+  padding: 4px;
+  //border: solid 1px $v-light-gray;
+  border-radius: 4px;
+  background-color: #655984;
+  cursor: pointer;
+  align-items: center;
+  font-size: 12px;
+}
+
+.smart-filter__item {
+  border: solid 1px transparent;
+  margin: 0 8px;
+  background-color: white;
+  color: $main-color;
+  &:hover {
+    border: solid 1px fade_out($main-color, 0.9);
+  }
+
+  > .aw-pill__delete {
+    .aw-pill__delete-btn {
+      height: 12px;
+      width: 12px;
+    }
+  }
+
+  &__id {
+    font-family: $default-bold-font;
+    font-weight: bold;
+  }
+  &__values {
+    display: flex;
+    margin-left: 10px;
+  }
+  &__value {
+    position: relative;
+    margin: 0 2px;
+    border: solid 1px fade_out($main-color, 0.9);
+    &-wrapper {
+      display: flex;
+    }
+  }
+  &__placeholder {
+    color: $v-light-gray;
+  }
+}

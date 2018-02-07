@@ -1,6 +1,7 @@
 import React from 'react';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
+import { SmartFilter } from 'access-watch-ui-components';
 
 import {
   tableResolvers,
@@ -11,6 +12,9 @@ import {
   getTimerangeTableResolvers,
   getTimeDisplay,
 } from '../sessions/timerange_utils';
+import filters from '../address/filters';
+import { updateRouteParameter } from '../../utilities/route_utils';
+import { V_SET_ROUTE, dispatch } from '../../event_hub';
 
 import SessionTimeSelector from '../sessions/session_time_selector';
 import SessionToolbar from '../sessions/session_toolbar';
@@ -29,6 +33,54 @@ const rowClassResolver = address => {
   return status ? `addresses__table__row--${status}` : '';
 };
 
+const dispatchNewFilters = ({ route }, value) =>
+  dispatch({
+    type: V_SET_ROUTE,
+    route: updateRouteParameter({ route, param: 'filters', value }),
+  });
+
+const onDeleteFilter = route => ({ id }) =>
+  dispatchNewFilters(route, route.filters.filter(f => f.id !== id));
+
+const onDeleteFilterValue = route => ({ id, value }) =>
+  dispatchNewFilters(
+    route,
+    route.filters.reduce((newFilters, f) => {
+      const { values = [] } = f;
+      return [
+        ...newFilters,
+        f.id === id
+          ? {
+              ...f,
+              values: values.filter(val => value !== val),
+            }
+          : f,
+      ];
+    }, [])
+  );
+
+const onFilterValueChange = route => ({ id, newValue, oldValue }) =>
+  dispatchNewFilters(
+    route,
+    route.filters.reduce((newFilters, f) => {
+      const { values = [] } = f;
+      return [
+        ...newFilters,
+        f.id === id
+          ? {
+              ...f,
+              values: oldValue
+                ? values.map(value => (oldValue === value ? newValue : value))
+                : values.concat([newValue]),
+            }
+          : f,
+      ];
+    }, [])
+  );
+
+const onAddFilter = route => ({ id }) =>
+  dispatchNewFilters(route, route.filters.concat([{ id }]));
+
 const AddressesPage = ({ route, addresses, activity }) => (
   <div className="addresses-page page--sessions">
     <div className="page-header page-header--addresses">
@@ -44,8 +96,19 @@ const AddressesPage = ({ route, addresses, activity }) => (
           </Col>
         </Row>
       </div>
-      <div className="page-header__body">
+      <div
+        className="page-header__body"
+        style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+      >
         <SessionToolbar route={route} />
+        <SmartFilter
+          filters={route.filters}
+          onDeleteFilter={onDeleteFilter(route)}
+          onDeleteFilterValue={onDeleteFilterValue(route)}
+          availableFilters={filters}
+          onFilterValueChange={onFilterValueChange(route)}
+          onAddFilter={onAddFilter(route)}
+        />
       </div>
     </div>
     <Sessions
