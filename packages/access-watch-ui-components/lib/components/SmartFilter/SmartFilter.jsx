@@ -133,6 +133,7 @@ class SmartFilter extends React.Component {
     const { values: availableValues } = availableFilters.find(f => f.id === id);
     const isFullText = !availableValues;
     const { values = [] } = filters.find(f => f.id === id);
+    const autoCompleteKeys = ['Enter', 'Tab', ' '];
     if (key === 'Backspace' && inputValue === '') {
       const index = value ? values.indexOf(value) : values.length;
       if (value) {
@@ -153,29 +154,27 @@ class SmartFilter extends React.Component {
       e.preventDefault();
       return;
     }
-    if (key === ' ') {
-      if (isFullText || highlightedItem) {
+    if (autoCompleteKeys.indexOf(key) !== -1) {
+      const hasValidValue = isFullText || highlightedItem;
+      if (hasValidValue) {
         if (isFullText) {
           this.handleFilterValueChange({ id, value })(inputValue);
-        } else {
+        } else if (highlightedItem) {
           this.handleFilterValueChange({ id, value })(highlightedItem);
         }
         reset();
-        if (isFullText || values.length < availableValues.length) {
+        e.preventDefault();
+        if (
+          key === ' ' &&
+          (isFullText || values.length < availableValues.length - 1)
+        ) {
           this.setState({ editFilter: { id } });
+        } else if (key === ' ' || key === 'Tab') {
+          this.setState({ editFilter: {}, addFilter: true });
         } else {
           this.setState({ editFilter: {} });
         }
-        e.preventDefault();
       }
-      return;
-    }
-    if (key === 'Enter' && (value || isFullText)) {
-      if (isFullText) {
-        this.handleFilterValueChange({ id, value })(inputValue);
-      }
-      this.setState({ editFilter: {} });
-      return;
     }
   };
 
