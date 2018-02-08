@@ -157,7 +157,7 @@ class SmartFilter extends React.Component {
     if (autoCompleteKeys.indexOf(key) !== -1) {
       const hasValidValue = isFullText || highlightedItem;
       if (hasValidValue) {
-        if (isFullText) {
+        if (isFullText && inputValue.length > 0) {
           this.handleFilterValueChange({ id, value })(inputValue);
         } else if (highlightedItem) {
           this.handleFilterValueChange({ id, value })(highlightedItem);
