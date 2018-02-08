@@ -29,9 +29,9 @@ const timerangesDividers = [
 
 const sortedDividers = timerangesDividers.sort((a, b) => a.divider < b.divider);
 
-const getTimeDivider = s =>
-  sortedDividers.find(({ divider }) => divider < s) ||
-  sortedDividers[sortedDividers.length - 1];
+const getTimeDivider = (s, dividers) =>
+  dividers.find(({ divider }) => divider < s) ||
+  dividers[sortedDividers.length - 1];
 
 const getDivided = s =>
   sortedDividers.reduce((acc, div, i) => {
@@ -67,16 +67,27 @@ const secondsToHumanDisplay = s => {
   return dividersToShortDisplay(splitted);
 };
 
-const timerangeDisplay = (from, to) => {
+export const timerangeDisplay = (
+  { timerangeFrom: from, timerangeTo: to },
+  excludeDividers = []
+) => {
   const seconds = Math.round((to - from) / 1000);
-  const timerangeDivider = getTimeDivider(seconds);
+  const timerangeDivider = getTimeDivider(
+    seconds,
+    sortedDividers.filter(({ short }) => excludeDividers.indexOf(short) === -1)
+  );
   return `${Math.round(seconds / timerangeDivider.divider)}${
     timerangeDivider.short
-  } interval`;
+  }`;
 };
 
-export const timeDisplay = ({ timerangeFrom, timerangeTo, timeSlider }) =>
-  (timerangeFrom && timerangeDisplay(timerangeFrom, timerangeTo)) ||
+export const timeDisplay = ({
+  timerangeFrom,
+  timerangeTo,
+  timeSlider = 'auto',
+} = {}) =>
+  (timerangeFrom &&
+    timerangeDisplay({ timerangeFrom, timerangeTo }) + ' interval') ||
   'last ' +
     secondsToHumanDisplay(
       timeSlider === 'auto' ? config.metrics.expiration : timeSlider * 60

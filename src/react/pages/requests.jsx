@@ -4,7 +4,7 @@ import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { stringify } from 'qs';
 
-import { V_SET_ROUTE, dispatch } from '../../event_hub';
+import { V_SET_ROUTE, dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import {
   dayEquality,
@@ -18,8 +18,7 @@ import LogsSeparator from '../logs/logs_separator';
 import SearchLogs from '../logs/search_logs';
 import FiltersLogs from '../logs/filters_logs';
 import TimeSelector from '../time/time_selector';
-import { formatNumber } from '../../i18n';
-import { logPropType, activityPropType, metricsPropType } from '../prop_types';
+import { logPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/requests_page.scss';
 
@@ -50,7 +49,6 @@ class LogsPage extends React.Component {
       route: PropTypes.string,
       filtersEnabled: PropTypes.bool,
     }).isRequired,
-    metrics: metricsPropType.isRequired,
     logEnd: PropTypes.bool,
     activity: activityPropType.isRequired,
   };
@@ -83,8 +81,8 @@ class LogsPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { logs } = nextProps;
-    if (logs.earlierLoading === true) {
+    const { earlierLoading } = nextProps;
+    if (earlierLoading === true) {
       this.setState({ earlierLoading: false });
     }
   }
@@ -97,17 +95,14 @@ class LogsPage extends React.Component {
   }
 
   handleGetEarlierLogs = _ => {
-    const { earlierLoading, route, logs } = this.props;
-    if (!this.state.earlierLoading || !earlierLoading) {
+    const { earlierLoading, route, logs, logEnd } = this.props;
+    if (!this.state.earlierLoading && !earlierLoading && !logEnd) {
       this.setState({ earlierLoading: true });
       dispatch({
-        type: 'view.req_earlier_logs',
+        type: V_REQUEST_EARLIER_LOGS,
         q: route.q || '',
-        filters: (route.filtersEnabled && route.filters) || null,
-        beforeTime: (logs.length >= 1
-          ? new Date(logs[logs.length - 1].request.time)
-          : new Date()
-        ).toISOString(),
+        filters: (route.filtersEnabled && route.filters) || {},
+        end: new Date(logs[logs.length - 1].request.time).getTime(),
       });
     }
   };
@@ -209,14 +204,12 @@ class LogsPage extends React.Component {
   render() {
     const {
       route,
-      metrics,
       logs,
       loading,
       earlierLoading,
       logEnd,
       activity,
     } = this.props;
-    const { count, speed = 0 } = metrics.requests;
     const { fullTextSearchOpened } = this.state;
 
     return (
@@ -224,32 +217,19 @@ class LogsPage extends React.Component {
         <div className="page-header page-header--requests">
           <div className="page-header__header">
             <Row gutter={0}>
-              <Col md="40%">
+              <Col md="60%">
                 <span className="page-header__header-title">
                   {!route.timerangeFrom && 'Latest'} Requests{' '}
-                  {timeDisplay(route) &&
-                    `(${timeDisplay(route).toLowerCase()})`}
+                  {timeDisplay(route) && `(${timeDisplay(route)})`}
                 </span>
-              </Col>
-              <Col md="20%">
-                <div className="requests-metrics">
-                  <p className="requests-metrics__day">
-                    {metrics.loading && 'Loading'}
-                    {!metrics.loading &&
-                      formatNumber(count, {
-                        maximumFractionDigits: 2,
-                      })}
-                    {' requests'}
-                  </p>
-                  <p className="requests-metrics__minute">
-                    {metrics.loading && 'Loading requests speed...'}
-                    {!metrics.loading && `${formatNumber(speed)}/min`}
-                  </p>
-                </div>
               </Col>
               <Col md="40%">
                 <div className="page-header__time-selector">
-                  <TimeSelector activity={activity.activity} route={route} />
+                  <TimeSelector
+                    activity={activity.activity}
+                    route={route}
+                    hideTimerange
+                  />
                 </div>
               </Col>
             </Row>

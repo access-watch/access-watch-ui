@@ -33,7 +33,7 @@ describe('create_logs_factory', () => {
       request: jest.fn(p => Observable.defer(_ => Observable.fromPromise(p()))),
       poll: jest.fn(p => Observable.defer(_ => Observable.fromPromise(p()))),
       http: {
-        get: jest.fn(_ => Promise.resolve({ logs: [] })),
+        get: jest.fn(_ => Promise.resolve([])),
         post: jest.fn(_ => Promise.resolve()),
       },
       ws: {
@@ -81,7 +81,7 @@ describe('create_logs_factory', () => {
     const logs$ = createLogs({});
 
     return pr(
-      logs$.skip(2).do(({ logs, streamOpen }) => {
+      logs$.skip(3).do(({ logs, streamOpen }) => {
         expect(streamOpen).toBe(true);
         expect(logs).toEqual(socketLogs);
         expect(api.ws.createSocket.mock.calls.length).toBe(1);
@@ -101,13 +101,14 @@ describe('create_logs_factory', () => {
     });
 
     const createLogs = createLogsFactory({ api, handleAction, transformLog });
-    const logs$ = createLogs({});
+    const logsStore = {};
+    const logs$ = createLogs(logsStore);
 
     return pr(
-      logs$.skip(2).do(a => {
+      logs$.skip(3).do(a => {
         const obsLogs = a.logs;
         expect(obsLogs).toEqual(logs);
-        const logs2$ = createLogs({});
+        const logs2$ = createLogs(logsStore);
         logs2$.do(b => {
           expect(b.logs).toEqual(obsLogs);
         });

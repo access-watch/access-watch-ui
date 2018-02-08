@@ -19,12 +19,14 @@
       font-family: $default-bold-font;
     }
     &--accepted,
-    &--rejected {
+    &--rejected,
+    &--processed {
       @include activityResolver();
     }
   }
   .rounded-table__body__cell {
-    &--accepted {
+    &--accepted,
+    &--processed {
       color: $green;
     }
     &--rejected {

@@ -2,13 +2,12 @@ import { Observable } from 'rxjs';
 import { createSessionDetailsObs } from './obs_session';
 import createLogs from './create_logs';
 import { getSessionDetails } from '../api_manager/api_agent_sessions';
-import { type, logFilter } from './obs_robots';
+import { type, logMapping as robotLogMapping } from './obs_robots';
 
-const createSessionLogs = id =>
-  createLogs({}).map(({ logs, ...rest }) => ({
-    ...rest,
-    logs: logs.filter(({ session }) => session.id === id),
-  }));
+const identityLogMapping = 'identity.id';
+
+export const getLogMapping = ({ robot }) =>
+  robot ? robotLogMapping : identityLogMapping;
 
 export default ({ session: id }) =>
   Observable.of(id).switchMap(_ =>
@@ -23,12 +22,22 @@ export default ({ session: id }) =>
       if (s) {
         return createSessionDetailsObs({
           routeId: 'session',
-          logFilter,
           sessionDetails$: Observable.of(s),
           lastSessions: [],
           type,
+          logMapping: robotLogMapping,
         })({ session: id });
       }
-      return createSessionLogs(id).map(logs => ({ logs, session: {} }));
+      return createLogs({
+        filters: { [identityLogMapping]: [id] },
+        filtersEnabled: true,
+      }).map(logs => ({
+        logs,
+        session: {
+          identity: {
+            id,
+          },
+        },
+      }));
     })
   );

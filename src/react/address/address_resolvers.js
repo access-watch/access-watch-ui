@@ -6,10 +6,7 @@ import {
   addressTypeResolver,
 } from 'access-watch-ui-components';
 
-import {
-  tableResolvers as sessionTableResolvers,
-  createReputationPreviewResolver,
-} from '../sessions/resolvers';
+import { createReputationPreviewResolver } from '../sessions/resolvers';
 
 import IdentityTableCell from '../sessions/identity_table_cell';
 import ReputationTableCell from '../sessions/reputation_table_cell';
@@ -133,5 +130,4 @@ export const tableResolvers = [
       return '';
     },
   },
-  ...sessionTableResolvers,
 ];

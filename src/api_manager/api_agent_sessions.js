@@ -1,7 +1,11 @@
 import { poll, api } from './api';
-import { sToMs } from '../utilities/time';
-import { convertObjKeyValues } from '../utilities/object';
-import { getAvgSpeedAndCount } from './utils';
+import { sToMs, msToS } from '../utilities/time';
+import {
+  convertObjKeyValues,
+  pickKeys,
+  convertObjValues,
+} from '../utilities/object';
+import { getAvgSpeedAndCount, extractTimerange } from './utils';
 
 const DEFAULT_POLL_INTERVAL = 5000;
 
@@ -14,15 +18,20 @@ const timeKeys = ['start', 'end', 'updated'];
 const convertTime = s =>
   convertObjKeyValues({ keys: timeKeys, convertFn: sToMs })(s);
 
-const transformSession = s => addAvgSpeed(convertTime(s));
+const transformSession = s => (s.speed ? addAvgSpeed(convertTime(s)) : s);
+
+const pickTimerangeKeys = pickKeys(['start', 'end']);
 
 export const getSessionsObs = (
-  { type, sort, filter, limit },
+  { type, sort, filter, limit, ...rest },
   pollInterval = DEFAULT_POLL_INTERVAL
 ) => {
   const suffix = (type && `/${type}`) || '';
+  const timerange = convertObjValues(msToS)(
+    pickTimerangeKeys(extractTimerange(rest))
+  );
   return poll(
-    () => api.get(`/sessions${suffix}`, { sort, filter, limit }),
+    () => api.get(`/sessions${suffix}`, { sort, filter, limit, ...timerange }),
     pollInterval
   ).map(arr => arr.map(transformSession));
 };

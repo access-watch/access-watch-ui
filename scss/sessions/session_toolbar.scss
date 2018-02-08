@@ -1,0 +1,79 @@
+@import '../vars';
+@import '../mixins';
+
+$checkbox-size: 15px;
+
+.session-toolbar {
+  display: inline-flex;
+  font-family: $default-light-font;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.session-toolbar__checkboxes {
+  margin: 0 20px;
+}
+
+.session-toolbar__checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.session-toolbar__checkbox-robots__text {
+  text-transform: capitalize;
+}
+
+.session-toolbar__checkbox__checkbox {
+  position: relative;
+  display: inline-block;
+  border-radius: 3px;
+  height: $checkbox-size;
+  width: $checkbox-size;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 5px;
+  input {
+    display: none;
+  }
+
+  @each $status, $color in $statuses {
+    &--#{$status} {
+      border-color: $color;
+    }
+  }
+}
+
+.session-toolbar__checkbox__checkbox--none-checked {
+  @each $status, $color in $statuses {
+    &.session-toolbar__checkbox__checkbox--#{$status} {
+      background-color: $color;
+    }
+  }
+}
+
+.session-toolbar__checkbox__checkbox--checked {
+  @each $status, $color in $statuses {
+    &.session-toolbar__checkbox__checkbox--#{$status} {
+      background-color: $color;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    fill: $brand-purple;
+    background-image: url(../../assets/checkmark-white.svg);
+    @include white-to-brand-purple();
+    background-size: 100%;
+  }
+}

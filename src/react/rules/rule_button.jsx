@@ -7,7 +7,7 @@ import { V_ADD_RULE, V_REMOVE_RULE, dispatch } from '../../event_hub';
 import Button from '../utilities/button';
 import RulePropTypes from './rule_prop_types';
 
-import '../../../scss/rules_button.scss';
+import '../../../scss/rules/rules_button.scss';
 
 const baseClass = 'rule-button';
 const cSfx = sfx => `${baseClass}--${sfx}`;

@@ -12,10 +12,24 @@ import AbstractSessionDetails, {
 } from '../sessions/abstract_session_details';
 import AbstractSessionDetailsRowBlock from '../sessions/abstract_session_details_row_block';
 import { routePropType, addressPropType, logsPropType } from '../prop_types';
+import { logMapping } from '../../model/obs_robots';
+import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
+
+import '../../../scss/sessions/session_details.scss';
 
 import { AddressAction } from './address_action';
 
 import '../../../scss/address_details.scss';
+
+const handleGetEarlierLogs = ({ address }) => end =>
+  dispatch({
+    type: V_REQUEST_EARLIER_LOGS,
+    logMapping,
+    filters: {
+      [logMapping]: [address.value],
+    },
+    end,
+  });
 
 const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
   const { count, speed } = addressSession;
@@ -59,6 +73,7 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
           'user_agent.agent.label'
         ),
       }}
+      handleGetEarlierLogs={handleGetEarlierLogs(addressSession)}
       headerRowChildren={[
         <AbstractSessionDetailsRowBlock key="asNumber" label="AS Number">
           {asNumber || ''}

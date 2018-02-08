@@ -49,11 +49,13 @@ const DEFAULT_TIME_PROPS = {
 const sessionProps = {
   sort: 'p',
   visType: 'p',
+  ...timerangeProps,
 };
 
 const DEFAULT_SESSION_PROPS = {
   sort: 'speed',
   visType: 'treemap',
+  ...DEFAULT_TIMERANGE_PROPS,
 };
 
 const routerStateStoreConfig = {
@@ -62,8 +64,8 @@ const routerStateStoreConfig = {
     worldMapFilters: 'p',
   },
   [ROUTE_ROBOTS]: {
-    ...timeProps,
     ...sessionProps,
+    ...timeProps,
     reputation: 'p',
   },
   [ROUTE_ROBOTS_DETAILS]: {
@@ -79,7 +81,6 @@ const routerStateStoreConfig = {
     ...timeProps,
   },
   [ROUTE_ADDRESSES]: {
-    ...timeProps,
     ...sessionProps,
     reputation: 'p',
   },
@@ -114,7 +115,6 @@ export const METRICS_DEFAULT_PARAMS = {
 };
 
 export const ADDRESSES_DEFAULT_PARAMS = {
-  ...DEFAULT_TIME_PROPS,
   ...DEFAULT_SESSION_PROPS,
   visType: 'table',
 };

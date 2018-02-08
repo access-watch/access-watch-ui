@@ -6,10 +6,15 @@ import { dataEvents, D_MONITORING } from '../event_hub';
 
 import { getAvgSpeedAndCount } from './utils';
 
-const transformSpeeds = ({ accepted, rejected, ...rest }) => ({
+const transformSpeeds = ({ speeds, ...rest }) => ({
   ...rest,
-  accepted: getAvgSpeedAndCount({ speed: accepted }),
-  rejected: getAvgSpeedAndCount({ speed: rejected }),
+  speeds: Object.keys(speeds).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key]: getAvgSpeedAndCount({ speed: speeds[key] }),
+    }),
+    {}
+  ),
 });
 
 /**
