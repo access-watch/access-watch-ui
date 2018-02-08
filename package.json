@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "1.5.0",
+  "version": "1.5.5",
   "description": "The Access Watch User Interface",
   "main": "dist/main.js",
   "files": [
@@ -115,8 +115,5 @@
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
     ]
-  },
-  "dependencies": {
-    "babel-preset-env": "^1.6.1"
   }
 }

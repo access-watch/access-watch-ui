@@ -25,7 +25,9 @@ const handleGetEarlierLogs = ({ address }) => end =>
   dispatch({
     type: V_REQUEST_EARLIER_LOGS,
     logMapping,
-    logMappingValue: address.value,
+    filters: {
+      [logMapping]: [address.value],
+    },
     end,
   });
 

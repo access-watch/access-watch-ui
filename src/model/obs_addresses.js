@@ -1,10 +1,4 @@
-import { Observable } from 'rxjs';
-import {
-  routeChange$,
-  addressesRoute$,
-  addressDetailsRoute$,
-} from '../../src/router';
-import { robotsMetrics$ } from './obs_robots_metrics';
+import { addressesRoute$, addressDetailsRoute$ } from '../../src/router';
 import { createSessions$ } from './obs_session';
 
 const createFilter = ({ reputation }) => ({
@@ -20,19 +14,8 @@ const addressSessions$ = createSessions$({
   logMapping: 'address.value',
 });
 
-const allAddressesRoute$ = Observable.merge(
-  addressesRoute$,
-  addressDetailsRoute$
-);
-
-const obsAddresses = Observable.combineLatest(
-  addressSessions$,
-  allAddressesRoute$.switchMap(_ => robotsMetrics$.takeUntil(routeChange$))
-).map(
-  ([
-    { sessions: addresses, sessionDetails, route, routeDetails, activity },
-    robotsMetrics,
-  ]) => ({
+const obsAddresses = addressSessions$.map(
+  ({ sessions: addresses, sessionDetails, route, routeDetails, activity }) => ({
     route,
     routeDetails,
     addresses,
@@ -41,7 +24,6 @@ const obsAddresses = Observable.combineLatest(
       logs: sessionDetails.logs,
       rule: sessionDetails.rule,
     },
-    robotsMetrics,
     activity,
   })
 );

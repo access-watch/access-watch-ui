@@ -49,6 +49,7 @@ export default class AccessWatchAPI {
     return withTimeout(
       fetch(this.apiBase + endpoint + '?' + stringify(params), {
         method,
+        credentials: 'same-origin',
         headers: this.headers.get,
       })
     )
@@ -64,6 +65,7 @@ export default class AccessWatchAPI {
     return withTimeout(
       fetch(this.apiBase + endpoint, {
         method: 'POST',
+        credentials: 'same-origin',
         body: JSON.stringify(params),
         headers: this.headers.post,
       })
