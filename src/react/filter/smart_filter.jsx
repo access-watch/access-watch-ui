@@ -42,7 +42,6 @@ const getFilterFunctions = ({ route, prefix }) => {
         value: filtersToURI(filters.map(prefixFilter(prefix))),
       }),
     });
-
   const onDeleteFilter = ({ id }) =>
     dispatchNewFilters(URIToFilters(route.filter).filter(f => f.id !== id));
 
@@ -82,8 +81,8 @@ const getFilterFunctions = ({ route, prefix }) => {
       )
     );
 
-  const onAddFilter = ({ id }) =>
-    dispatchNewFilters(URIToFilters(route.filter).concat([{ id }]));
+  const onAddFilter = filter =>
+    dispatchNewFilters(URIToFilters(route.filter).concat([filter]));
 
   return {
     onDeleteFilter,
@@ -94,20 +93,65 @@ const getFilterFunctions = ({ route, prefix }) => {
   };
 };
 
-const SmartFilter = ({ route, prefix, ...props }) => {
-  const { URIToFilters, ...filtersFn } = getFilterFunctions({ route, prefix });
-  return (
-    <SmartFilterAbstract
-      filters={URIToFilters(route.filter)}
-      {...filtersFn}
-      {...props}
-    />
-  );
-};
+class SmartFilter extends React.Component {
+  static propTypes = {
+    route: routePropType.isRequired,
+    prefix: PropTypes.string.isRequired,
+  };
 
-SmartFilter.propTypes = {
-  route: routePropType.isRequired,
-  prefix: PropTypes.string.isRequired,
-};
+  state = {};
+
+  onFilterValueChange = args => {
+    const { id, newValue } = args;
+    const { newFilter } = this.state;
+    const { onAddFilter, onFilterValueChange } = this.getFilterFunctions();
+    if (newFilter === id) {
+      onAddFilter({ id, values: [newValue] });
+      this.setState({ newFilter: null });
+    } else {
+      onFilterValueChange(args);
+    }
+  };
+
+  onAddFilter = ({ id }) => {
+    this.setState({ newFilter: id });
+  };
+
+  onDeleteFilter = ({ id }) => {
+    const { newFilter } = this.state;
+    if (newFilter === id) {
+      this.setState({ newFilter: null });
+    } else {
+      this.getFilterFunctions().onDeleteFilter({ id });
+    }
+  };
+
+  getFilterFunctions = () => {
+    const { route, prefix } = this.props;
+    return getFilterFunctions({
+      route,
+      prefix,
+    });
+  };
+
+  render() {
+    const { route, ...props } = this.props;
+    const { newFilter } = this.state;
+    const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
+    const filters = newFilter
+      ? [...URIToFilters(route.filter), { id: newFilter }]
+      : URIToFilters(route.filter);
+    return (
+      <SmartFilterAbstract
+        filters={filters}
+        {...filtersFn}
+        onAddFilter={this.onAddFilter}
+        onFilterValueChange={this.onFilterValueChange}
+        onDeleteFilter={this.onDeleteFilter}
+        {...props}
+      />
+    );
+  }
+}
 
 export default SmartFilter;
