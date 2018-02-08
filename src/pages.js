@@ -95,7 +95,10 @@ export const onLogsPage = routeChange$
     Observable.combineLatest(
       createLogs(requestsRoute),
       Observable.combineLatest(metricsStore$, metricsLoading$).map(
-        ([metrics, metricsLoading]) => ({ ...metrics, loading: metricsLoading })
+        ([metrics, metricsLoading]) => ({
+          ...metrics,
+          loading: metricsLoading,
+        })
       ),
       Observable.of(requestsRoute),
       globalActivity$,
@@ -222,8 +225,6 @@ export const onRulesPage = rules$.map(({ rules }) => ({
   element: <RulesPageComponent rules={rules} />,
   name: 'rules',
 }));
-
-metricsLoading$.subscribe();
 
 /**
  * @fires Pages#PageChange
