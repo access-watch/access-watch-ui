@@ -9,6 +9,7 @@ import {
   getTimerangeTableResolvers,
   getTimeDisplay,
 } from '../sessions/timerange_utils';
+import sessionFilters from '../sessions/filters';
 
 import Sessions from '../sessions/sessions';
 import SessionToolbar from '../sessions/session_toolbar';
@@ -16,6 +17,7 @@ import IdentityTableCell from '../sessions/identity_table_cell';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
 import SessionTimeSelector from '../sessions/session_time_selector';
+import SmartFilter from '../filter/smart_filter';
 import { robotSessionsPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
@@ -64,6 +66,16 @@ const tableResolvers = [
   },
 ];
 
+const availableFilters = [
+  {
+    id: 'name',
+  },
+  {
+    id: 'type',
+  },
+  ...sessionFilters,
+];
+
 const rowClassResolver = robot => {
   const { status } = treemapResolvers.reputation(robot);
   return status ? `robots__table__row--${status}` : '';
@@ -85,8 +97,16 @@ const RobotsPage = ({ route, robots, activity }) => (
           </Col>
         </Row>
       </div>
-      <div className="page-header__body">
+      <div
+        className="page-header__body"
+        style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+      >
         <SessionToolbar route={route} />
+        <SmartFilter
+          route={route}
+          prefix="robot"
+          availableFilters={availableFilters}
+        />
       </div>
     </div>
     <Sessions

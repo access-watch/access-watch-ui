@@ -23,7 +23,7 @@ const transformSession = s => (s.speed ? addAvgSpeed(convertTime(s)) : s);
 const pickTimerangeKeys = pickKeys(['start', 'end']);
 
 export const getSessionsObs = (
-  { type, sort, filter, limit, filters, ...rest },
+  { type, sort, filter, limit, ...rest },
   pollInterval = DEFAULT_POLL_INTERVAL
 ) => {
   const suffix = (type && `/${type}`) || '';
@@ -36,7 +36,6 @@ export const getSessionsObs = (
         sort,
         filter,
         limit,
-        filters,
         ...timerange,
       }),
     pollInterval

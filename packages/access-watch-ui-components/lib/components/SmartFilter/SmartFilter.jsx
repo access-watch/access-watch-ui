@@ -127,7 +127,7 @@ class SmartFilter extends React.Component {
     this.setState({ editFilter: {} });
   };
 
-  handleInputKeyDown = ({ id, value }) => (e, { reset }) => {
+  handleInputKeyDown = ({ id, value }) => (e, { reset, highlightedItem }) => {
     const { availableFilters, filters } = this.props;
     const { key, target: { value: inputValue } } = e;
     const { values: availableValues } = availableFilters.find(f => f.id === id);
@@ -137,6 +137,8 @@ class SmartFilter extends React.Component {
       const index = value ? values.indexOf(value) : values.length;
       if (value) {
         this.deleteFilterValue({ id, value, updateState: false })(e);
+      } else if (values.length === 0) {
+        this.deleteFilter({ id })(e);
       }
       if (index > 0) {
         this.setState({
@@ -152,11 +154,15 @@ class SmartFilter extends React.Component {
       return;
     }
     if (key === ' ') {
-      if (isFullText || availableValues.indexOf(inputValue) !== -1) {
-        this.handleFilterValueChange({ id, value })(inputValue);
+      if (isFullText || highlightedItem) {
+        if (isFullText) {
+          this.handleFilterValueChange({ id, value })(inputValue);
+        } else {
+          this.handleFilterValueChange({ id, value })(highlightedItem);
+        }
         reset();
         if (isFullText || values.length < availableValues.length) {
-          this.setState({ editFilter: { id, inputValue: '' } });
+          this.setState({ editFilter: { id } });
         } else {
           this.setState({ editFilter: {} });
         }

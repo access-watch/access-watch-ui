@@ -24,36 +24,45 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
       highlightedIndex,
       selectItem,
       reset,
-    }) => (
-      <div className={baseClass}>
-        <input
-          {...getInputProps({
-            ref: inputRef,
-            ...(onKeyDown
-              ? {
-                  onKeyDown: e => onKeyDown(e, { reset }),
-                }
-              : {}),
-          })}
-        />
-        {isOpen ? (
-          <div className={itemsClass}>
-            {items.filter(i => i.includes(inputValue)).map((item, index) => (
-              <div
-                className={cx(itemClass, {
-                  [`${itemClass}--highlight`]: highlightedIndex === index,
-                  [`${itemClass}--selected`]: selectedItem === item,
-                })}
-                {...getItemProps({ item })}
-                key={item}
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    )}
+    }) => {
+      const renderedItems = isOpen
+        ? items.filter(i => i.includes(inputValue))
+        : [];
+      return (
+        <div className={baseClass}>
+          <input
+            {...getInputProps({
+              ref: inputRef,
+              ...(onKeyDown
+                ? {
+                    onKeyDown: e =>
+                      onKeyDown(e, {
+                        reset,
+                        highlightedItem: renderedItems[highlightedIndex],
+                      }),
+                  }
+                : {}),
+            })}
+          />
+          {isOpen ? (
+            <div className={itemsClass}>
+              {renderedItems.map((item, index) => (
+                <div
+                  className={cx(itemClass, {
+                    [`${itemClass}--highlight`]: highlightedIndex === index,
+                    [`${itemClass}--selected`]: selectedItem === item,
+                  })}
+                  {...getItemProps({ item })}
+                  key={item}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      );
+    }}
   />
 );
 

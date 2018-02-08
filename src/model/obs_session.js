@@ -97,6 +97,7 @@ export const createSessions$ = ({
     visType,
     timerangeFrom,
     timerangeTo,
+    filter,
     ...rest
   }) =>
     getSessionsObs({
@@ -107,6 +108,7 @@ export const createSessions$ = ({
       timerangeFrom,
       timerangeTo,
       ...createFilter(rest),
+      filter,
     })
       .do(sessions => {
         lastSessions.timerange = !!(timerangeFrom && timerangeTo);

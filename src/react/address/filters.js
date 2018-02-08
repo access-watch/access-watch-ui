@@ -4,20 +4,20 @@ import sessionFilters from '../sessions/filters';
 
 export const addressesFilters = [
   {
-    id: 'address.value',
+    id: 'value',
   },
   {
-    id: 'address.hostname',
+    id: 'hostname',
   },
   {
-    id: 'address.country_code',
+    id: 'country_code',
     values: Object.keys(countries).filter(code => code.length === 2),
   },
   {
-    id: 'address.network_name',
+    id: 'network_name',
   },
   {
-    id: 'address.as_number',
+    id: 'as_number',
   },
 ];
 

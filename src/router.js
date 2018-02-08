@@ -46,16 +46,25 @@ const DEFAULT_TIME_PROPS = {
   ...DEFAULT_TIMERANGE_PROPS,
 };
 
+const filterProps = {
+  filter: 'p',
+};
+const DEFAULT_FILTER_PROPS = {
+  filter: '',
+};
+
 const sessionProps = {
   sort: 'p',
   visType: 'p',
   ...timerangeProps,
+  ...filterProps,
 };
 
 const DEFAULT_SESSION_PROPS = {
   sort: 'speed',
   visType: 'treemap',
   ...DEFAULT_TIMERANGE_PROPS,
+  ...DEFAULT_FILTER_PROPS,
 };
 
 const routerStateStoreConfig = {
@@ -117,7 +126,6 @@ export const METRICS_DEFAULT_PARAMS = {
 export const ADDRESSES_DEFAULT_PARAMS = {
   ...DEFAULT_SESSION_PROPS,
   visType: 'table',
-  filters: [],
 };
 
 const valueConverters = {
