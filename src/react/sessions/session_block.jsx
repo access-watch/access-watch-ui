@@ -160,7 +160,7 @@ class SessionBlock extends React.Component {
                 {speed ||
                   (updated && (
                     <span>
-                      latest <TimeAgo time={updated} />
+                      latest <TimeAgo time={new Date(updated)} />
                     </span>
                   ))}
               </span>
