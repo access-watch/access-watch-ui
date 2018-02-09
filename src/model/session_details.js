@@ -32,11 +32,7 @@ export default ({ session: id }) =>
         filtersEnabled: true,
       }).map(logs => ({
         logs,
-        session: {
-          identity: {
-            id,
-          },
-        },
+        session: {},
       }));
     })
   );
