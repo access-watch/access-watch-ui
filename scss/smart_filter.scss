@@ -1,0 +1,33 @@
+@import 'vars';
+
+@mixin filter-with-circle($global, $text-size, $horizontal-padding, $vertical-padding, $colors-map) {
+  &--#{$global} {
+    padding-left: 0;
+    &::before {
+      content: '';
+      width: $text-size;
+      height: $text-size;
+      border-radius: 50%;
+      margin: 0 8px;
+    }
+  }
+  @each $key, $color in $colors-map {
+    &--#{$key} {
+      &::before {
+        background-color: $color;
+      }
+    }
+  }
+}
+
+$filter-side-margin: 5px;
+$filter-horizontal-padding: 3px;
+$filter-vertical-padding: 8px;
+$filter-bg-color: white;
+$filter-color: $brand-purple;
+$filter-font-size: 11px;
+
+.smart-filter__item__value {
+  @include filter-with-circle('reputation-status', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $statuses);
+  //@include filter-with-circle('type', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $type-map);
+}

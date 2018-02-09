@@ -17,6 +17,12 @@ const itemValueClass = getItemElementClass('value');
 const itemPlaceholderClass = getItemElementClass('placeholder');
 const itemValueWrapperClass = `${itemValueClass}-wrapper`;
 
+const classNameFriendly = str => str.replace('.', '-');
+const getClassName = base => ({ id, value }) => {
+  const compose = s => `${base}--${classNameFriendly(s)}`;
+  return `${base} ${compose(id)} ${compose(value)}`;
+};
+
 const isEditedValue = (edit, id, value) =>
   edit.id === id && edit.value === value;
 
@@ -211,7 +217,7 @@ class SmartFilter extends React.Component {
               {values.map(value => (
                 <div key={value} className={itemValueWrapperClass}>
                   <Pill
-                    className={itemValueClass}
+                    className={getClassName(itemValueClass)({ id, value })}
                     onClick={this.handleFilterClick({ id, value })}
                     onDelete={this.deleteFilterValue({ id, value })}
                   >

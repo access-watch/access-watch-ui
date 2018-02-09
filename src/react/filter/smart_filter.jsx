@@ -7,6 +7,8 @@ import { routePropType } from '../prop_types';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 
+import '../../../scss/smart_filter.scss';
+
 const prefixFilter = prefix => ({ id, ...rest }) => ({
   id: prefix ? `${prefix}.${id}` : id,
   ...rest,
