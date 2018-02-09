@@ -14,7 +14,7 @@ export const createSessionDetailsObs = ({
   routeId,
   logMapping,
   sessionDetails$,
-  lastSessions,
+  lastSessions = { sessions: [] },
   type,
 }) => p =>
   Observable.of(p)
