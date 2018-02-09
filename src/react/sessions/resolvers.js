@@ -25,9 +25,10 @@ export const tableResolvers = [
     sortable: true,
   },
   {
-    id: 'activity',
+    id: 'speed',
     label: 'Activity (last 15m)',
     resolver: ActivityCell,
+    sortable: true,
   },
 ];
 
