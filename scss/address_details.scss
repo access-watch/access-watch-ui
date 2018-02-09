@@ -1,7 +1,14 @@
 .address-details__title {
   display: inline-flex;
   flex-direction: column;
-  .address-details__title__sub {
+  width: 100%;
+  &__main,
+  &__sub {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+  }
+  &__sub {
     font-size: 14px;
   }
 }

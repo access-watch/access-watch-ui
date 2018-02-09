@@ -48,8 +48,12 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
 
   const title = (
     <span className="address-details__title">
-      <span>{value}</span>
-      <span className="address-details__title__sub">{hostname}</span>
+      <span className="address-details__title__main" title={value}>
+        {value}
+      </span>
+      <span className="address-details__title__sub" title={hostname}>
+        {hostname}
+      </span>
     </span>
   );
 

@@ -207,33 +207,28 @@ class AbstractSessionDetails extends React.Component {
     return (
       <div>
         <div className="session-details__top">
-          <div style={{ overflow: 'hidden' }}>
-            <div className="session-details__left">
-              <div className="session-details__header">
-                {icon &&
-                  React.cloneElement(icon, {
-                    className: 'session-details__icon',
-                  })}
-                <span className="text-line text-line--header">{title}</span>
-                {moreButton && (
-                  <span
-                    className={cx([
-                      'session-details__button',
-                      moreButton.status,
-                    ])}
+          <div className="session-details__top__top">
+            <div className="session-details__header">
+              {icon &&
+                React.cloneElement(icon, {
+                  className: 'session-details__icon',
+                })}
+              <span className="session-details__title">{title}</span>
+              {moreButton && (
+                <span
+                  className={cx(['session-details__button', moreButton.status])}
+                >
+                  <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={moreButton.url}
                   >
-                    <a
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={moreButton.url}
-                    >
-                      {moreButton.text}
-                    </a>
-                  </span>
-                )}
-              </div>
+                    {moreButton.text}
+                  </a>
+                </span>
+              )}
             </div>
-            <div className="session-details__right">
+            <div className="session-details__actions">
               {actionChildren && actionChildren}
             </div>
           </div>

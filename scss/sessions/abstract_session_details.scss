@@ -4,23 +4,6 @@ $details-header-height: 200px;
 $details-header-bg: $gray-blue;
 
 .session-details {
-  &__left {
-    float: left;
-  }
-
-  &__right {
-    float: right;
-
-    // actionables
-    .btn {
-      margin-right: 18px;
-
-      &:last-child {
-        margin-right: 3px;
-      }
-    }
-  }
-
   &__content,
   &__overlay {
     // fixed positioned so that it's in the view regardless of page scroll pos!
@@ -55,6 +38,10 @@ $details-header-bg: $gray-blue;
     padding-bottom: 0;
     box-sizing: border-box;
     position: relative;
+    &__top {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   &__bottom {
@@ -86,10 +73,18 @@ $details-header-bg: $gray-blue;
 
   &__header {
     overflow: hidden;
-    font-size: 32px;
+    font-size: 27px;
     margin-bottom: 40px;
     display: flex;
     align-items: center;
+  }
+
+  &__actions {
+    flex-shrink: 0;
+  }
+
+  &__title {
+    max-width: 40%;
   }
 
   &__icon {
