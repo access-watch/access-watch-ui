@@ -11,10 +11,13 @@ const itemClass = `${baseClass}__item`;
 
 const highlightFirst = (_, { setHighlightedIndex }) => setHighlightedIndex(0);
 
+const itemToString = item => (item && item.label ? item.label : '');
+
 const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
   <Downshift
     onInputValueChange={highlightFirst}
     {...downshiftProps}
+    itemToString={itemToString}
     render={({
       getInputProps,
       getItemProps,
@@ -26,7 +29,9 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
       reset,
     }) => {
       const renderedItems = isOpen
-        ? items.filter(i => i.includes(inputValue))
+        ? items.filter(({ label }) =>
+            label.toLowerCase().includes(inputValue.toLowerCase())
+          )
         : [];
       return (
         <div className={baseClass}>
@@ -50,12 +55,13 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
                 <div
                   className={cx(itemClass, {
                     [`${itemClass}--highlight`]: highlightedIndex === index,
-                    [`${itemClass}--selected`]: selectedItem === item,
+                    [`${itemClass}--selected`]:
+                      selectedItem && selectedItem.id === item.id,
                   })}
                   {...getItemProps({ item })}
-                  key={item}
+                  key={item.id}
                 >
-                  {item}
+                  {item.label}
                 </div>
               ))}
             </div>

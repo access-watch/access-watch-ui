@@ -2,6 +2,7 @@ import { Observable, ReplaySubject, Scheduler } from 'rxjs';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
 import { msToS } from '../utilities/time';
+import { createURIToFilters } from '../utilities/filter';
 import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 
 // maximum requests that we can have renedered at the same time.
@@ -14,28 +15,18 @@ const hasNoStorageParam = params =>
 
 const append = (a, b) => a.concat(b);
 
-const filterLogs = (logs, filters = {}) => {
+const URIToFilters = createURIToFilters();
+
+const filterLogs = (logs, filtersURI = '') => {
   if (!logs) {
     return [];
   }
-  return Object.keys(filters).reduce(
-    (filtered, key) =>
-      filtered.filter(
-        l => filters[key].indexOf('' + getIn(l, key.split('.'))) !== -1
-      ),
+  const filters = URIToFilters(filtersURI);
+  return filters.reduce(
+    (filtered, { id, values }) =>
+      filtered.filter(l => values.indexOf('' + getIn(l, id.split('.'))) !== -1),
     [...logs]
   );
-};
-
-const querySearchFactory = (filters = {}, q = '') => {
-  const searchObject = Object.keys(filters).reduce(
-    (acc, k) => ({
-      ...acc,
-      [k]: filters[k].join(','),
-    }),
-    {}
-  );
-  return { ...searchObject, ...(q.length > 0 ? { q } : {}) };
 };
 
 const pickParamsKeys = pickKeys(['offset', 'limit', 'start', 'end']);
@@ -79,7 +70,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
         api.http
           .get('/logs', {
             ...transformTimerange(pickParamsKeys(params)),
-            ...querySearchFactory(params.filters, params.q),
+            filter: params.filter,
           })
           .then(logs => logs.map(transformLog))
       );
@@ -91,7 +82,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
     } else {
       logs$ = initLogsObs.switchMap(firstLogs =>
         ws$
-          .map(slogs => filterLogs(slogs, params.filters))
+          .map(slogs => filterLogs(slogs, params.filter))
           .filter(entries => entries.length > 0)
           .map(logs => logs.map(transformLog))
           .startWith(initLogs.length > 0 ? [] : firstLogs)
@@ -101,7 +92,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
   };
 
   const getSelection = logsParams =>
-    'logs:' + (logsParams.filters ? JSON.stringify(logsParams.filters) : '');
+    'logs:' + (logsParams.filter ? JSON.stringify(logsParams.filter) : '');
 
   // store logs that can be shown at a later state
   // for instance instead of loading
@@ -122,8 +113,8 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
 
   const earlierLogsMatching = p => act =>
     act.logMapping &&
-    p.filters &&
-    p.filters[act.logMapping] === act.logMappingValue;
+    p.filter &&
+    p.filter[act.logMapping] === act.logMappingValue;
 
   const earlierLogs = p =>
     handleAction(V_REQUEST_EARLIER_LOGS)
@@ -134,7 +125,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
             .get('/logs', {
               ...transformTimerange(pickParamsKeys(p)),
               end: msToS(act.end),
-              ...querySearchFactory(act.filters, act.q),
+              filter: act.filter,
               limit: REQUESTS_LIMIT,
             })
             .then(logs => ({
@@ -149,9 +140,9 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
       ...logsParams,
     };
 
-    if (!p.filtersEnabled) {
-      delete p.filters;
-      delete p.filtersEnabled;
+    if (!p.filterEnabled) {
+      delete p.filter;
+      delete p.filterEnabled;
     }
 
     p = extractTimerange(p);

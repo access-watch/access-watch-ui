@@ -83,7 +83,7 @@ const routerStateStoreConfig = {
   },
   [ROUTE_REQUESTS]: {
     ...timeProps,
-    filters: 'p',
+    ...filterProps,
     filtersEnabled: 'p',
   },
   [ROUTE_REQUESTS_DETAILS]: {
@@ -116,6 +116,7 @@ export const SESSION_DETAILS_DEFAULT_PARAMS = {
 export const REQUESTS_DEFAULT_PARAMS = {
   filtersEnabled: true,
   ...DEFAULT_TIME_PROPS,
+  ...DEFAULT_FILTER_PROPS,
 };
 
 export const METRICS_DEFAULT_PARAMS = {

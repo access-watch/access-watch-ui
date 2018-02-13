@@ -5,33 +5,14 @@ import { SmartFilter as SmartFilterAbstract } from 'access-watch-ui-components';
 
 import { routePropType } from '../prop_types';
 import { updateRouteParameter } from '../../utilities/route_utils';
+import {
+  createURIToFilters,
+  filtersToURI,
+  prefixFilter,
+} from '../../utilities/filter';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 
 import '../../../scss/smart_filter.scss';
-
-const prefixFilter = prefix => ({ id, ...rest }) => ({
-  id: prefix ? `${prefix}.${id}` : id,
-  ...rest,
-});
-const unfixFilter = prefix => ({ id, ...rest }) => ({
-  id: id.replace(`${prefix}.`, ''),
-  ...rest,
-});
-
-const filterToURI = ({ id, values = [] }) => `${id}:${values.join(',')}`;
-const filtersToURI = filters => filters.map(filterToURI).join(';');
-const URIToFilter = uri => {
-  const [id, valuesURI] = uri.split(':');
-  const values = valuesURI ? valuesURI.split(',') : [];
-  return {
-    id,
-    values,
-  };
-};
-const createURIToFilters = prefix => uri =>
-  uri.length
-    ? uri.split(';').map(f => unfixFilter(prefix)(URIToFilter(f)))
-    : [];
 
 const getFilterFunctions = ({ route, prefix }) => {
   const URIToFilters = createURIToFilters(prefix);

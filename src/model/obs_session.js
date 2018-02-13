@@ -34,10 +34,10 @@ export const createSessionDetailsObs = ({
             getSessionDetailsObs({ type, id: p[routeId] })
           ).combineLatest(
             createLogs({
-              filters: {
+              filter: {
                 [logMapping]: [getIn(session, logMapping.split('.'))],
               },
-              filtersEnabled: true,
+              filterEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
               ...Object.values(rules).find(matchCondition(type)(session)),

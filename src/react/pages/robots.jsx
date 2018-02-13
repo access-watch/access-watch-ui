@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { countries } from 'access-watch-ui-components';
+import { filters } from 'access-watch-sdk';
 
 import { createReputationPreviewResolver } from '../sessions/resolvers';
 import {
   getTimerangeTableResolvers,
   getTimeDisplay,
 } from '../sessions/timerange_utils';
-import sessionFilters from '../sessions/filters';
 
 import Sessions from '../sessions/sessions';
 import SessionToolbar from '../sessions/session_toolbar';
@@ -66,16 +66,6 @@ const tableResolvers = [
   },
 ];
 
-const availableFilters = [
-  {
-    id: 'name',
-  },
-  {
-    id: 'type',
-  },
-  ...sessionFilters,
-];
-
 const rowClassResolver = robot => {
   const { status } = treemapResolvers.reputation(robot);
   return status ? `robots__table__row--${status}` : '';
@@ -105,7 +95,7 @@ const RobotsPage = ({ route, robots, activity }) => (
         <SmartFilter
           route={route}
           prefix="robot"
-          availableFilters={availableFilters}
+          availableFilters={filters.robot}
         />
       </div>
     </div>

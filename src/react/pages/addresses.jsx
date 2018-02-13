@@ -1,6 +1,7 @@
 import React from 'react';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
+import { filters } from 'access-watch-sdk';
 
 import {
   tableResolvers,
@@ -11,7 +12,6 @@ import {
   getTimerangeTableResolvers,
   getTimeDisplay,
 } from '../sessions/timerange_utils';
-import availableFilters from '../address/filters';
 
 import SessionTimeSelector from '../sessions/session_time_selector';
 import SessionToolbar from '../sessions/session_toolbar';
@@ -54,7 +54,7 @@ const AddressesPage = ({ route, addresses, activity }) => (
         <SmartFilter
           route={route}
           prefix="address"
-          availableFilters={availableFilters}
+          availableFilters={filters.address}
         />
       </div>
     </div>

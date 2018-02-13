@@ -29,13 +29,18 @@ const isEditedValue = (edit, id, value) =>
 const arrayDifference = (a, b) => a.filter(i => b.indexOf(i) === -1);
 const getAvailableValues = (filters, availableFilters, filter) => {
   const { values = [] } = filters.find(f => f.id === filter.id);
-  const { values: availableValues = [] } = availableFilters.find(
-    f => f.id === filter.id
-  );
+  const filterDef = availableFilters.find(f => f.id === filter.id);
+  const { values: availableValues = [] } = filterDef;
   return arrayDifference(
     availableValues,
     values.filter(v => v !== filter.value)
-  );
+  ).map(value => {
+    const { valueToLabel = v => v } = filterDef;
+    return {
+      value,
+      label: valueToLabel(value),
+    };
+  });
 };
 
 const autoFocus = ref => {
@@ -46,6 +51,14 @@ const autoFocus = ref => {
     ref.focus();
   }
 };
+
+const displayFilterValue = ({ availableFilters, id, value }) => {
+  const { valueToLabel = v => v } = availableFilters.find(f => f.id === id);
+  return valueToLabel(value);
+};
+
+const displayFilterLabel = ({ availableFilters, id }) =>
+  availableFilters.find(f => f.id === id).label || id;
 
 class SmartFilter extends React.Component {
   static propTypes = {
@@ -127,7 +140,9 @@ class SmartFilter extends React.Component {
     });
   };
 
-  handleFilterValueChange = ({ id, value: oldValue }) => newValue => {
+  handleFilterValueChange = ({ id, value: oldValue }) => ({
+    value: newValue,
+  }) => {
     const { onFilterValueChange } = this.props;
     onFilterValueChange({ id, newValue, oldValue });
     this.setState({ editFilter: {} });
@@ -164,7 +179,7 @@ class SmartFilter extends React.Component {
       const hasValidValue = isFullText || highlightedItem;
       if (hasValidValue) {
         if (isFullText && inputValue.length > 0) {
-          this.handleFilterValueChange({ id, value })(inputValue);
+          this.handleFilterValueChange({ id, value })({ value: inputValue });
         } else if (highlightedItem) {
           this.handleFilterValueChange({ id, value })(highlightedItem);
         }
@@ -184,7 +199,7 @@ class SmartFilter extends React.Component {
     }
   };
 
-  onAddFilter = id => {
+  onAddFilter = ({ value: id }) => {
     this.setState({ editFilter: { id }, addFilter: false });
     this.props.onAddFilter({ id });
   };
@@ -205,13 +220,15 @@ class SmartFilter extends React.Component {
     const canAddFilter = filters.length < availableFilters.length;
     return (
       <div className={baseClass}>
-        {filters.map(({ id, values = [] }) => (
+        {filters.map(({ id, label = id, values = [] }) => (
           <Pill
             className={itemClass}
             onClick={this.handleFilterClick({ id })}
             onDelete={this.deleteFilter({ id })}
           >
-            <div className={itemIdClass}>{id}</div>
+            <div className={itemIdClass}>
+              {displayFilterLabel({ availableFilters, id })}
+            </div>
             :
             <div className={itemValuesClass}>
               {values.map(value => (
@@ -234,7 +251,7 @@ class SmartFilter extends React.Component {
                         onOuterClick={this.onOuterClick}
                       />
                     ) : (
-                      value
+                      displayFilterValue({ availableFilters, id, value })
                     )}
                   </Pill>
                 </div>
@@ -260,7 +277,10 @@ class SmartFilter extends React.Component {
               items={arrayDifference(
                 availableFilters.map(({ id }) => id),
                 filters.map(({ id }) => id)
-              )}
+              ).map(id => ({
+                value: id,
+                label: displayFilterLabel({ availableFilters, id }),
+              }))}
               onChange={this.onAddFilter}
               inputRef={autoFocus}
               onOuterClick={this.onOuterClick}
