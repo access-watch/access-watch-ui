@@ -37,7 +37,6 @@ export const createSessionDetailsObs = ({
               filter: {
                 [logMapping]: [getIn(session, logMapping.split('.'))],
               },
-              filterEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
               ...Object.values(rules).find(matchCondition(type)(session)),

@@ -95,7 +95,7 @@ class LogsPage extends React.Component {
       this.setState({ earlierLoading: true });
       dispatch({
         type: V_REQUEST_EARLIER_LOGS,
-        filter: (route.filterEnabled && route.filter) || {},
+        filter: route.filter || {},
         end: new Date(logs[logs.length - 1].request.time).getTime(),
       });
     }

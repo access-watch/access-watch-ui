@@ -140,11 +140,6 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
       ...logsParams,
     };
 
-    if (!p.filterEnabled) {
-      delete p.filter;
-      delete p.filterEnabled;
-    }
-
     p = extractTimerange(p);
 
     const initialLogs = getInitialLogs(p);
