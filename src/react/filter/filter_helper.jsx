@@ -22,11 +22,13 @@ export default class FiltersLogs extends React.Component {
     onFilterValueClick: PropTypes.func.isRequired,
     onFiltersChanged: PropTypes.func.isRequired,
     onToggleEnabled: PropTypes.func,
+    maxValuesDisplay: PropTypes.number,
   };
 
   static defaultProps = {
     ...filtersDefaultProps,
     onToggleEnabled: _ => _,
+    maxValuesDisplay: 20,
   };
 
   state = {
@@ -61,6 +63,7 @@ export default class FiltersLogs extends React.Component {
       filters,
       onFilterClick,
       onFilterValueClick,
+      maxValuesDisplay,
     } = this.props;
 
     return (
@@ -106,34 +109,38 @@ export default class FiltersLogs extends React.Component {
                     >
                       {label}
                     </button>
-                    {values.map(value => (
-                      <button
-                        key={value}
-                        className={cx(
-                          generateFilterCn(
-                            'filter_helper__filters-panel__filter-value',
-                            id,
-                            value
-                          ),
-                          {
-                            'filter_helper__filters-panel__filter-value--active': filterHasValue(
-                              filters,
+                    {values.length < maxValuesDisplay &&
+                      values.map(value => (
+                        <button
+                          key={value}
+                          className={cx(
+                            generateFilterCn(
+                              'filter_helper__filters-panel__filter-value',
                               id,
                               value
                             ),
-                          }
-                        )}
-                        onClick={e => {
-                          e.stopPropagation();
-                          onFilterValueClick({ id, value });
-                        }}
-                      >
-                        {valueToLabel(value)}
-                      </button>
-                    ))}
-                    {values.length === 0 && (
+                            {
+                              'filter_helper__filters-panel__filter-value--active': filterHasValue(
+                                filters,
+                                id,
+                                value
+                              ),
+                            }
+                          )}
+                          onClick={e => {
+                            e.stopPropagation();
+                            onFilterValueClick({ id, value });
+                          }}
+                        >
+                          {valueToLabel(value)}
+                        </button>
+                      ))}
+                    {(values.length === 0 ||
+                      values.length >= maxValuesDisplay) && (
                       <div className="filter_helper__filters-panel__full-text">
-                        {fullText ? 'Full text f' : 'F'}ree typing
+                        {values.length === 0
+                          ? `${fullText ? 'Full text f' : 'F'}ree typing`
+                          : 'Too many possible values'}
                       </div>
                     )}
                   </div>
