@@ -11,6 +11,7 @@ import {
   prefixFilter,
 } from '../../utilities/filter';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
+import FilterHelper from './filter_helper';
 
 import '../../../scss/smart_filter.scss';
 
@@ -109,6 +110,37 @@ class SmartFilter extends React.Component {
     }
   };
 
+  onFilterValueClick = ({ id, value }) => {
+    const { route } = this.props;
+    const {
+      URIToFilters,
+      onDeleteFilterValue,
+      onAddFilter,
+      onFilterValueChange,
+    } = this.getFilterFunctions();
+    const filters = URIToFilters(route.filter);
+    const filter = filters.find(f => f.id === id);
+    if (filter) {
+      const { values = [] } = filter;
+      if (values.indexOf(value) !== -1) {
+        onDeleteFilterValue({ id, value });
+      } else {
+        onFilterValueChange({ id, newValue: value });
+      }
+    } else {
+      onAddFilter({ id, values: [value] });
+    }
+  };
+
+  onFilterClick = ({ id }) => {
+    const { route } = this.props;
+    const { URIToFilters } = this.getFilterFunctions();
+    const filters = URIToFilters(route.filter);
+    if (!filters.find(f => f.id === id)) {
+      this.onAddFilter({ id });
+    }
+  };
+
   getFilterFunctions = () => {
     const { route, prefix } = this.props;
     return getFilterFunctions({
@@ -125,14 +157,22 @@ class SmartFilter extends React.Component {
       ? [...URIToFilters(route.filter), { id: newFilter }]
       : URIToFilters(route.filter);
     return (
-      <SmartFilterAbstract
-        filters={filters}
-        {...filtersFn}
-        onAddFilter={this.onAddFilter}
-        onFilterValueChange={this.onFilterValueChange}
-        onDeleteFilter={this.onDeleteFilter}
-        {...props}
-      />
+      <div className="smart-filter__wrapper">
+        <FilterHelper
+          filters={filters}
+          availableFilters={props.availableFilters}
+          onFilterClick={this.onFilterClick}
+          onFilterValueClick={this.onFilterValueClick}
+        />
+        <SmartFilterAbstract
+          filters={filters}
+          {...filtersFn}
+          onAddFilter={this.onAddFilter}
+          onFilterValueChange={this.onFilterValueChange}
+          onDeleteFilter={this.onDeleteFilter}
+          {...props}
+        />
+      </div>
     );
   }
 }

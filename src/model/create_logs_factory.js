@@ -70,7 +70,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
         api.http
           .get('/logs', {
             ...transformTimerange(pickParamsKeys(params)),
-            filter: params.filter,
+            ...pickKeys(['filter'])(params),
           })
           .then(logs => logs.map(transformLog))
       );
@@ -125,7 +125,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
             .get('/logs', {
               ...transformTimerange(pickParamsKeys(p)),
               end: msToS(act.end),
-              filter: act.filter,
+              ...pickKeys(['filter'])(act),
               limit: REQUESTS_LIMIT,
             })
             .then(logs => ({

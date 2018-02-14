@@ -140,3 +140,11 @@ $btn-default-color: $dark-gray;
     margin-right: 30px;
   }
 }
+
+@mixin reset-button() {
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  border: none;
+  text-align: left;
+}

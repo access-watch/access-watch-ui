@@ -31,3 +31,10 @@ $filter-font-size: 11px;
   @include filter-with-circle('reputation-status', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $statuses);
   //@include filter-with-circle('type', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $type-map);
 }
+
+.smart-filter__wrapper {
+  display: flex;
+  .smart-filter {
+    flex-grow: 1;
+  }
+}
