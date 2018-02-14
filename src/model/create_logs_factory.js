@@ -1,4 +1,5 @@
 import { Observable, ReplaySubject, Scheduler } from 'rxjs';
+import { filters as awSdkFilters } from 'access-watch-sdk';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
 import { msToS } from '../utilities/time';
@@ -9,6 +10,7 @@ import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 const MAX_REQUESTS = 50000;
 const NO_STORAGE_PARAMS = ['start', 'end'];
 const REQUESTS_LIMIT = 50;
+const filtersDef = awSdkFilters.log;
 
 const hasNoStorageParam = params =>
   NO_STORAGE_PARAMS.reduce((acc, k) => acc || params[k], false);
@@ -17,16 +19,29 @@ const append = (a, b) => a.concat(b);
 
 const URIToFilters = createURIToFilters();
 
+const getLogFilter = ({ id, values }) => log => {
+  const filterDef = filtersDef.find(f => f.id === id);
+  const keyPath = id.split('.');
+  const logValue = getIn(log, keyPath);
+  let compFn = v => logValue === v;
+  if (filterDef.fullText) {
+    compFn = v => logValue.indexOf(v) !== -1;
+  }
+  if (Array.isArray(logValue)) {
+    compFn = v => logValue.indexOf(v) !== -1;
+  }
+  return values.findIndex(compFn) !== -1;
+};
+
+const getLogFilters = filters => log =>
+  filters.map(getLogFilter).reduce((bool, fn) => bool && fn(log), true);
+
 const filterLogs = (logs, filtersURI = '') => {
   if (!logs) {
     return [];
   }
   const filters = URIToFilters(filtersURI);
-  return filters.reduce(
-    (filtered, { id, values }) =>
-      filtered.filter(l => values.indexOf('' + getIn(l, id.split('.'))) !== -1),
-    [...logs]
-  );
+  return logs.filter(getLogFilters(filters));
 };
 
 const pickParamsKeys = pickKeys(['offset', 'limit', 'start', 'end']);
