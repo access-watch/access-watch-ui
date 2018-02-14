@@ -40,7 +40,15 @@ const filterLogs = (logs, filtersURI = '') => {
   if (!logs) {
     return [];
   }
-  const filters = URIToFilters(filtersURI);
+  const filters = URIToFilters(filtersURI).map(({ values, ...f }) => ({
+    ...f,
+    values: values.map(v => {
+      const { transform = _ => _ } = filtersDef.find(
+        filterDef => filterDef.id === f.id
+      );
+      return transform(v);
+    }),
+  }));
   return logs.filter(getLogFilters(filters));
 };
 

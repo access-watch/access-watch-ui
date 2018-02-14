@@ -27,7 +27,7 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
     }) => {
       const renderedItems = isOpen
         ? items.filter(({ label }) =>
-            label.toLowerCase().includes(inputValue.toLowerCase())
+            ('' + label).toLowerCase().includes(inputValue.toLowerCase())
           )
         : [];
       return (
