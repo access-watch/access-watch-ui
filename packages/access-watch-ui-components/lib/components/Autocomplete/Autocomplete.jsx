@@ -11,13 +11,10 @@ const itemClass = `${baseClass}__item`;
 
 const highlightFirst = (_, { setHighlightedIndex }) => setHighlightedIndex(0);
 
-const itemToString = item => (item && item.label ? item.label : '');
-
 const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
   <Downshift
     onInputValueChange={highlightFirst}
     {...downshiftProps}
-    itemToString={itemToString}
     render={({
       getInputProps,
       getItemProps,
@@ -73,7 +70,12 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
 );
 
 Autocomplete.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      id: PropTypes.string,
+    })
+  ).isRequired,
   onChange: PropTypes.func.isRequired,
   inputRef: PropTypes.func,
   onKeyDown: PropTypes.func,
