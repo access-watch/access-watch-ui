@@ -20,7 +20,7 @@ const append = (a, b) => a.concat(b);
 const URIToFilters = createURIToFilters();
 
 const getLogFilter = ({ id, values }) => log => {
-  const filterDef = filtersDef.find(f => f.id === id);
+  const filterDef = filtersDef.find(f => f.id === id) || {};
   const keyPath = id.split('.');
   const logValue = getIn(log, keyPath);
   let compFn = v => logValue === v;
@@ -43,9 +43,8 @@ const filterLogs = (logs, filtersURI = '') => {
   const filters = URIToFilters(filtersURI).map(({ values, ...f }) => ({
     ...f,
     values: values.map(v => {
-      const { transform = _ => _ } = filtersDef.find(
-        filterDef => filterDef.id === f.id
-      );
+      const { transform = _ => _ } =
+        filtersDef.find(filterDef => filterDef.id === f.id) || {};
       return transform(v);
     }),
   }));

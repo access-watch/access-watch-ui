@@ -24,7 +24,6 @@ export default ({ session: id }) =>
         return createSessionDetailsObs({
           routeId: 'session',
           sessionDetails$: Observable.of(s),
-          lastSessions: [],
           type,
           logMapping,
         })({ session: id });

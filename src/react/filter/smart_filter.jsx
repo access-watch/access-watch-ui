@@ -153,9 +153,10 @@ class SmartFilter extends React.Component {
     const { route, ...props } = this.props;
     const { newFilter } = this.state;
     const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
+    const { filter = '' } = route;
     const filters = newFilter
-      ? [...URIToFilters(route.filter), { id: newFilter }]
-      : URIToFilters(route.filter);
+      ? [...URIToFilters(filter), { id: newFilter }]
+      : URIToFilters(filter);
     return (
       <div className="smart-filter__wrapper">
         <FilterHelper

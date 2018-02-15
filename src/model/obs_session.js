@@ -14,7 +14,7 @@ export const createSessionDetailsObs = ({
   routeId,
   logMapping,
   sessionDetails$,
-  lastSessions,
+  lastSessions = { sessions: [] },
   type,
 }) => p =>
   Observable.of(p)
@@ -34,9 +34,7 @@ export const createSessionDetailsObs = ({
             getSessionDetailsObs({ type, id: p[routeId] })
           ).combineLatest(
             createLogs({
-              filter: {
-                [logMapping]: [getIn(session, logMapping.split('.'))],
-              },
+              filter: `${logMapping}:${getIn(session, logMapping.split('.'))}`,
             }),
             rules$.map(({ rules, actionPending }) => ({
               ...Object.values(rules).find(matchCondition(type)(session)),
