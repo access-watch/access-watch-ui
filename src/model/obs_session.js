@@ -7,7 +7,7 @@ import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
 import rules$ from '../store/obs_rules_store';
-import { getIn } from '../utilities/object';
+import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
 
 export const createSessionDetailsObs = ({
@@ -37,6 +37,7 @@ export const createSessionDetailsObs = ({
               filters: {
                 [logMapping]: [getIn(session, logMapping.split('.'))],
               },
+              ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
               filtersEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
@@ -146,6 +147,7 @@ export const createSessions$ = ({
         // Replacing the '_' we used in sessions.jsx for it's real value ':'
         .map(r => ({
           [routeId]: r[routeId].replace(/_/g, ':'),
+          ...r,
         }))
         .switchMap(p => detailsSessions$(p).takeUntil(routeChange$))
     ),
