@@ -15,6 +15,7 @@ export const V_SET_ROUTE = 'view.set_route';
 export const V_SHOW_TEXT_TOOLTIP = 'view.show_text_tooltip';
 export const V_UPDATE_ROUTE_PARAMS = 'view.update_route_params';
 export const V_REQUEST_EARLIER_LOGS = 'view.req_earlier_logs';
+export const V_SESSIONS_LOAD_MORE = 'view.sessions_req_more';
 
 export const V_SHOW_TOOLTIP = 'view.show_tooltip';
 export const V_SET_TOOLTIP = 'view.set_tooltip';
