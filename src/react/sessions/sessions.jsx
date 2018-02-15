@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { V_SET_ROUTE, dispatch } from '../../event_hub';
+import { V_SET_ROUTE, V_SESSIONS_LOAD_MORE, dispatch } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import { pickKeys } from '../../utilities/object';
 
@@ -42,6 +42,7 @@ class Sessions extends React.Component {
     sessions: PropTypes.shape({
       sessions: PropTypes.array.isRequired,
       loading: PropTypes.bool.isRequired,
+      end: PropTypes.bool,
     }).isRequired,
     tableResolvers: TableResolversPropTypes.isRequired,
     treemapResolvers: PropTypes.shape(treemapResolversProps).isRequired,
@@ -53,6 +54,16 @@ class Sessions extends React.Component {
   static defaultProps = {
     rowClassResolver: _ => '',
   };
+
+  state = {};
+
+  componentWillReceiveProps({ sessions: { loading: nextLoading } }) {
+    const { loading } = this.state;
+    const { sessions: { loading: prevLoading } } = this.props;
+    if (loading && !nextLoading && prevLoading) {
+      this.setState({ loading: false });
+    }
+  }
 
   handleSortChange = value => {
     const { route: { route, sort } } = this.props;
@@ -71,6 +82,17 @@ class Sessions extends React.Component {
       type: V_SET_ROUTE,
       route: `${route.split('?')[0]}/${id.replace(/:/g, '_')}`,
     });
+  };
+
+  loadMoreSessions = () => {
+    const { loading } = this.state;
+    const { end } = this.props.sessions;
+    if (!loading && !end) {
+      this.setState({ loading: true });
+      dispatch({
+        type: V_SESSIONS_LOAD_MORE,
+      });
+    }
   };
 
   render() {
@@ -118,6 +140,7 @@ class Sessions extends React.Component {
             currentSort={sort}
             onEntryClick={onSessionClick}
             rowClassResolver={rowClassResolver}
+            onScrollNearBottom={this.loadMoreSessions}
           />
         )}
         {loading && (

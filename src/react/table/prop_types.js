@@ -15,6 +15,8 @@ export const TablePropTypes = {
   currentSort: PropTypes.string,
   onEntryClick: PropTypes.func,
   rowClassResolver: PropTypes.func,
+  onScrollNearBottom: PropTypes.func,
+  end: PropTypes.bool,
 };
 
 export const TableDefaultProps = {
@@ -22,4 +24,5 @@ export const TableDefaultProps = {
   currentSort: '',
   onEntryClick: _ => _,
   rowClassResolver: _ => '',
+  onScrollReachBottom: _ => _,
 };
