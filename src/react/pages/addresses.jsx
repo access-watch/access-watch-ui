@@ -14,7 +14,6 @@ import {
 } from '../sessions/timerange_utils';
 
 import SessionTimeSelector from '../sessions/session_time_selector';
-import SessionToolbar from '../sessions/session_toolbar';
 import Sessions from '../sessions/sessions';
 import SmartFilter from '../filter/smart_filter';
 import {
@@ -50,7 +49,6 @@ const AddressesPage = ({ route, addresses, activity }) => (
         className="page-header__body"
         style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
       >
-        <SessionToolbar route={route} />
         <SmartFilter
           route={route}
           prefix="address"

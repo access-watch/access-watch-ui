@@ -12,7 +12,6 @@ import {
 } from '../sessions/timerange_utils';
 
 import Sessions from '../sessions/sessions';
-import SessionToolbar from '../sessions/session_toolbar';
 import IdentityTableCell from '../sessions/identity_table_cell';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
@@ -91,7 +90,6 @@ const RobotsPage = ({ route, robots, activity }) => (
         className="page-header__body"
         style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
       >
-        <SessionToolbar route={route} />
         <SmartFilter
           route={route}
           prefix="robot"
