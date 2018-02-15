@@ -143,6 +143,8 @@
     height: 100%;
     width: $thickness;
     background-color: $color;
+    top: 0;
+    left: 50%;
   }
 
   &:before {
@@ -187,7 +189,13 @@
 }
 
 @mixin reset-btn-style() {
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
   border: none;
-  background-color: unset;
+  text-align: left;
+  outline: none;
   border-radius: 0;
+  padding: 0;
+  background-color: unset;
 }

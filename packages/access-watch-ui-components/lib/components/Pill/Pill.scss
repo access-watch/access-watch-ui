@@ -34,7 +34,12 @@ $delete-width: 20px;
   @include reset-btn-style();
   @include cross(0, 10px, 1px, $main-color);
   position: relative;
-  margin-top: -10px;
-  margin-left: -2px;
+  margin: 5px;
   cursor: pointer;
+  &:hover {
+    &:before,
+    &:after {
+      width: 2px;
+    }
+  }
 }
