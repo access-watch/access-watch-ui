@@ -15,19 +15,16 @@ const getFilterValues = (filters, id) => getFilter(filters, id).values || [];
 const filterHasValue = (filters, id, value) =>
   getFilterValues(filters, id).indexOf(value) !== -1;
 
-export default class FiltersLogs extends React.Component {
+export default class FiltersHelper extends React.Component {
   static propTypes = {
     ...filtersPropTypes,
     onFilterClick: PropTypes.func.isRequired,
     onFilterValueClick: PropTypes.func.isRequired,
-    onFiltersChanged: PropTypes.func.isRequired,
-    onToggleEnabled: PropTypes.func,
     maxValuesDisplay: PropTypes.number,
   };
 
   static defaultProps = {
     ...filtersDefaultProps,
-    onToggleEnabled: _ => _,
     maxValuesDisplay: 20,
   };
 

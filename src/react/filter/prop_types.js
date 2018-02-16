@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 const filterPropTypesShape = {
   id: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(
-    PropTypes.oneOfType(PropTypes.number, PropTypes.string)
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   ),
 };
 
@@ -13,14 +13,14 @@ const filterDefaultProps = {
 
 const filterPropTypes = PropTypes.shape(filterPropTypesShape);
 
-const availableFiltersPropTypes = PropTypes.shape({
+const availableFilterPropTypes = PropTypes.shape({
   ...filterPropTypesShape,
   label: PropTypes.string,
   fullText: PropTypes.bool,
   valueToLabel: PropTypes.func,
 });
 
-const availableFiltersDefaultProps = {
+const availableFilterDefaultProps = {
   ...filterDefaultProps,
   label: null,
   fullText: false,
@@ -28,13 +28,13 @@ const availableFiltersDefaultProps = {
 };
 
 export const filtersPropTypes = {
-  filters: filterPropTypes,
-  availableFilters: availableFiltersPropTypes,
+  filters: PropTypes.arrayOf(filterPropTypes),
+  availableFilters: PropTypes.arrayOf(availableFilterPropTypes),
 };
 
 export const filtersDefaultProps = {
   filters: filterDefaultProps,
-  availableFilters: availableFiltersDefaultProps,
+  availableFilters: availableFilterDefaultProps,
 };
 
 export default {
