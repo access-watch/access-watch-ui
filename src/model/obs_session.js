@@ -74,27 +74,34 @@ const timerangeChanged = ({ timerangeFrom, timerangeTo }, { timerange }) =>
   !!(timerangeFrom && timerangeTo) === timerange;
 
 const createGlobalSessions$ = ({ parameters$, allSessions$, lastSessions }) =>
-  parameters$.switchMap(p =>
-    allSessions$(p)
-      .map(sessions => ({
-        sessions: {
-          sessions,
-          loading: false,
-          end: sessions.length < p.limit,
-        },
-      }))
-      .startWith({
-        sessions: {
-          sessions: timerangeChanged(p, lastSessions)
-            ? lastSessions.sessions
-            : [],
-          loading:
-            !timerangeChanged(p, lastSessions) ||
-            lastSessions.sessions.length < p.limit,
-        },
-      })
-      .takeUntil(routeChange$)
-  );
+  parameters$
+    .switchMap(p =>
+      allSessions$(p)
+        .map(sessions => ({
+          sessions: {
+            sessions,
+            loading: false,
+            end: sessions.length < p.limit,
+          },
+        }))
+        .startWith({
+          sessions: {
+            sessions: timerangeChanged(p, lastSessions)
+              ? lastSessions.sessions
+              : [],
+            loading:
+              !timerangeChanged(p, lastSessions) ||
+              lastSessions.sessions.length < p.limit,
+          },
+        })
+        .takeUntil(routeChange$)
+    )
+    .startWith({
+      sessions: {
+        sessions: [],
+        loading: true,
+      },
+    });
 
 export const createSessions$ = ({
   route$,
