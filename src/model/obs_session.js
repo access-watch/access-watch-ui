@@ -7,8 +7,27 @@ import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
 import rules$ from '../store/obs_rules_store';
-import { getIn } from '../utilities/object';
+import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
+import { viewEvents, V_SESSIONS_LOAD_MORE } from '../event_hub';
+
+const MORE_SESSIONS_LIMIT = 50;
+
+const onLoadMoreSessions$ = Observable.fromEvent(
+  viewEvents,
+  V_SESSIONS_LOAD_MORE
+);
+
+const createParametersObs = ({ route$, lastSessions }) =>
+  route$.switchMap(p =>
+    onLoadMoreSessions$
+      .map(_ => ({
+        ...p,
+        limit: lastSessions.sessions.length + MORE_SESSIONS_LIMIT,
+      }))
+      .startWith(lastSessions.sessions.length || 50)
+      .takeUntil(routeChange$)
+  );
 
 export const createSessionDetailsObs = ({
   routeId,
@@ -37,6 +56,7 @@ export const createSessionDetailsObs = ({
               filters: {
                 [logMapping]: [getIn(session, logMapping.split('.'))],
               },
+              ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
               filtersEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
@@ -53,13 +73,14 @@ export const createSessionDetailsObs = ({
 const timerangeChanged = ({ timerangeFrom, timerangeTo }, { timerange }) =>
   !!(timerangeFrom && timerangeTo) === timerange;
 
-const createGlobalSessions$ = ({ route$, allSessions$, lastSessions }) =>
-  route$.switchMap(p =>
+const createGlobalSessions$ = ({ parameters$, allSessions$, lastSessions }) =>
+  parameters$.switchMap(p =>
     allSessions$(p)
       .map(sessions => ({
         sessions: {
           sessions,
           loading: false,
+          end: sessions.length < p.limit,
         },
       }))
       .startWith({
@@ -67,7 +88,9 @@ const createGlobalSessions$ = ({ route$, allSessions$, lastSessions }) =>
           sessions: timerangeChanged(p, lastSessions)
             ? lastSessions.sessions
             : [],
-          loading: !timerangeChanged(p, lastSessions),
+          loading:
+            !timerangeChanged(p, lastSessions) ||
+            lastSessions.sessions.length < p.limit,
         },
       })
       .takeUntil(routeChange$)
@@ -90,6 +113,8 @@ export const createSessions$ = ({
   const sessionDetails$ = Observable.create(obs => {
     sessionDetailsObserver = obs;
   });
+
+  const parameters$ = createParametersObs({ route$, lastSessions });
 
   const allSessions$ = ({
     sort,
@@ -123,7 +148,7 @@ export const createSessions$ = ({
       });
 
   const globalSessions$ = createGlobalSessions$({
-    route$,
+    parameters$,
     allSessions$,
     lastSessions,
   });
@@ -146,6 +171,7 @@ export const createSessions$ = ({
         // Replacing the '_' we used in sessions.jsx for it's real value ':'
         .map(r => ({
           [routeId]: r[routeId].replace(/_/g, ':'),
+          ...r,
         }))
         .switchMap(p => detailsSessions$(p).takeUntil(routeChange$))
     ),
