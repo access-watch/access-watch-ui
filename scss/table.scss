@@ -58,3 +58,11 @@ $cell-padding: $horizontal-cell-padding $vertical-cell-padding;
   padding: $cell-padding;
   border-bottom: solid 1px $v-light-gray;
 }
+
+.aw-table__body__last-row {
+  text-align: center;
+  padding: 5px 0;
+  .loader {
+    display: inline-block;
+  }
+}
