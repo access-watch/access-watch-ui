@@ -97,7 +97,7 @@ class Sessions extends React.Component {
 
   render() {
     const {
-      sessions: { sessions, loading },
+      sessions: { sessions, loading, end },
       tableResolvers,
       emptyMessage,
       route,
@@ -141,15 +141,16 @@ class Sessions extends React.Component {
             onEntryClick={onSessionClick}
             rowClassResolver={rowClassResolver}
             onScrollNearBottom={this.loadMoreSessions}
+            loadingMore={loading}
+            end={end}
           />
         )}
-        {loading && (
-          <div className="loading-box">
-            <LoadingIcon message="Getting your data ready ..." />
-          </div>
-        )}
-        {!loading &&
-          sessions.length === 0 && (
+        {sessions.length === 0 &&
+          (loading ? (
+            <div className="loading-box">
+              <LoadingIcon message="Getting your data ready ..." />
+            </div>
+          ) : (
             <div className="loading-box">
               <p
                 style={{
@@ -161,7 +162,7 @@ class Sessions extends React.Component {
                 {emptyMessage}
               </p>
             </div>
-          )}
+          ))}
       </div>
     );
   }

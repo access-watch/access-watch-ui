@@ -33,6 +33,10 @@ const Table = ({
   onEntryClick,
   rowClassResolver,
   onScrollNearBottom,
+  end,
+  loadingMore,
+  loadingComponent,
+  endComponent,
 }) => (
   <NearPageBottom onScrollNearBottom={onScrollNearBottom}>
     {() => (
@@ -87,6 +91,16 @@ const Table = ({
               )}
             </tr>
           ))}
+          {(loadingMore || end) && (
+            <tr>
+              <td
+                colSpan={resolvers.length}
+                className="aw-table__body__last-row"
+              >
+                {loadingMore ? loadingComponent : endComponent}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     )}

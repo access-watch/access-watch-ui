@@ -1,4 +1,8 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Loader } from 'access-watch-ui-components';
+
+import End from '../utilities/end';
 
 export const TableResolversPropTypes = PropTypes.arrayOf(
   PropTypes.shape({
@@ -7,6 +11,8 @@ export const TableResolversPropTypes = PropTypes.arrayOf(
     resolver: PropTypes.func,
   })
 );
+
+// TODO FIXME : For now RoundedTable doesn't support end and loading as we didn't have the need
 
 export const TablePropTypes = {
   entries: PropTypes.array.isRequired,
@@ -17,6 +23,9 @@ export const TablePropTypes = {
   rowClassResolver: PropTypes.func,
   onScrollNearBottom: PropTypes.func,
   end: PropTypes.bool,
+  loadingMore: PropTypes.bool,
+  loadingComponent: PropTypes.node,
+  endComponent: PropTypes.node,
 };
 
 export const TableDefaultProps = {
@@ -25,4 +34,8 @@ export const TableDefaultProps = {
   onEntryClick: _ => _,
   rowClassResolver: _ => '',
   onScrollReachBottom: _ => _,
+  end: false,
+  loadingMore: false,
+  loadingComponent: <Loader />,
+  endComponent: <End />,
 };
