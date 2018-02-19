@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import RulesButton from '../rules/rule_button';
+import RuleButton from '../rules/rule_button';
 import RulePropTypes from '../rules/rule_prop_types';
 import { addressPropType } from '../prop_types';
 
 const ruleName = 'address';
 
 export const AddressAction = ({ address, rule, actionPending }) => (
-  <RulesButton
+  <RuleButton
     value={address}
     type={ruleName}
     rule={rule}
