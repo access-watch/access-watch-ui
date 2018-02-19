@@ -136,11 +136,13 @@ $filter_helper-value-vertical-padding: 8px;
   }
 }
 
-.filter_helper__filters-panel__full-text {
+.filter_helper__filters-panel__text {
+  @include reset-button();
   display: inline-block;
   padding: $filter_helper-value-horizontal-padding
     $filter_helper-value-vertical-padding;
   opacity: 0.6;
+  cursor: pointer;
 }
 
 $triangle-size: 5px;

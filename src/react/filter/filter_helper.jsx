@@ -53,12 +53,18 @@ export default class FiltersHelper extends React.Component {
     this.switchOpen(false);
   };
 
+  handleFilterClick = id => e => {
+    const { onFilterClick } = this.props;
+    e.stopPropagation();
+    onFilterClick({ id });
+    this.switchOpen();
+  };
+
   render() {
     const { open } = this.state;
     const {
       availableFilters,
       filters,
-      onFilterClick,
       onFilterValueClick,
       maxValuesDisplay,
     } = this.props;
@@ -98,11 +104,7 @@ export default class FiltersHelper extends React.Component {
                   >
                     <button
                       className="filter_helper__filters-panel__filter-label"
-                      onClick={e => {
-                        e.stopPropagation();
-                        onFilterClick({ id });
-                        this.switchOpen();
-                      }}
+                      onClick={this.handleFilterClick(id)}
                     >
                       {label}
                     </button>
@@ -134,11 +136,12 @@ export default class FiltersHelper extends React.Component {
                       ))}
                     {(values.length === 0 ||
                       values.length >= maxValuesDisplay) && (
-                      <div className="filter_helper__filters-panel__full-text">
-                        {values.length === 0
-                          ? `${fullText ? 'Full text f' : 'F'}ree typing`
-                          : 'Too many possible values'}
-                      </div>
+                      <button
+                        className="filter_helper__filters-panel__text"
+                        onClick={this.handleFilterClick(id)}
+                      >
+                        {fullText ? 'Partial Match' : 'Exact Match'}
+                      </button>
                     )}
                   </div>
                 )
