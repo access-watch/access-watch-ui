@@ -18,14 +18,25 @@ const onLoadMoreSessions$ = Observable.fromEvent(
   V_SESSIONS_LOAD_MORE
 );
 
+const sessionsLengthRoundToLimit = (
+  { sessions },
+  limit = MORE_SESSIONS_LIMIT
+) => Math.floor((sessions.length + (limit - 1)) / limit) * limit;
+
 const createParametersObs = ({ route$, lastSessions }) =>
   route$.switchMap(p =>
-    onLoadMoreSessions$
-      .map(_ => ({
-        ...p,
-        limit: lastSessions.sessions.length + MORE_SESSIONS_LIMIT,
+    Observable.of(p)
+      .combineLatest(
+        onLoadMoreSessions$
+          .map(
+            _ => sessionsLengthRoundToLimit(lastSessions) + MORE_SESSIONS_LIMIT
+          )
+          .startWith(Math.max(sessionsLengthRoundToLimit(lastSessions), 50))
+      )
+      .map(([routeParams, limit]) => ({
+        ...routeParams,
+        limit,
       }))
-      .startWith(lastSessions.sessions.length || 50)
       .takeUntil(routeChange$)
   );
 
