@@ -212,6 +212,16 @@ class SmartFilter extends React.Component {
     }
   };
 
+  handleFilterInputKeyDown = (e, { reset, highlightedItem }) => {
+    const { availableFilters } = this.props;
+    const { key, target: { value: inputValue } } = e;
+    const valueIndex = availableFilters.findIndex(f => f.label === inputValue);
+    if (key === ':' && valueIndex !== -1) {
+      e.preventDefault();
+      this.onAddFilter({ value: availableFilters[valueIndex].id });
+    }
+  };
+
   onAddFilter = ({ value: id }) => {
     this.setState({ editFilter: { id }, addFilter: false });
     this.props.onAddFilter({ id });
@@ -300,6 +310,7 @@ class SmartFilter extends React.Component {
               }))}
               onChange={this.onAddFilter}
               inputRef={autoFocus}
+              onKeyDown={this.handleFilterInputKeyDown}
               onOuterClick={this.onOuterClick}
             />
           ) : (
