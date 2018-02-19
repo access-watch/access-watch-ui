@@ -61,6 +61,7 @@ export const tableResolvers = [
   {
     id: 'address',
     resolver: o => hostnameResolver(o) || valueResolver(o),
+    label: 'Address (hostname or IP)',
   },
   {
     id: 'asNumber',
