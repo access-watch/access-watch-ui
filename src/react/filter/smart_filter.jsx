@@ -81,6 +81,11 @@ class SmartFilter extends React.Component {
   static propTypes = {
     route: routePropType.isRequired,
     prefix: PropTypes.string.isRequired,
+    children: PropTypes.node,
+  };
+
+  static defaultProps = {
+    children: null,
   };
 
   state = {};
@@ -150,7 +155,7 @@ class SmartFilter extends React.Component {
   };
 
   render() {
-    const { route, ...props } = this.props;
+    const { route, children, ...props } = this.props;
     const { newFilter } = this.state;
     const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
     const { filter = '' } = route;
@@ -173,6 +178,7 @@ class SmartFilter extends React.Component {
           onDeleteFilter={this.onDeleteFilter}
           {...props}
         />
+        <div className="smart_filter__children">{children}</div>
       </div>
     );
   }

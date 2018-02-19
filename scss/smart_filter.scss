@@ -34,6 +34,8 @@ $filter-font-size: 11px;
 
 .smart-filter__wrapper {
   display: flex;
+  background-color: #655984;
+  align-items: center;
   .smart-filter {
     flex-grow: 1;
   }

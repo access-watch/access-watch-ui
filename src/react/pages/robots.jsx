@@ -16,7 +16,7 @@ import IdentityTableCell from '../sessions/identity_table_cell';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
 import SessionTimeSelector from '../sessions/session_time_selector';
-import SmartFilter from '../filter/smart_filter';
+import SessionsFilter from '../sessions/sessions_filter';
 import { robotSessionsPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
@@ -90,7 +90,7 @@ const RobotsPage = ({ route, robots, activity }) => (
         className="page-header__body"
         style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
       >
-        <SmartFilter
+        <SessionsFilter
           route={route}
           prefix="robot"
           availableFilters={filters.robot}

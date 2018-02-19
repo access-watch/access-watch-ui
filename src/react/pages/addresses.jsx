@@ -15,7 +15,7 @@ import {
 
 import SessionTimeSelector from '../sessions/session_time_selector';
 import Sessions from '../sessions/sessions';
-import SmartFilter from '../filter/smart_filter';
+import SessionsFilter from '../sessions/sessions_filter';
 import {
   routePropType,
   addressSessionsPropType,
@@ -49,7 +49,7 @@ const AddressesPage = ({ route, addresses, activity }) => (
         className="page-header__body"
         style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
       >
-        <SmartFilter
+        <SessionsFilter
           route={route}
           prefix="address"
           availableFilters={filters.address}
