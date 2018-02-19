@@ -12,7 +12,7 @@ import AbstractSessionDetails, {
 } from '../sessions/abstract_session_details';
 import AbstractSessionDetailsRowBlock from '../sessions/abstract_session_details_row_block';
 import { routePropType, addressPropType, logsPropType } from '../prop_types';
-import { logMapping } from '../../model/obs_robots';
+import { logMapping } from '../../model/obs_addresses';
 import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 
 import '../../../scss/sessions/session_details.scss';
