@@ -78,15 +78,28 @@ class SmartFilter extends React.Component {
         ),
       })
     ),
+    selectedFilter: PropTypes.string,
+    onUnselectFilter: PropTypes.func,
   };
 
   state = {
     editFilter: {},
     addFilter: false,
+    selectedFilter: null,
+    onUnselectFilter: _ => _,
   };
+
+  componentWillReceiveProps({ selectedFilter }) {
+    const { editFilter } = this.state;
+    if (selectedFilter && selectedFilter !== editFilter.id) {
+      this.setState({ editFilter: { id: selectedFilter } });
+    }
+  }
 
   componentDidMount() {
     window.addEventListener('click', () => {
+      const { onUnselectFilter } = this.props;
+      onUnselectFilter();
       this.setState({ editFilter: {}, addFilter: false });
     });
   }
@@ -210,14 +223,18 @@ class SmartFilter extends React.Component {
   };
 
   onOuterClick = () => {
+    const { onUnselectFilter } = this.props;
+    onUnselectFilter();
     this.setState({ editFilter: {} });
   };
 
   render() {
     const { filters, availableFilters } = this.props;
     const { editFilter, addFilter } = this.state;
-    const addingFilterValue = editFilter && !editFilter.value;
-    const canAddFilter = filters.length < availableFilters.length;
+    const addingFilterValue =
+      Object.keys(editFilter).length !== 0 && !editFilter.value;
+    const canAddFilter =
+      filters.length < availableFilters.length && !addingFilterValue;
     return (
       <div className={baseClass}>
         {filters.map(({ id, label = id, values = [] }) => (

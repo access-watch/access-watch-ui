@@ -154,6 +154,10 @@ class SmartFilter extends React.Component {
     });
   };
 
+  handleUnselectFilter = () => {
+    this.setState({ newFilter: null });
+  };
+
   render() {
     const { route, children, ...props } = this.props;
     const { newFilter } = this.state;
@@ -176,6 +180,8 @@ class SmartFilter extends React.Component {
           onAddFilter={this.onAddFilter}
           onFilterValueChange={this.onFilterValueChange}
           onDeleteFilter={this.onDeleteFilter}
+          selectedFilter={newFilter}
+          onUnselectFilter={this.handleUnselectFilter}
           {...props}
         />
         <div className="smart_filter__children">{children}</div>
