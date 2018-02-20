@@ -19,10 +19,10 @@
   .aw-table {
     background-color: white;
     color: $brand-purple;
-    .aw-table__body__cell--activity {
-      width: 150px;
-      font-size: 0;
+    .aw-table__body__cell--speed {
+      width: 200px;
       .spark-line {
+        width: 150px;
         display: inline-block;
         height: 100%;
       }

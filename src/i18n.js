@@ -44,4 +44,4 @@ export const formatTimeSince = (d, opts = { compact: true }) =>
 export const formatPrice = ({ value, currency = '€' }) =>
   `${formatPercentage(value)} ${currency}`;
 export const formatSpeedMin = ({ speed }) =>
-  formatNumber(speed, { maximumFractionDigits: 2 }) + '/min';
+  speed ? formatNumber(speed, { maximumFractionDigits: 2 }) + '/min' : null;

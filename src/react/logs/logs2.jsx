@@ -7,7 +7,7 @@ import { Loader } from 'access-watch-ui-components';
 
 import LogsHeader from './logs_header';
 import ScrollTopButton from '../utilities/scroll_top_button';
-import LogsEnd from './logs_end';
+import End from '../utilities/end';
 import { logPropType } from '../prop_types';
 
 import '../../../scss/logs.scss';
@@ -218,7 +218,7 @@ export default class Logs extends Component {
                     style={{ height: rowHeight * 2 }}
                   >
                     {logEnd ? (
-                      <LogsEnd />
+                      <End label="End of logs" />
                     ) : (
                       <div
                         className="logs__loader"

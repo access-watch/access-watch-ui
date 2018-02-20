@@ -12,7 +12,7 @@ import AbstractSessionDetails, {
 } from '../sessions/abstract_session_details';
 import AbstractSessionDetailsRowBlock from '../sessions/abstract_session_details_row_block';
 import { routePropType, addressPropType, logsPropType } from '../prop_types';
-import { logMapping } from '../../model/obs_robots';
+import { logMapping } from '../../model/obs_addresses';
 import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 
 import '../../../scss/sessions/session_details.scss';
@@ -25,7 +25,9 @@ const handleGetEarlierLogs = ({ address }) => end =>
   dispatch({
     type: V_REQUEST_EARLIER_LOGS,
     logMapping,
-    logMappingValue: address.value,
+    filters: {
+      [logMapping]: [address.value],
+    },
     end,
   });
 
@@ -46,8 +48,12 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
 
   const title = (
     <span className="address-details__title">
-      <span>{value}</span>
-      <span className="address-details__title__sub">{hostname}</span>
+      <span className="address-details__title__main" title={value}>
+        {value}
+      </span>
+      <span className="address-details__title__sub" title={hostname}>
+        {hostname}
+      </span>
     </span>
   );
 

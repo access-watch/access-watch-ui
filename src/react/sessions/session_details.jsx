@@ -6,22 +6,28 @@ import { Loader } from 'access-watch-ui-components';
 import TimeAgo from '../utilities/time_ago';
 import RuleButton from '../rules/rule_button';
 import { formatNumber } from '../../i18n';
+import { getIn } from '../../utilities/object';
 import AbstractSessionDetails from './abstract_session_details';
 import AbstractSessionDetailsRowBlock from './abstract_session_details_row_block';
 import IdentityIcon from './identity_icon';
 import { logPropType, routePropType } from '../prop_types';
-import { logMapping } from '../../model/obs_robots';
+import { getLogMapping } from '../../model/session_details';
 import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 
 import '../../../scss/sessions/session_details.scss';
 
-const handleGetEarlierLogs = ({ robot }) => end =>
+const handleGetEarlierLogs = session => end => {
+  const logMapping = getLogMapping(session);
+  const value = getIn(session, getLogMapping(session).split('.'));
   dispatch({
     type: V_REQUEST_EARLIER_LOGS,
     logMapping,
-    logMappingValue: robot.id,
+    filters: {
+      [logMapping]: [value],
+    },
     end,
   });
+};
 
 const SessionDetails = ({
   logs,

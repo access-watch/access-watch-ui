@@ -71,8 +71,6 @@ const getWebsocket = api => {
     };
     const handleStreamClose = _ => {
       websocketStatus$.next(false);
-      websocket$ = null;
-      websocketStatus$ = null;
     };
     websocket$ = api.ws
       .createSocket('/logs', null, handleStreamOpen, handleStreamClose)

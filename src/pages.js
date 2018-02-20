@@ -45,14 +45,9 @@ import {
  * @fires Pages#PageChange
  */
 export const onRobotsPage = robots$.map(
-  ({ route, routeDetails, robots, robotDetails, robotsMetrics, activity }) => ({
+  ({ route, routeDetails, robots, robotDetails, activity }) => ({
     element: (
-      <RobotsPageComponent
-        robots={robots}
-        route={route}
-        metrics={robotsMetrics}
-        activity={activity}
-      />
+      <RobotsPageComponent robots={robots} route={route} activity={activity} />
     ),
     name: 'robots',
     ...(robotDetails
@@ -100,7 +95,10 @@ export const onLogsPage = routeChange$
     Observable.combineLatest(
       createLogs(requestsRoute),
       Observable.combineLatest(metricsStore$, metricsLoading$).map(
-        ([metrics, metricsLoading]) => ({ ...metrics, loading: metricsLoading })
+        ([metrics, metricsLoading]) => ({
+          ...metrics,
+          loading: metricsLoading,
+        })
       ),
       Observable.of(requestsRoute),
       globalActivity$,
@@ -200,19 +198,11 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
 }));
 
 export const onAddressesPage = addresses$.map(
-  ({
-    route,
-    routeDetails,
-    addresses,
-    addressDetails,
-    robotsMetrics,
-    activity,
-  }) => ({
+  ({ route, routeDetails, addresses, addressDetails, activity }) => ({
     element: (
       <AddressesPageComponent
         addresses={addresses}
         route={route}
-        robotsMetrics={robotsMetrics}
         activity={activity}
       />
     ),
@@ -235,8 +225,6 @@ export const onRulesPage = rules$.map(({ rules }) => ({
   element: <RulesPageComponent rules={rules} />,
   name: 'rules',
 }));
-
-metricsLoading$.subscribe();
 
 /**
  * @fires Pages#PageChange

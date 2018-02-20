@@ -157,11 +157,12 @@ class SessionBlock extends React.Component {
                 {type}
                 <wbr /> &middot; {formatNumber(count)} requests
                 <wbr /> &middot;{' '}
-                {speed || (
-                  <span>
-                    latest <TimeAgo time={updated} />
-                  </span>
-                )}
+                {speed ||
+                  (updated && (
+                    <span>
+                      latest <TimeAgo time={new Date(updated)} />
+                    </span>
+                  ))}
               </span>
             </div>
           )}

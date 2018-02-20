@@ -21,7 +21,7 @@ const windowConfig = {
     expiration: 24 * 3600,
   },
   session: {
-    timerange: true,
+    timerange: false,
   },
   ...(window.config || {}),
 };
