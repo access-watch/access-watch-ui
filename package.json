@@ -33,7 +33,7 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "access-watch-sdk": "^0.1.4",
+    "access-watch-sdk": "^0.1.5",
     "access-watch-ui-components": "^1.0.1",
     "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^7.0.1",
@@ -120,5 +120,6 @@
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
     ]
-  }
+  },
+  "dependencies": {}
 }
