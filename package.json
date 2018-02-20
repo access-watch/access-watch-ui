@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server --hot",
+    "dev": "NODE_ENV=development webpack-dev-server --hot",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint './src/**/*.{js,jsx}' './__tests__/**/*.js'",
@@ -87,7 +87,7 @@
     "svg-react-loader": "^0.4.5",
     "timeago.js": "^3.0.2",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
+    "webpack": "^3.11.0",
     "webpack-dev-server": "^2.4.5",
     "whatwg-fetch": "^2.0.1"
   },
