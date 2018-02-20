@@ -134,7 +134,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
   const earlierLogsMatching = p => act =>
     act.logMapping &&
     p.filter &&
-    p.filter[act.logMapping] === act.logMappingValue;
+    p.filter[act.logMapping] === act.filter[act.logMapping];
 
   const earlierLogs = p =>
     handleAction(V_REQUEST_EARLIER_LOGS)

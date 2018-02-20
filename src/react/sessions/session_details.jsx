@@ -12,21 +12,14 @@ import AbstractSessionDetailsRowBlock from './abstract_session_details_row_block
 import IdentityIcon from './identity_icon';
 import { logPropType, routePropType } from '../prop_types';
 import { getLogMapping } from '../../model/session_details';
-import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
+import { requestEarlierLogs } from '../../utilities/session';
 
 import '../../../scss/sessions/session_details.scss';
 
-const handleGetEarlierLogs = session => end => {
+const handleGetEarlierLogs = session => {
   const logMapping = getLogMapping(session);
   const value = getIn(session, getLogMapping(session).split('.'));
-  dispatch({
-    type: V_REQUEST_EARLIER_LOGS,
-    logMapping,
-    filters: {
-      [logMapping]: [value],
-    },
-    end,
-  });
+  requestEarlierLogs({ logMapping, value });
 };
 
 const SessionDetails = ({

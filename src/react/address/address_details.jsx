@@ -13,7 +13,7 @@ import AbstractSessionDetails, {
 import AbstractSessionDetailsRowBlock from '../sessions/abstract_session_details_row_block';
 import { routePropType, addressPropType, logsPropType } from '../prop_types';
 import { logMapping } from '../../model/obs_addresses';
-import { dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
+import { requestEarlierLogs } from '../../utilities/session';
 
 import '../../../scss/sessions/session_details.scss';
 
@@ -21,15 +21,8 @@ import { AddressAction } from './address_action';
 
 import '../../../scss/address_details.scss';
 
-const handleGetEarlierLogs = ({ address }) => end =>
-  dispatch({
-    type: V_REQUEST_EARLIER_LOGS,
-    logMapping,
-    filters: {
-      [logMapping]: [address.value],
-    },
-    end,
-  });
+const handleGetEarlierLogs = ({ address }) =>
+  requestEarlierLogs({ logMapping, value: address.value });
 
 const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
   const { count, speed } = addressSession;
