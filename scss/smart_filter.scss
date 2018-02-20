@@ -29,7 +29,7 @@ $filter-font-size: 11px;
 
 .smart-filter__item__value {
   @include filter-with-circle('reputation-status', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $statuses);
-  //@include filter-with-circle('type', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $type-map);
+  @include filter-with-circle('identity-type', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $type-map);
 }
 
 .smart-filter__wrapper {

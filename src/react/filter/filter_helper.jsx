@@ -6,8 +6,10 @@ import { filtersPropTypes, filtersDefaultProps } from './prop_types';
 
 import '../../../scss/filter_helper.scss';
 
+const cssFriendly = s => s.replace('.', '-');
+
 const generateFilterCn = (cn, f, val) =>
-  cx(cn, `${cn}--${f.className}`, val ? `${cn}--${val.className}` : '');
+  cx(cn, `${cn}--${cssFriendly(f)}`, val ? `${cn}--${cssFriendly(val)}` : '');
 
 const getFilter = (filters, id) => filters.find(f => f.id === id) || {};
 
