@@ -19,7 +19,7 @@ import '../../../scss/sessions/session_details.scss';
 const handleGetEarlierLogs = session => {
   const logMapping = getLogMapping(session);
   const value = getIn(session, getLogMapping(session).split('.'));
-  requestEarlierLogs({ logMapping, value });
+  return requestEarlierLogs({ logMapping, value });
 };
 
 const SessionDetails = ({
@@ -32,7 +32,7 @@ const SessionDetails = ({
   let session = { ...realSession };
   const loading = !session;
 
-  if (!Object.keys(session).length) {
+  if (session.type === 'identity') {
     if (logs.logs.length) {
       [session] = logs.logs;
       session.count = logs.logs.length;
