@@ -92,62 +92,64 @@ export default class FiltersHelper extends React.Component {
               <div className="filter_helper__filters-panel__title">
                 Filter by
               </div>
-              {availableFilters.map(
-                ({
-                  id,
-                  label = id,
-                  values = [],
-                  valueToLabel = v => v,
-                  fullText,
-                }) => (
-                  <div
-                    key={id}
-                    className="filter_helper__filters-panel__filter"
-                  >
-                    <button
-                      className="filter_helper__filters-panel__filter-label"
-                      onClick={this.handleFilterClick(id)}
+              {availableFilters
+                .filter(({ showInPanel }) => showInPanel)
+                .map(
+                  ({
+                    id,
+                    label = id,
+                    values = [],
+                    valueToLabel = v => v,
+                    fullText,
+                  }) => (
+                    <div
+                      key={id}
+                      className="filter_helper__filters-panel__filter"
                     >
-                      {label}
-                    </button>
-                    {values.length < maxValuesDisplay &&
-                      values.map(value => (
-                        <button
-                          key={value}
-                          className={cx(
-                            generateFilterCn(
-                              'filter_helper__filters-panel__filter-value',
-                              id,
-                              value
-                            ),
-                            {
-                              'filter_helper__filters-panel__filter-value--active': filterHasValue(
-                                filters,
+                      <button
+                        className="filter_helper__filters-panel__filter-label"
+                        onClick={this.handleFilterClick(id)}
+                      >
+                        {label}
+                      </button>
+                      {values.length < maxValuesDisplay &&
+                        values.map(value => (
+                          <button
+                            key={value}
+                            className={cx(
+                              generateFilterCn(
+                                'filter_helper__filters-panel__filter-value',
                                 id,
                                 value
                               ),
-                            }
-                          )}
-                          onClick={e => {
-                            e.stopPropagation();
-                            onFilterValueClick({ id, value });
-                          }}
+                              {
+                                'filter_helper__filters-panel__filter-value--active': filterHasValue(
+                                  filters,
+                                  id,
+                                  value
+                                ),
+                              }
+                            )}
+                            onClick={e => {
+                              e.stopPropagation();
+                              onFilterValueClick({ id, value });
+                            }}
+                          >
+                            {valueToLabel(value)}
+                          </button>
+                        ))}
+                      {(values.length === 0 ||
+                        values.length >= maxValuesDisplay) && (
+                        <button
+                          className="filter_helper__filters-panel__text"
+                          onClick={this.handleFilterClick(id)}
                         >
-                          {valueToLabel(value)}
+                          {fullText ? 'Partial Match' : 'Exact Match'}
                         </button>
-                      ))}
-                    {(values.length === 0 ||
-                      values.length >= maxValuesDisplay) && (
-                      <button
-                        className="filter_helper__filters-panel__text"
-                        onClick={this.handleFilterClick(id)}
-                      >
-                        {fullText ? 'Partial Match' : 'Exact Match'}
-                      </button>
-                    )}
-                  </div>
-                )
-              )}
+                      )}
+                    </div>
+                  )
+                )}
             </div>
           )}
         </div>
