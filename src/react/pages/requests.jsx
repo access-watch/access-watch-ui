@@ -220,7 +220,7 @@ class LogsPage extends React.Component {
               <Col md="60%">
                 <span className="page-header__header-title">
                   {!route.timerangeFrom && 'Latest'} Requests{' '}
-                  {timeDisplay(route) && `(${timeDisplay(route)})`}
+                  {route.timerangeFrom && `(${timeDisplay(route)})`}
                 </span>
               </Col>
               <Col md="40%">
