@@ -25,7 +25,7 @@ const getLogFilter = ({ id, values }) => log => {
   const logValue = getIn(log, keyPath);
   let compFn = v => logValue === v;
   if (filterDef.fullText) {
-    compFn = v => logValue.indexOf(v) !== -1;
+    compFn = v => logValue && logValue.indexOf(v) !== -1;
   }
   if (Array.isArray(logValue)) {
     compFn = v => logValue.indexOf(v) !== -1;
