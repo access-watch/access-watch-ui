@@ -252,6 +252,7 @@ class SmartFilter extends React.Component {
             className={itemClass}
             onClick={this.handleFilterClick({ id })}
             onDelete={this.deleteFilter({ id })}
+            key={id}
           >
             <div className={itemIdClass}>
               {displayFilterLabel({ availableFilters, id })}

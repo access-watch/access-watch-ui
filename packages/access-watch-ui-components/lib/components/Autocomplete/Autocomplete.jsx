@@ -10,11 +10,13 @@ const itemsClass = `${baseClass}__items`;
 const itemClass = `${baseClass}__item`;
 
 const highlightFirst = (_, { setHighlightedIndex }) => setHighlightedIndex(0);
+const itemToString = ({ value, label = value }) => label;
 
 const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
   <Downshift
     onInputValueChange={highlightFirst}
     {...downshiftProps}
+    itemToString={itemToString}
     render={({
       getInputProps,
       getItemProps,
@@ -62,7 +64,7 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
                       e.stopPropagation();
                       onClick(e);
                     }}
-                    key={item.id}
+                    key={item.value}
                   >
                     {item.label}
                   </div>
