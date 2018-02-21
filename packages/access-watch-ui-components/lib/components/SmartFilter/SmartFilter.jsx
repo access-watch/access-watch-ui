@@ -67,7 +67,7 @@ class SmartFilter extends React.Component {
         id: PropTypes.string.isRequired,
         values: PropTypes.arrayOf(
           PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-        ).isRequired,
+        ),
       })
     ).isRequired,
     availableFilters: PropTypes.arrayOf(

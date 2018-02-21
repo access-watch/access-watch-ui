@@ -48,19 +48,26 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
           />
           {isOpen ? (
             <div className={itemsClass}>
-              {renderedItems.map((item, index) => (
-                <div
-                  className={cx(itemClass, {
-                    [`${itemClass}--highlight`]: highlightedIndex === index,
-                    [`${itemClass}--selected`]:
-                      selectedItem && selectedItem.id === item.id,
-                  })}
-                  {...getItemProps({ item })}
-                  key={item.id}
-                >
-                  {item.label}
-                </div>
-              ))}
+              {renderedItems.map((item, index) => {
+                const { onClick, ...itemProps } = getItemProps({ item });
+                return (
+                  <div
+                    className={cx(itemClass, {
+                      [`${itemClass}--highlight`]: highlightedIndex === index,
+                      [`${itemClass}--selected`]:
+                        selectedItem && selectedItem.id === item.id,
+                    })}
+                    {...itemProps}
+                    onClick={e => {
+                      e.stopPropagation();
+                      onClick(e);
+                    }}
+                    key={item.id}
+                  >
+                    {item.label}
+                  </div>
+                );
+              })}
             </div>
           ) : null}
         </div>
