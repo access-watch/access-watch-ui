@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "The Access Watch User Interface",
   "repository": {
     "type": "git",
@@ -120,6 +120,5 @@
       "<rootDir>/src/rx",
       "<rootDir>/node_modules/rxjs"
     ]
-  },
-  "dependencies": {}
+  }
 }
