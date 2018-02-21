@@ -22,7 +22,7 @@ describe('router', () => {
       const route = '/robots?LOL=BOLL&a=1&offset=123';
 
       // skip default route
-      routeChange$.subscribe(resolve);
+      routeChange$.skip(1).subscribe(resolve);
 
       Router.initRouter();
 

@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/access-watch/access-watch-ui.svg?branch=master)](https://travis-ci.org/access-watch/access-watch-ui)
+[![Greenkeeper badge](https://badges.greenkeeper.io/access-watch/access-watch-ui.svg)](https://greenkeeper.io/)
+
 ## Usage
 
 * `npm start`: Runs a webpack dev server. Point browser to
