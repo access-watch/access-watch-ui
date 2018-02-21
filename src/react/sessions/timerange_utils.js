@@ -25,5 +25,5 @@ export const getTimerangeTableResolvers = route =>
 
 export const getTimeDisplay = route =>
   isTimerangeDisplay(route)
-    ? timeDisplay(pickTimerangeKeys(route))
-    : timeDisplay();
+    ? timeDisplay(pickTimerangeKeys(route), 'session')
+    : timeDisplay({}, 'session');

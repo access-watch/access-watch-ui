@@ -140,7 +140,9 @@ class MetricsPage extends React.Component {
             <Row gutter={0}>
               <Col gutter={30} md="16.67%" className="page-header-card">
                 <p className="page-header-card__label">
-                  Requests {timeDisplay(route) && `(${timeDisplay(route)})`}
+                  Requests{' '}
+                  {timeDisplay(route, 'metrics') &&
+                    `(${timeDisplay(route, 'metrics')})`}
                 </p>
                 <div className="page-header-card__value">
                   <StyledNumber

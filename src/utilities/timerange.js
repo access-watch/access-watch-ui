@@ -81,16 +81,17 @@ export const timerangeDisplay = (
   }`;
 };
 
-export const timeDisplay = ({
-  timerangeFrom,
-  timerangeTo,
-  timeSlider = 'auto',
-} = {}) =>
+const getDefaultExpiration = type => config[type].expiration;
+
+export const timeDisplay = (
+  { timerangeFrom, timerangeTo, timeSlider = 'auto' } = {},
+  type
+) =>
   (timerangeFrom &&
     timerangeDisplay({ timerangeFrom, timerangeTo }) + ' interval') ||
   'last ' +
     secondsToHumanDisplay(
-      timeSlider === 'auto' ? config.metrics.expiration : timeSlider * 60
+      timeSlider === 'auto' ? getDefaultExpiration(type) : timeSlider * 60
     );
 
 export const handleTimeSliderChange = (route, value) => {

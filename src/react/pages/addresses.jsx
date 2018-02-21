@@ -37,7 +37,7 @@ const AddressesPage = ({ route, addresses, activity }) => (
         <Row gutter={0}>
           <Col md="50%">
             <span className="page-header__header-title">
-              Top Addresses {` (${getTimeDisplay(route)})`}
+              Top Addresses {` (${getTimeDisplay(route, 'session')})`}
             </span>
           </Col>
           <Col md="50%">
