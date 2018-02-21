@@ -1,0 +1,27 @@
+@import '../vars';
+
+.auto-complete {
+  display: flex;
+  position: relative;
+}
+
+.auto-complete__items {
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  background-color: $main-color;
+  width: 100%;
+  left: 0;
+  border: solid 1px $light-gray;
+  color: white;
+}
+
+.auto-complete__item {
+  padding: 5px;
+  &--highlight {
+    background-color: fade_out(white, 0.7);
+  }
+  &--selected {
+    font-weight: bold;
+  }
+}

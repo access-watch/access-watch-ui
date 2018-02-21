@@ -3,49 +3,12 @@ const AssetsPlugin = require('assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const path = require('path');
-const fs = require('fs');
 
 const DIST_PATH = path.join(__dirname, 'dist');
 const SRC_PATH = path.join(__dirname, 'src');
 
 const PROD = process.env.NODE_ENV === 'production';
 const STAGING = process.env.NODE_ENV === 'staging';
-
-const babelConfig = (() => {
-  const babelrc = JSON.parse(fs.readFileSync('./.babelrc'));
-  // just a helper to put the complete path
-  const resolvePaths = data => ({
-    presets:
-      data.presets &&
-      data.presets.map(p => {
-        if (Array.isArray(p)) {
-          p[0] = require.resolve(p[0]);
-        } else {
-          p = require.resolve(p); //eslint-disable-line
-        }
-        return p;
-      }),
-    plugins: data.plugins && data.plugins.map(require.resolve),
-  });
-
-  return Object.assign(
-    babelrc, // all the stuff from babelrc file
-    {
-      babelrc: false, // don't try to load the babelrc we
-      cacheDirectory: true,
-    },
-    // override presets, plugins
-    resolvePaths(babelrc),
-    babelrc.env && {
-      env: {
-        // override again, if presets/plugins are availible under
-        // `env.development` or `env.production`
-        development: resolvePaths(babelrc.env.development),
-        production: resolvePaths(babelrc.env.production),
-      },
-    }
-  );
-})();
 
 const opts = {
   // hot module replacement
@@ -85,13 +48,6 @@ const cssLoaderImportLoaders = {
   },
 };
 
-const cssLoader = {
-  loader: 'css-loader',
-  options: {
-    minimize: opts.minify,
-  },
-};
-
 const styleLoader = {
   loader: 'style-loader',
 };
@@ -125,9 +81,6 @@ module.exports = {
       director$: path.resolve('./node_modules/director/build/director'),
     },
   },
-  //resolveLoader: {
-  //fallback: [path.resolve('./node_modules')]
-  //},
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
@@ -139,7 +92,6 @@ module.exports = {
     .concat(
       opts.minify
         ? [
-            //minify plugins
             new webpack.optimize.UglifyJsPlugin({
               sourceMap: !PROD,
               compress: {
@@ -198,10 +150,10 @@ module.exports = {
             include: [
               path.resolve(__dirname, 'src'),
               /.*[/]/g.exec(require.resolve('access-watch-ui-components'))[0],
+              /.*[/]/g.exec(require.resolve('access-watch-sdk'))[0],
             ],
             use: {
               loader: 'babel-loader',
-              query: babelConfig,
             },
           },
           {
@@ -224,7 +176,6 @@ module.exports = {
                 loader: 'file-loader',
                 query: {
                   name: '[name].[ext]',
-                  //useRelativePath: true
                 },
               },
             ],

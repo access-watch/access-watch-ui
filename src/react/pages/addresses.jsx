@@ -1,6 +1,7 @@
 import React from 'react';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
+import { filters } from 'access-watch-sdk';
 
 import {
   tableResolvers,
@@ -13,8 +14,8 @@ import {
 } from '../sessions/timerange_utils';
 
 import SessionTimeSelector from '../sessions/session_time_selector';
-import SessionToolbar from '../sessions/session_toolbar';
 import Sessions from '../sessions/sessions';
+import SessionsFilter from '../sessions/sessions_filter';
 import {
   routePropType,
   addressSessionsPropType,
@@ -44,8 +45,15 @@ const AddressesPage = ({ route, addresses, activity }) => (
           </Col>
         </Row>
       </div>
-      <div className="page-header__body">
-        <SessionToolbar route={route} />
+      <div
+        className="page-header__body"
+        style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+      >
+        <SessionsFilter
+          route={route}
+          prefix="address"
+          availableFilters={filters.address}
+        />
       </div>
     </div>
     <Sessions

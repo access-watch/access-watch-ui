@@ -3,6 +3,7 @@ import { createSessionDetailsObs } from './obs_session';
 import createLogs from './create_logs';
 import { getSessionDetails } from '../api_manager/api_agent_sessions';
 import { type, logMapping as robotLogMapping } from './obs_robots';
+import { filterToURI } from '../utilities/filter';
 
 const identityLogMapping = 'identity.id';
 
@@ -28,11 +29,10 @@ export default ({ session: id }) =>
         })({ session: id });
       }
       return createLogs({
-        filters: { [identityLogMapping]: [id] },
-        filtersEnabled: true,
+        filter: filterToURI({ id: identityLogMapping, values: [id] }),
       }).map(logs => ({
         logs,
-        session: {},
+        session: { id, type: 'identity' },
       }));
     })
   );

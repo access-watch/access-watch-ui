@@ -1,41 +1,54 @@
 import { Observable, ReplaySubject, Scheduler } from 'rxjs';
+import { filters as awSdkFilters } from 'access-watch-sdk';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
 import { msToS } from '../utilities/time';
+import { createURIToFilters } from '../utilities/filter';
 import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 
 // maximum requests that we can have renedered at the same time.
 const MAX_REQUESTS = 50000;
 const NO_STORAGE_PARAMS = ['start', 'end'];
 const REQUESTS_LIMIT = 50;
+const filtersDef = awSdkFilters.log;
 
 const hasNoStorageParam = params =>
   NO_STORAGE_PARAMS.reduce((acc, k) => acc || params[k], false);
 
 const append = (a, b) => a.concat(b);
 
-const filterLogs = (logs, filters = {}) => {
+const URIToFilters = createURIToFilters();
+
+const getLogFilter = ({ id, values }) => log => {
+  const filterDef = filtersDef.find(f => f.id === id) || {};
+  const keyPath = id.split('.');
+  const logValue = getIn(log, keyPath);
+  let compFn = v => logValue === v;
+  if (filterDef.fullText) {
+    compFn = v => logValue && logValue.indexOf(v) !== -1;
+  }
+  if (Array.isArray(logValue)) {
+    compFn = v => logValue.indexOf(v) !== -1;
+  }
+  return values.findIndex(compFn) !== -1;
+};
+
+const getLogFilters = filters => log =>
+  filters.map(getLogFilter).reduce((bool, fn) => bool && fn(log), true);
+
+const filterLogs = (logs, filtersURI = '') => {
   if (!logs) {
     return [];
   }
-  return Object.keys(filters).reduce(
-    (filtered, key) =>
-      filtered.filter(
-        l => filters[key].indexOf('' + getIn(l, key.split('.'))) !== -1
-      ),
-    [...logs]
-  );
-};
-
-const querySearchFactory = (filters = {}, q = '') => {
-  const searchObject = Object.keys(filters).reduce(
-    (acc, k) => ({
-      ...acc,
-      [k]: filters[k].join(','),
+  const filters = URIToFilters(filtersURI).map(({ values, ...f }) => ({
+    ...f,
+    values: values.map(v => {
+      const { transform = _ => _ } =
+        filtersDef.find(filterDef => filterDef.id === f.id) || {};
+      return transform(v);
     }),
-    {}
-  );
-  return { ...searchObject, ...(q.length > 0 ? { q } : {}) };
+  }));
+  return logs.filter(getLogFilters(filters));
 };
 
 const pickParamsKeys = pickKeys(['offset', 'limit', 'start', 'end']);
@@ -77,7 +90,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
         api.http
           .get('/logs', {
             ...transformTimerange(pickParamsKeys(params)),
-            ...querySearchFactory(params.filters, params.q),
+            ...pickKeys(['filter'])(params),
           })
           .then(logs => logs.map(transformLog))
       );
@@ -89,7 +102,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
     } else {
       logs$ = initLogsObs.switchMap(firstLogs =>
         ws$
-          .map(slogs => filterLogs(slogs, params.filters))
+          .map(slogs => filterLogs(slogs, params.filter))
           .filter(entries => entries.length > 0)
           .map(logs => logs.map(transformLog))
           .startWith(initLogs.length > 0 ? [] : firstLogs)
@@ -99,7 +112,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
   };
 
   const getSelection = logsParams =>
-    'logs:' + (logsParams.filters ? JSON.stringify(logsParams.filters) : '');
+    'logs:' + (logsParams.filter ? JSON.stringify(logsParams.filter) : '');
 
   // store logs that can be shown at a later state
   // for instance instead of loading
@@ -119,9 +132,9 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
   };
 
   const earlierLogsMatching = p => act =>
-    act.filters &&
-    p.filters &&
-    p.filters[act.logMapping] === act.filters[act.logMapping];
+    act.logMapping &&
+    p.filter &&
+    p.filter[act.logMapping] === act.filter[act.logMapping];
 
   const earlierLogs = p =>
     handleAction(V_REQUEST_EARLIER_LOGS)
@@ -132,7 +145,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
             .get('/logs', {
               ...transformTimerange(pickParamsKeys(p)),
               end: msToS(act.end),
-              ...querySearchFactory(act.filters, act.q),
+              ...pickKeys(['filter'])(act),
               limit: REQUESTS_LIMIT,
             })
             .then(logs => ({
@@ -146,11 +159,6 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
     let p = {
       ...logsParams,
     };
-
-    if (!p.filtersEnabled) {
-      delete p.filters;
-      delete p.filtersEnabled;
-    }
 
     p = extractTimerange(p);
 

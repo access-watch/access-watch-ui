@@ -64,11 +64,8 @@ export const createSessionDetailsObs = ({
             getSessionDetailsObs({ type, id: p[routeId] })
           ).combineLatest(
             createLogs({
-              filters: {
-                [logMapping]: [getIn(session, logMapping.split('.'))],
-              },
+              filter: `${logMapping}:${getIn(session, logMapping.split('.'))}`,
               ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
-              filtersEnabled: true,
             }),
             rules$.map(({ rules, actionPending }) => ({
               ...Object.values(rules).find(matchCondition(type)(session)),
@@ -140,6 +137,7 @@ export const createSessions$ = ({
     visType,
     timerangeFrom,
     timerangeTo,
+    filter,
     ...rest
   }) =>
     getSessionsObs({
@@ -150,6 +148,7 @@ export const createSessions$ = ({
       timerangeFrom,
       timerangeTo,
       ...createFilter(rest),
+      filter,
     })
       .do(sessions => {
         lastSessions.timerange = !!(timerangeFrom && timerangeTo);
