@@ -1,5 +1,7 @@
 ## Usage
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/access-watch/access-watch-ui.svg)](https://greenkeeper.io/)
+
 * `npm start`: Runs a webpack dev server. Point browser to
   http://localhost:8080/main.
 * `npm run lint`: Runs eslint. This has to pass for CI to be successful.
