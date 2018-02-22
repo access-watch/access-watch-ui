@@ -28,6 +28,7 @@ const SessionDetails = ({
   muteParentEsc,
   requestInfo,
   session: realSession,
+  rule,
 }) => {
   let session = { ...realSession };
   const loading = !session;
@@ -127,7 +128,15 @@ const SessionDetails = ({
         </AbstractSessionDetailsRowBlock>,
       ]}
       actionChildren={
-        !loading && robot && <RuleButton disabled title="Coming soon..." />
+        !loading &&
+        robot && (
+          <RuleButton
+            value={robot}
+            type="robot"
+            {...(rule.id ? { rule } : {})}
+            actionPending={rule.actionPending}
+          />
+        )
       }
       logs={logs}
       route={route}
@@ -156,10 +165,15 @@ SessionDetails.propTypes = {
   requestInfo: logPropType,
   route: routePropType.isRequired,
   muteParentEsc: PropTypes.func,
+  rule: PropTypes.shape({
+    id: PropTypes.string,
+    actionPending: PropTypes.bool,
+  }),
 };
 
 SessionDetails.defaultProps = {
   requestInfo: null,
   muteParentEsc: _ => _,
+  rule: null,
 };
 export default SessionDetails;

@@ -37,10 +37,15 @@ const conditionCreators = {
     type: 'address',
     address,
   }),
+  robot: robot => ({
+    type: 'robot',
+    robot,
+  }),
 };
 
 export const conditionDisplays = {
   address: condition => condition.address.value,
+  robot: condition => condition.robot.name,
 };
 
 export const displayRule = ({ condition }) => {
@@ -54,14 +59,15 @@ export const displayRule = ({ condition }) => {
 };
 
 export const conditionMatchers = {
-  address: ({ address }) => ({ condition }) =>
+  address: ({ address }) => condition =>
     address.value === condition.address.value,
+  robot: ({ robot }) => condition => robot.id === condition.robot.id,
 };
 
-export const matchCondition = type => session => rule => {
+export const matchCondition = type => session => ({ condition }) => {
   const conditionMatcher = conditionMatchers[type];
-  if (conditionMatcher) {
-    return conditionMatcher(session)(rule);
+  if (conditionMatcher && condition.type === type) {
+    return conditionMatcher(session)(condition);
   }
   return false;
 };
