@@ -5,6 +5,7 @@ import AddressLabel from '../address/address_label';
 
 const conditionDisplays = {
   address: c => <AddressLabel address={c.address} />,
+  robot: c => c.robot.name,
 };
 
 const ConditionDisplay = ({ condition }) => {
