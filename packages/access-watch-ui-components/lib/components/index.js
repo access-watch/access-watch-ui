@@ -10,3 +10,7 @@ export * from './FlagIcon';
 export * from './Loader';
 export * from './SubscriptionSummary';
 export * from './PieChart';
+export * from './SmartFilter';
+export * from './Pill';
+export * from './Autocomplete';
+

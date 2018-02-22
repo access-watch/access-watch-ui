@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { stringify } from 'qs';
+import { filters } from 'access-watch-sdk';
 
 import { V_SET_ROUTE, dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
@@ -15,14 +16,13 @@ import { timeDisplay } from '../../utilities/timerange';
 import Logs from '../logs/logs2';
 import LogsRow from '../logs/logs_row';
 import LogsSeparator from '../logs/logs_separator';
-import SearchLogs from '../logs/search_logs';
-import FiltersLogs from '../logs/filters_logs';
+import SmartFilter from '../filter/smart_filter';
 import TimeSelector from '../time/time_selector';
 import { logPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/requests_page.scss';
 
-import { nearPageBottom$, keydown } from '../../utilities/interaction';
+import { nearPageBottom$ } from '../../utilities/interaction';
 
 const ROW_HEIGHT = 30;
 const SEPARATOR_HEIGHT = ROW_HEIGHT * 1.5;
@@ -62,7 +62,6 @@ class LogsPage extends React.Component {
     super(props);
 
     this.state = {
-      fullTextSearchOpened: !!props.route.q,
       earlierLoading: false,
     };
   }
@@ -74,10 +73,6 @@ class LogsPage extends React.Component {
         _ => !this.props.loading || !this.props.earlierLoading
       )
       .subscribe(this.handleGetEarlierLogs.bind(this));
-
-    if (!this.state.fullTextSearchOpened) {
-      this.keydownS = keydown('s').subscribe(this.showSearch);
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -100,35 +95,10 @@ class LogsPage extends React.Component {
       this.setState({ earlierLoading: true });
       dispatch({
         type: V_REQUEST_EARLIER_LOGS,
-        q: route.q || '',
-        filters: (route.filtersEnabled && route.filters) || {},
+        filter: route.filter || {},
         end: new Date(logs[logs.length - 1].request.time).getTime(),
       });
     }
-  };
-
-  handleSearch = query => {
-    const { route } = this.props.route;
-    dispatch({
-      type: V_SET_ROUTE,
-      route: updateRouteParameter({ route, param: 'q', value: query }),
-    });
-  };
-
-  handleFiltersChange = filters => {
-    const { route } = this.props.route;
-    dispatch({
-      type: V_SET_ROUTE,
-      route: updateRouteParameter({
-        route: updateRouteParameter({
-          route,
-          param: 'filters',
-          value: filters,
-        }),
-        param: 'filtersEnabled',
-        value: 'true',
-      }),
-    });
   };
 
   handleFiltersToggleEnabled = _ => {
@@ -151,20 +121,6 @@ class LogsPage extends React.Component {
       type: V_SET_ROUTE,
       route: `/requests/${logRecord.session.id}?${stringify(query)}`,
     });
-  };
-
-  removeSearchQuery = e => {
-    e.preventDefault();
-    this.handleSearch();
-    this.setState({ fullTextSearchOpened: false }, _ => {
-      this.keydownS = keydown('s').subscribe(this.showSearch);
-    });
-  };
-
-  showSearch = _ => {
-    this.setState({ fullTextSearchOpened: true });
-    this.keydownS.unsubscribe();
-    this.keydownS = null;
   };
 
   renderRowWithSeparator = (row, i) => {
@@ -210,7 +166,6 @@ class LogsPage extends React.Component {
       logEnd,
       activity,
     } = this.props;
-    const { fullTextSearchOpened } = this.state;
 
     return (
       <div className="requests-page">
@@ -220,7 +175,7 @@ class LogsPage extends React.Component {
               <Col md="60%">
                 <span className="page-header__header-title">
                   {!route.timerangeFrom && 'Latest'} Requests{' '}
-                  {timeDisplay(route) && `(${timeDisplay(route)})`}
+                  {route.timerangeFrom && `(${timeDisplay(route)})`}
                 </span>
               </Col>
               <Col md="40%">
@@ -235,21 +190,13 @@ class LogsPage extends React.Component {
             </Row>
           </div>
           <div className="logs-filters-container">
-            <FiltersLogs
-              currentFilters={route.filters}
-              onFiltersChanged={this.handleFiltersChange}
-              enabled={route.filtersEnabled}
-              onToggleEnabled={this.handleFiltersToggleEnabled}
+            <SmartFilter
+              route={route}
+              prefix=""
+              availableFilters={filters.log}
             />
           </div>
         </div>
-        {fullTextSearchOpened && (
-          <SearchLogs
-            disabled={loading}
-            query={route.q}
-            onSearch={this.handleSearch}
-          />
-        )}
         <Logs
           columns={COLUMNS}
           logs={logs}
@@ -264,11 +211,6 @@ class LogsPage extends React.Component {
             <div className="logs-empty">
               <div className="logs-empty__content">
                 <p>No logs available. Waiting for real-time logs.</p>
-                {route.q && (
-                  <button onClick={this.removeSearchQuery}>
-                    Try clearing your search query
-                  </button>
-                )}
               </div>
             </div>
           )}

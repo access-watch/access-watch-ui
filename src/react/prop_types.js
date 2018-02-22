@@ -79,7 +79,6 @@ export const logPropType = PropTypes.shape({
   session: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  time: PropTypes.string.isRequired,
   user_agent: userAgentPropType,
   uuid: PropTypes.string.isRequired,
 });

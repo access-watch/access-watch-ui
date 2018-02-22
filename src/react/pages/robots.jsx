@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { countries } from 'access-watch-ui-components';
+import { filters } from 'access-watch-sdk';
 
 import { createReputationPreviewResolver } from '../sessions/resolvers';
 import {
@@ -11,11 +12,11 @@ import {
 } from '../sessions/timerange_utils';
 
 import Sessions from '../sessions/sessions';
-import SessionToolbar from '../sessions/session_toolbar';
 import IdentityTableCell from '../sessions/identity_table_cell';
 import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
 import SessionTimeSelector from '../sessions/session_time_selector';
+import SessionsFilter from '../sessions/sessions_filter';
 import { robotSessionsPropType, activityPropType } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
@@ -85,8 +86,15 @@ const RobotsPage = ({ route, robots, activity }) => (
           </Col>
         </Row>
       </div>
-      <div className="page-header__body">
-        <SessionToolbar route={route} />
+      <div
+        className="page-header__body"
+        style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+      >
+        <SessionsFilter
+          route={route}
+          prefix="robot"
+          availableFilters={filters.robot}
+        />
       </div>
     </div>
     <Sessions

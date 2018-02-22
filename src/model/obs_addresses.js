@@ -1,6 +1,8 @@
 import { addressesRoute$, addressDetailsRoute$ } from '../../src/router';
 import { createSessions$ } from './obs_session';
 
+export const logMapping = 'address.value';
+
 const createFilter = ({ reputation }) => ({
   ...(reputation ? { filter: `address.reputation.status:${reputation}` } : {}),
 });
@@ -11,7 +13,7 @@ const addressSessions$ = createSessions$({
   createFilter,
   type: 'address',
   routeId: 'address',
-  logMapping: 'address.value',
+  logMapping,
 });
 
 const obsAddresses = addressSessions$.map(

@@ -46,16 +46,25 @@ const DEFAULT_TIME_PROPS = {
   ...DEFAULT_TIMERANGE_PROPS,
 };
 
+const filterProps = {
+  filter: 'p',
+};
+const DEFAULT_FILTER_PROPS = {
+  filter: '',
+};
+
 const sessionProps = {
   sort: 'p',
   visType: 'p',
   ...timerangeProps,
+  ...filterProps,
 };
 
 const DEFAULT_SESSION_PROPS = {
   sort: 'speed',
   visType: 'treemap',
   ...DEFAULT_TIMERANGE_PROPS,
+  ...DEFAULT_FILTER_PROPS,
 };
 
 const routerStateStoreConfig = {
@@ -74,7 +83,7 @@ const routerStateStoreConfig = {
   },
   [ROUTE_REQUESTS]: {
     ...timeProps,
-    filters: 'p',
+    ...filterProps,
     filtersEnabled: 'p',
   },
   [ROUTE_REQUESTS_DETAILS]: {
@@ -96,6 +105,7 @@ const routerStateStore = new RouterStateStore(
 // default query params to use if none was specified
 // these are overridden by params in window.location
 export const ROBOTS_DEFAULT_PARAMS = {
+  ...DEFAULT_TIME_PROPS,
   ...DEFAULT_SESSION_PROPS,
 };
 
@@ -106,6 +116,7 @@ export const SESSION_DETAILS_DEFAULT_PARAMS = {
 export const REQUESTS_DEFAULT_PARAMS = {
   filtersEnabled: true,
   ...DEFAULT_TIME_PROPS,
+  ...DEFAULT_FILTER_PROPS,
 };
 
 export const METRICS_DEFAULT_PARAMS = {

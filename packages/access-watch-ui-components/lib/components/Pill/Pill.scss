@@ -1,0 +1,45 @@
+@import '../mixins';
+$horizontal-padding: 12px;
+$delete-width: 20px;
+
+.aw-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px $horizontal-padding;
+  padding-right: 5px + $delete-width;
+  //border: solid 1px fade_out($main-color, 0.7);
+  border-radius: 15px;
+  background-color: $v-light-gray;
+}
+
+.aw-pill__content {
+  display: inline-flex;
+  align-items: center;
+}
+
+.aw-pill__delete {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: $delete-width;
+  //background-color: rgba(0, 0, 0, 0.05);
+  justify-content: center;
+  align-items: center;
+}
+
+.aw-pill__delete-btn {
+  @include reset-btn-style();
+  @include cross(0, 10px, 1px, $main-color);
+  position: relative;
+  margin: 5px;
+  cursor: pointer;
+  &:hover {
+    &:before,
+    &:after {
+      width: 2px;
+    }
+  }
+}

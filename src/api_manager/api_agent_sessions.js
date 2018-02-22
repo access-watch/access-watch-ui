@@ -31,7 +31,13 @@ export const getSessionsObs = (
     pickTimerangeKeys(extractTimerange(rest))
   );
   return poll(
-    () => api.get(`/sessions${suffix}`, { sort, filter, limit, ...timerange }),
+    () =>
+      api.get(`/sessions${suffix}`, {
+        sort,
+        filter,
+        limit,
+        ...timerange,
+      }),
     pollInterval
   ).map(arr => arr.map(transformSession));
 };
