@@ -61,6 +61,7 @@ const mainEntry = [
 ];
 
 module.exports = {
+  mode: PROD ? 'production' : 'development',
   devtool: 'source-map',
   cache: !PROD,
   bail: PROD, // exit on first error
