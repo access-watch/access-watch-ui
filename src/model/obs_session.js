@@ -187,8 +187,8 @@ export const createSessions$ = ({
         .filter(r => r[routeId])
         // Replacing the '_' we used in sessions.jsx for it's real value ':'
         .map(r => ({
-          [routeId]: r[routeId].replace(/_/g, ':'),
           ...r,
+          [routeId]: r[routeId].replace(/_/g, ':'),
         }))
         .switchMap(p => detailsSessions$(p).takeUntil(routeChange$))
     ),
