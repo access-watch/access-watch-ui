@@ -152,3 +152,11 @@ export const metricsPropType = PropTypes.shape({
   status: PropTypes.objectOf(metricsStatusPropType).isRequired,
   type: PropTypes.objectOf(metricsStatusPropType).isRequired,
 });
+
+export const filterGroupPropType = PropTypes.shape({
+  id: PropTypes.string,
+  filter: PropTypes.string,
+  label: PropTypes.string,
+});
+
+export const filterGroupsPropType = PropTypes.arrayOf(filterGroupPropType);

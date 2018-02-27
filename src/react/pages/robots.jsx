@@ -17,7 +17,11 @@ import ReputationTableCell from '../sessions/reputation_table_cell';
 import IdentityIcon from '../sessions/identity_icon';
 import SessionTimeSelector from '../sessions/session_time_selector';
 import SessionsFilter from '../sessions/sessions_filter';
-import { robotSessionsPropType, activityPropType } from '../prop_types';
+import {
+  robotSessionsPropType,
+  activityPropType,
+  filterGroupsPropType,
+} from '../prop_types';
 
 import '../../../scss/robots_page.scss';
 import '../../../scss/sessions/sessions_page.scss';
@@ -70,7 +74,7 @@ const rowClassResolver = robot => {
   return status ? `robots__table__row--${status}` : '';
 };
 
-const RobotsPage = ({ route, robots, activity }) => (
+const RobotsPage = ({ route, robots, activity, filterGroups }) => (
   <div className="robots-page page--sessions">
     <div className="page-header page-header--robots">
       <div className="page-header__header">
@@ -94,6 +98,8 @@ const RobotsPage = ({ route, robots, activity }) => (
           route={route}
           prefix="robot"
           availableFilters={filters.robot}
+          filterGroups={filterGroups}
+          groupId="robot"
         />
       </div>
     </div>
@@ -117,6 +123,7 @@ RobotsPage.propTypes = {
   /* eslint-disable react/no-typos */
   robots: robotSessionsPropType.isRequired,
   activity: activityPropType.isRequired,
+  filterGroups: filterGroupsPropType.isRequired,
   /* eslint-enable react/no-typos */
 };
 

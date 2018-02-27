@@ -18,18 +18,10 @@ const robotSessions$ = createSessions$({
 });
 
 const obsRobots = robotSessions$.map(
-  ({
-    sessions: robots,
-    sessionDetails: robotDetails,
-    route,
-    routeDetails,
-    activity,
-  }) => ({
-    route,
-    routeDetails,
+  ({ sessions: robots, sessionDetails: robotDetails, ...sessionProps }) => ({
     robots,
     robotDetails,
-    activity,
+    ...sessionProps,
   })
 );
 

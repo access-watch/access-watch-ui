@@ -10,6 +10,7 @@ export const D_METRICS = 'data.metrics';
 export const D_MONITORING = 'data.monitoring';
 export const D_ACTIVITY = 'data.activity';
 export const D_RULES = 'data.rules';
+export const D_FILTER_GROUPS = 'data.filter_groups';
 
 export const V_SET_ROUTE = 'view.set_route';
 export const V_SHOW_TEXT_TOOLTIP = 'view.show_text_tooltip';
@@ -26,6 +27,20 @@ export const D_ADD_RULE_SUCCESS = 'data.add_rule.success';
 export const D_ADD_RULE_ERROR = 'data.add_rule.error';
 export const D_DELETE_RULE_SUCCESS = 'data.delete_rule.success';
 export const D_DELETE_RULE_ERROR = 'data.delete_rule.error';
+
+export const V_ADD_FILTER_GROUP = 'view.add_filter_group';
+export const V_DELETE_FILTER_GROUP = 'view.delete_filter_group';
+export const V_UPDATE_FILTER_GROUP = 'view.update_filter_group';
+export const V_REORDER_FILTER_GROUP = 'view.reorder_filter_group';
+export const D_ADD_FILTER_GROUP_SUCCESS = 'data.add_filter_group.success';
+export const D_ADD_FILTER_GROUP_ERROR = 'data.add_filter_group.error';
+export const D_DELETE_FILTER_GROUP_SUCCESS = 'data.delete_filter_group.success';
+export const D_DELETE_FILTER_GROUP_ERROR = 'data.delete_filter_group.error';
+export const D_UPDATE_FILTER_GROUP_SUCCESS = 'data.update_filter_group.success';
+export const D_UPDATE_FILTER_GROUP_ERROR = 'data.update_filter_group.error';
+export const D_REORDER_FILTER_GROUP_SUCCESS =
+  'data.reorder_filter_group.success';
+export const D_REORDER_FILTER_GROUP_ERROR = 'data.reorder_filter_group.error';
 
 export const handleAction = type =>
   Observable.fromEvent(viewEvents, type).merge(
