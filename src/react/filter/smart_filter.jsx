@@ -184,7 +184,7 @@ class SmartFilter extends React.Component {
           onUnselectFilter={this.handleUnselectFilter}
           {...props}
         />
-        <div className="smart_filter__children">{children}</div>
+        <div className="smart-filter__children">{children}</div>
       </div>
     );
   }

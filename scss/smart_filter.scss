@@ -40,3 +40,8 @@ $filter-font-size: 11px;
     flex-grow: 1;
   }
 }
+
+.smart-filter__children {
+  display: flex;
+  align-items: center;
+}

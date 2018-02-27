@@ -8,6 +8,8 @@ import { metricsLoading$ } from './api_manager';
 import createLogs from './model/create_logs';
 import metrics$ from './model/obs_metrics';
 import addresses$ from './model/obs_addresses';
+import filterGroups$ from './store/obs_filter_groups_store';
+import { getFilterGroupsObs } from './api_manager/filter_groups_api';
 
 import status$ from './model/obs_status';
 import robots$ from './model/obs_robots';
@@ -45,9 +47,14 @@ import {
  * @fires Pages#PageChange
  */
 export const onRobotsPage = robots$.map(
-  ({ route, routeDetails, robots, robotDetails, activity }) => ({
+  ({ route, routeDetails, robots, robotDetails, activity, filterGroups }) => ({
     element: (
-      <RobotsPageComponent robots={robots} route={route} activity={activity} />
+      <RobotsPageComponent
+        robots={robots}
+        route={route}
+        activity={activity}
+        filterGroups={filterGroups}
+      />
     ),
     name: 'robots',
     ...(robotDetails
@@ -73,6 +80,12 @@ export const onMetricsPage = metrics$
     element: <MetricsPageComponent {...metrics} route={route} />,
     name: 'metrics',
   }));
+
+const logfilterGroupsObs = Observable.combineLatest(
+  filterGroups$.map(({ filterGroups }) => filterGroups.log),
+  getFilterGroupsObs()
+).map(([filterGroups]) => filterGroups);
+filterGroups$.connect();
 
 /**
  * @fires Pages#PageChange
@@ -113,7 +126,8 @@ export const onLogsPage = routeChange$
         )
         // emitting [] because theres no side panel to show when this route is
         // not triggered
-        .startWith([])
+        .startWith([]),
+      logfilterGroupsObs
     )
       // continue to take from the even while details are open. We do this because
       // don't have a way to paginate upwards atm. but it could be useful at a
@@ -124,29 +138,39 @@ export const onLogsPage = routeChange$
         )
       )
   )
-  .map(([logs, metrics, route, activity, [details, detailsRoute]]) => ({
-    element: (
-      <RequestsPageComponent
-        {...logs}
-        logEnd={logs.end}
-        metrics={metrics}
-        route={route}
-        activity={activity}
-      />
-    ),
-    sidePanel: details && {
+  .map(
+    ([
+      logs,
+      metrics,
+      route,
+      activity,
+      [details, detailsRoute],
+      filterGroups,
+    ]) => ({
       element: (
-        <SessionDetailsComponent
-          {...details}
-          requestInfo={logs.logs.find(l => l.id === detailsRoute.hl)}
-          route={detailsRoute}
+        <RequestsPageComponent
+          {...logs}
+          logEnd={logs.end}
+          metrics={metrics}
+          route={route}
+          activity={activity}
+          filterGroups={filterGroups}
         />
       ),
-      BEMblock: 'session-details',
-      bgRoute: 'requests',
-    },
-    name: 'requests',
-  }));
+      sidePanel: details && {
+        element: (
+          <SessionDetailsComponent
+            {...details}
+            requestInfo={logs.logs.find(l => l.id === detailsRoute.hl)}
+            route={detailsRoute}
+          />
+        ),
+        BEMblock: 'session-details',
+        bgRoute: 'requests',
+      },
+      name: 'requests',
+    })
+  );
 
 export const onLogDetailsPage = requestDetailsRoute$
   // Only use this route until logs route has been visited. This is because we
@@ -172,16 +196,18 @@ export const onLogDetailsPage = requestDetailsRoute$
         },
       ]),
       Observable.of(requestDetailsRoute),
-      globalActivity$
+      globalActivity$,
+      logfilterGroupsObs
     ).takeUntil(routeChange$)
   )
-  .map(([details, [logs, metrics], route, activity]) => ({
+  .map(([details, [logs, metrics], route, activity, filterGroups]) => ({
     element: (
       <RequestsPageComponent
         {...logs}
         metrics={metrics}
         route={route}
         activity={activity}
+        filterGroups={filterGroups}
       />
     ),
     sidePanel: {
@@ -198,12 +224,20 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
 }));
 
 export const onAddressesPage = addresses$.map(
-  ({ route, routeDetails, addresses, addressDetails, activity }) => ({
+  ({
+    route,
+    routeDetails,
+    addresses,
+    addressDetails,
+    activity,
+    filterGroups,
+  }) => ({
     element: (
       <AddressesPageComponent
         addresses={addresses}
         route={route}
         activity={activity}
+        filterGroups={filterGroups}
       />
     ),
     name: 'addresses',

@@ -16,9 +16,13 @@ import { timeDisplay } from '../../utilities/timerange';
 import Logs from '../logs/logs2';
 import LogsRow from '../logs/logs_row';
 import LogsSeparator from '../logs/logs_separator';
-import SmartFilter from '../filter/smart_filter';
+import Filters from '../filter/filters';
 import TimeSelector from '../time/time_selector';
-import { logPropType, activityPropType } from '../prop_types';
+import {
+  logPropType,
+  activityPropType,
+  filterGroupsPropType,
+} from '../prop_types';
 
 import '../../../scss/requests_page.scss';
 
@@ -51,6 +55,7 @@ class LogsPage extends React.Component {
     }).isRequired,
     logEnd: PropTypes.bool,
     activity: activityPropType.isRequired,
+    filterGroups: filterGroupsPropType.isRequired,
   };
 
   static defaultProps = {
@@ -165,6 +170,7 @@ class LogsPage extends React.Component {
       earlierLoading,
       logEnd,
       activity,
+      filterGroups,
     } = this.props;
 
     return (
@@ -190,10 +196,12 @@ class LogsPage extends React.Component {
             </Row>
           </div>
           <div className="logs-filters-container">
-            <SmartFilter
+            <Filters
               route={route}
               prefix=""
               availableFilters={filters.log}
+              filterGroups={filterGroups}
+              groupId="log"
             />
           </div>
         </div>
