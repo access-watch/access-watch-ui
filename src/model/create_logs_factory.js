@@ -194,7 +194,6 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
       isOpen$.map(open => state => ({
         ...state,
         streamOpen: open,
-        loading: false,
       })),
 
       logs$.map(logs => state => ({
