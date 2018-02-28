@@ -61,6 +61,7 @@ const mainEntry = [
 ];
 
 module.exports = {
+  mode: PROD ? 'production' : 'development',
   devtool: 'source-map',
   cache: !PROD,
   bail: PROD, // exit on first error
@@ -88,45 +89,24 @@ module.exports = {
       __DEV__: opts.dev,
       'process.env': opts.env,
     }),
-  ]
-    .concat(
-      opts.minify
-        ? [
-            new webpack.optimize.UglifyJsPlugin({
-              sourceMap: !PROD,
-              compress: {
-                screw_ie8: true,
-                warnings: false,
-              },
-              mangle: {
-                screw_ie8: true,
-              },
-              output: {
-                comments: false,
-                screw_ie8: true,
-              },
-            }),
-          ]
-        : []
-    )
-    .concat(
-      PROD
-        ? [
-            // production plugins
-            new webpack.LoaderOptionsPlugin({
-              minimize: true,
-            }),
-            new CleanWebpackPlugin([DIST_PATH], {
-              verbose: true,
-              exclude: [],
-            }),
-            new AssetsPlugin({
-              prettyPrint: true,
-              path: DIST_PATH,
-            }),
-          ]
-        : []
-    ),
+  ].concat(
+    PROD
+      ? [
+          // production plugins
+          new webpack.LoaderOptionsPlugin({
+            minimize: true,
+          }),
+          new CleanWebpackPlugin([DIST_PATH], {
+            verbose: true,
+            exclude: [],
+          }),
+          new AssetsPlugin({
+            prettyPrint: true,
+            path: DIST_PATH,
+          }),
+        ]
+      : []
+  ),
 
   module: {
     rules: [

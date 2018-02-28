@@ -10,8 +10,8 @@ export const unfixFilter = prefix => ({ id, ...rest }) => ({
 export const filterToURI = ({ id, values = [] }) => `${id}:${values.join(',')}`;
 export const filtersToURI = filters => filters.map(filterToURI).join(';');
 export const URIToFilter = uri => {
-  const [id, valuesURI] = uri.split(':');
-  const values = valuesURI ? valuesURI.split(',') : [];
+  const [id, ...valuesURI] = uri.split(':');
+  const values = valuesURI.length ? valuesURI.join(':').split(',') : [];
   return {
     id,
     values,
