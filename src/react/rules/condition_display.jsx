@@ -2,10 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import AddressLabel from '../address/address_label';
+import IdentityIcon from '../sessions/identity_icon';
+
+import '../../../scss/rules/condition_display.scss';
 
 const conditionDisplays = {
   address: c => <AddressLabel address={c.address} />,
-  robot: c => c.robot.name,
+  robot: c => (
+    <span className="rule-condition__robot">
+      <IdentityIcon robot={c.robot} reputation={c.robot.reputation} />
+      {c.robot.name}
+    </span>
+  ),
 };
 
 const ConditionDisplay = ({ condition }) => {
