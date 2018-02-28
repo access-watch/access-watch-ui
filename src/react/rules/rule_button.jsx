@@ -5,7 +5,10 @@ import cx from 'classnames';
 import { V_ADD_RULE, V_REMOVE_RULE, dispatch } from '../../event_hub';
 
 import Button from '../utilities/button';
+import SVGIcon from '../utilities/svg_icon';
 import RulePropTypes from './rule_prop_types';
+
+import blockedIcon from '!raw-loader!../../../assets/blocked-nofill.svg'; // eslint-disable-line
 
 import '../../../scss/rules/rules_button.scss';
 
@@ -49,23 +52,31 @@ class RuleButton extends React.Component {
   }
 
   render() {
-    const { rule, actionPending, className, ...props } = this.props;
-    const label = rule ? 'Unblock' : 'Block';
+    const { rule, actionPending, className, type, ...props } = this.props;
+    const label = rule ? 'Undo' : 'Block';
     return (
-      <Button
-        disabled={actionPending}
-        onClick={this.handleClick}
-        className={cx(
-          baseClass,
-          className,
-          { [cSfx('block')]: !rule },
-          { [cSfx('reset')]: !!rule },
-          { [cSfx('disabled')]: actionPending }
+      <span className="rule-button-wrapper">
+        {rule && (
+          <span className="rule-button__blocked">
+            <SVGIcon svg={blockedIcon} className="rule-button__blocked__icon" />
+            You blocked this {type}.
+          </span>
         )}
-        {...props}
-      >
-        {label}
-      </Button>
+        <Button
+          disabled={actionPending}
+          onClick={this.handleClick}
+          className={cx(
+            baseClass,
+            className,
+            { [cSfx('block')]: !rule },
+            { [cSfx('reset')]: !!rule },
+            { [cSfx('disabled')]: actionPending }
+          )}
+          {...props}
+        >
+          {label}
+        </Button>
+      </span>
     );
   }
 }
