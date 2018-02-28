@@ -67,7 +67,7 @@ class SaveFilterGroup extends React.Component {
     if (onlyCreateFilter || !filterGroup.id) {
       const label = filterGroup.label
         ? `${filterGroup.label} copy`
-        : `#${index}`;
+        : `Search #${index}`;
       saveFilterGroup({
         groupId,
         filter,
