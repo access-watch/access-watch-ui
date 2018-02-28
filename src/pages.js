@@ -82,7 +82,10 @@ export const onMetricsPage = metrics$
   }));
 
 const logfilterGroupsObs = Observable.combineLatest(
-  filterGroups$.map(({ filterGroups }) => filterGroups.log),
+  filterGroups$.map(({ filterGroups, actionPending }) => ({
+    filterGroups: filterGroups.log,
+    actionPending,
+  })),
   getFilterGroupsObs()
 ).map(([filterGroups]) => filterGroups);
 filterGroups$.connect();

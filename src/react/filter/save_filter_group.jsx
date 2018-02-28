@@ -48,12 +48,27 @@ class SaveFilterGroup extends React.Component {
     onlyCreateFilter: PropTypes.bool,
     onAddFilterGroup: PropTypes.func,
     index: PropTypes.number.isRequired,
+    actionPending: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     onlyCreateFilter: false,
     onAddFilterGroup: _ => _,
   };
+
+  state = {
+    actionPending: null,
+  };
+
+  componentWillReceiveProps({ actionPending, filterGroup }) {
+    if (
+      this.state.actionPending &&
+      actionPending === false &&
+      filterGroup.id !== this.state.actionPending
+    ) {
+      this.setState({ actionPending: false });
+    }
+  }
 
   saveFilter = () => {
     const {
@@ -64,26 +79,35 @@ class SaveFilterGroup extends React.Component {
       onAddFilterGroup,
       index,
     } = this.props;
-    if (onlyCreateFilter || !filterGroup.id) {
-      const label = filterGroup.label
-        ? `${filterGroup.label} copy`
-        : `Search #${index}`;
-      saveFilterGroup({
-        groupId,
-        filter,
-        filterGroup: {},
-        label,
-        onAddFilterGroup,
-      });
-    } else {
-      saveFilterGroup({ filterGroup, groupId, filter, onAddFilterGroup });
+    const { actionPending } = this.state;
+    if (!actionPending) {
+      if (onlyCreateFilter || !filterGroup.id) {
+        const label = filterGroup.label
+          ? `${filterGroup.label} copy`
+          : `Search #${index}`;
+        saveFilterGroup({
+          groupId,
+          filter,
+          filterGroup: {},
+          label,
+          onAddFilterGroup,
+        });
+      } else {
+        saveFilterGroup({ filterGroup, groupId, filter, onAddFilterGroup });
+      }
+      this.setState({ actionPending: filterGroup.id });
     }
   };
 
   render() {
     const { children } = this.props;
+    const { actionPending } = this.state;
     return (
-      <button className="save-filter-group" onClick={this.saveFilter}>
+      <button
+        className="save-filter-group"
+        disabled={actionPending}
+        onClick={this.saveFilter}
+      >
         {children}
       </button>
     );

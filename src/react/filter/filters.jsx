@@ -35,27 +35,12 @@ const Filters = ({
   children,
 }) => (
   <div className="filters">
-    <Tabs filterGroups={filterGroups} route={route} groupId={groupId} />
+    <Tabs {...filterGroups} route={route} groupId={groupId} />
     <SmartFilter
       route={route}
       prefix={prefix}
       availableFilters={availableFilters}
     >
-      <SaveFilterGroup
-        filter={route.filter}
-        filterGroup={
-          route.filterGroupId === 'default'
-            ? {}
-            : filterGroups.find(fg => fg.id === route.filterGroupId) || {
-                id: route.filterGroupId,
-              }
-        }
-        groupId={groupId}
-        index={filterGroups.length + 1}
-        onAddFilterGroup={changeRouteToFilterGroupId(route)}
-      >
-        <SVGIcon svg={SaveIconSVG} className="filters-save-icon" />
-      </SaveFilterGroup>
       {children}
     </SmartFilter>
   </div>
