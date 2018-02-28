@@ -1,0 +1,13 @@
+@import '../mixins';
+
+.rule-condition__robot {
+  display: flex;
+  align-items: center;
+  img,
+  svg {
+    @include white-to-brand-purple();
+    height: 14px;
+    width: 14px;
+    margin-right: 8px;
+  }
+}
