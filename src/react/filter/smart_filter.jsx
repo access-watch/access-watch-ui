@@ -91,14 +91,15 @@ class SmartFilter extends React.Component {
   state = {};
 
   onFilterValueChange = args => {
-    const { id, newValue } = args;
+    const { id, newValue: newValueRaw } = args;
     const { newFilter } = this.state;
     const { onAddFilter, onFilterValueChange } = this.getFilterFunctions();
+    const newValue = newValueRaw.trim();
     if (newFilter === id) {
       onAddFilter({ id, values: [newValue] });
       this.setState({ newFilter: null });
     } else {
-      onFilterValueChange(args);
+      onFilterValueChange({ ...args, newValue });
     }
   };
 
