@@ -19,16 +19,19 @@ const append = (a, b) => a.concat(b);
 
 const URIToFilters = createURIToFilters();
 
+const toLowerCase = v => (typeof v === 'string' ? v.toLowerCase() : v);
+
 const getLogFilter = ({ id, values }) => log => {
   const filterDef = filtersDef.find(f => f.id === id) || {};
   const keyPath = id.split('.');
   const logValue = getIn(log, keyPath);
-  let compFn = v => logValue === v;
+  let compFn = v => toLowerCase(logValue) === toLowerCase(v);
   if (filterDef.fullText) {
-    compFn = v => logValue && logValue.indexOf(v) !== -1;
+    compFn = v =>
+      logValue && logValue.toLowerCase().indexOf(v.toLowerCase()) !== -1;
   }
   if (Array.isArray(logValue)) {
-    compFn = v => logValue.indexOf(v) !== -1;
+    compFn = v => logValue.map(toLowerCase).indexOf(toLowerCase(v)) !== -1;
   }
   return values.findIndex(compFn) !== -1;
 };
