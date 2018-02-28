@@ -4,6 +4,7 @@ import Col from 'elemental/lib/components/Col';
 import Row from 'elemental/lib/components/Row';
 import { stringify } from 'qs';
 import { filters } from 'access-watch-sdk';
+import { Loader } from 'access-watch-ui-components';
 
 import { V_SET_ROUTE, dispatch, V_REQUEST_EARLIER_LOGS } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
@@ -206,6 +207,13 @@ class LogsPage extends React.Component {
           earlierLoading={this.state.earlierLoading || earlierLoading}
           logEnd={logEnd && logs.length > 0}
         />
+        {loading && (
+          <div className="logs-empty">
+            <div className="logs-empty__content">
+              <Loader />
+            </div>
+          </div>
+        )}
         {!loading &&
           logs.length === 0 && (
             <div className="logs-empty">

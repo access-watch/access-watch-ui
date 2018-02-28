@@ -9,8 +9,13 @@ const baseClass = 'auto-complete';
 const itemsClass = `${baseClass}__items`;
 const itemClass = `${baseClass}__item`;
 
-const highlightFirst = (_, { setHighlightedIndex }) => setHighlightedIndex(0);
-const itemToString = ({ value, label = value }) => label;
+const highlightFirst = (inputValue, { setHighlightedIndex, ...args }) => {
+  if (inputValue) {
+    setHighlightedIndex(0);
+  }
+};
+
+const itemToString = item => (item ? item.label || item.value : '');
 
 const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
   <Downshift
