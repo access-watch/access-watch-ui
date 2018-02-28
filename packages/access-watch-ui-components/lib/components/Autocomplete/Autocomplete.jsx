@@ -9,8 +9,16 @@ const baseClass = 'auto-complete';
 const itemsClass = `${baseClass}__items`;
 const itemClass = `${baseClass}__item`;
 
-const highlightFirst = (inputValue, { setHighlightedIndex, ...args }) => {
-  if (inputValue) {
+const getAutocompleItems = (inputValue, items) =>
+  items.filter(({ label }) =>
+    ('' + label).toLowerCase().includes(inputValue.toLowerCase())
+  );
+
+const highlightFirst = items => (
+  inputValue,
+  { setHighlightedIndex, ...args }
+) => {
+  if (inputValue && getAutocompleItems(inputValue, items).length > 0) {
     setHighlightedIndex(0);
   }
 };
@@ -19,7 +27,7 @@ const itemToString = item => (item ? item.label || item.value : '');
 
 const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
   <Downshift
-    onInputValueChange={highlightFirst}
+    onInputValueChange={highlightFirst(items)}
     {...downshiftProps}
     itemToString={itemToString}
     render={({
@@ -32,11 +40,7 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
       selectItem,
       reset,
     }) => {
-      const renderedItems = isOpen
-        ? items.filter(({ label }) =>
-            ('' + label).toLowerCase().includes(inputValue.toLowerCase())
-          )
-        : [];
+      const renderedItems = isOpen ? getAutocompleItems(inputValue, items) : [];
       return (
         <div className={baseClass}>
           <input
