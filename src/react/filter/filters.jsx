@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { dispatch, V_SET_ROUTE } from '../../event_hub';
-import { updateRouteParameter } from '../../utilities/route_utils';
+import { dispatch, V_UPDATE_FILTER_GROUP } from '../../event_hub';
 
 import Tabs from './smart_filter_tabs';
 import SmartFilter from './smart_filter';
-import SaveFilterGroup from './save_filter_group';
-import SVGIcon from '../utilities/svg_icon';
 
 import { availableFilterPropType } from './prop_types';
 import { filterGroupsPropType, routePropType } from '../prop_types';
@@ -16,15 +13,19 @@ import SaveIconSVG from '!raw-loader!../../../assets/save.svg'; //eslint-disable
 
 import '../../../scss/filters.scss';
 
-const changeRouteToFilterGroupId = route => ({ id }) =>
-  dispatch({
-    type: V_SET_ROUTE,
-    route: updateRouteParameter({
-      route: route.route,
-      param: 'filterGroupId',
-      value: id,
-    }),
-  });
+const saveFilterGroup = ({ route, groupId }) => filter => {
+  const { filterGroupId } = route;
+  if (filterGroupId !== 'default') {
+    dispatch({
+      type: V_UPDATE_FILTER_GROUP,
+      filterGroup: {
+        id: filterGroupId,
+        filter,
+      },
+      groupId,
+    });
+  }
+};
 
 const Filters = ({
   route,
@@ -40,6 +41,7 @@ const Filters = ({
       route={route}
       prefix={prefix}
       availableFilters={availableFilters}
+      onFilterChange={saveFilterGroup({ route, groupId })}
     >
       {children}
     </SmartFilter>
