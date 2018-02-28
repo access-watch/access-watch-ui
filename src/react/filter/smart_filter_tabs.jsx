@@ -11,7 +11,7 @@ import {
   V_UPDATE_FILTER_GROUP,
 } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
-import { routePropType, filterGroupsPropType } from '../prop_types';
+import { routePropType, filterGroupPropType } from '../prop_types';
 
 import Tabs from '../utilities/tabs';
 
@@ -27,8 +27,9 @@ const autofocus = ref => {
 class SmartFilterTabs extends React.Component {
   static propTypes = {
     groupId: PropTypes.string.isRequired,
-    filterGroups: filterGroupsPropType.isRequired,
+    filterGroups: PropTypes.arrayOf(filterGroupPropType).isRequired,
     route: routePropType.isRequired,
+    actionPending: PropTypes.bool.isRequired,
   };
 
   state = {
