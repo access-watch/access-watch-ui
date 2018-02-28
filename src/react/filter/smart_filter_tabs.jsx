@@ -135,7 +135,7 @@ class SmartFilterTabs extends React.Component {
   };
 
   render() {
-    const { route, filterGroups, groupId } = this.props;
+    const { route, filterGroups, groupId, actionPending } = this.props;
     const { filterGroupId, filter } = route;
     const { editLabel } = this.state;
     const filterGroup = this.getCurrentFilterGroup();
@@ -179,6 +179,7 @@ class SmartFilterTabs extends React.Component {
           onlyCreateFilter
           onAddFilterGroup={this.selectFilterGroup}
           index={filterGroups.length + 1}
+          actionPending={actionPending}
         >
           +
         </SaveFilterGroup>

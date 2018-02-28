@@ -159,4 +159,7 @@ export const filterGroupPropType = PropTypes.shape({
   label: PropTypes.string,
 });
 
-export const filterGroupsPropType = PropTypes.arrayOf(filterGroupPropType);
+export const filterGroupsPropType = PropTypes.shape({
+  filterGroups: PropTypes.arrayOf(filterGroupPropType),
+  actionPending: PropTypes.bool.isRequired,
+});

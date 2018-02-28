@@ -197,7 +197,10 @@ export const createSessions$ = ({
     allRoute$.switchMap(_ =>
       globalActivity$
         .combineLatest(
-          filterGroups$.map(({ filterGroups }) => filterGroups[type]),
+          filterGroups$.map(({ filterGroups, actionPending }) => ({
+            filterGroups: filterGroups[type],
+            actionPending,
+          })),
           getFilterGroupsObs()
         )
         .takeUntil(routeChange$)
