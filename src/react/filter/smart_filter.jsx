@@ -18,14 +18,19 @@ import '../../../scss/smart_filter.scss';
 const getFilterFunctions = ({ route, prefix }) => {
   const URIToFilters = createURIToFilters(prefix);
   const dispatchNewFilters = filters =>
-    dispatch({
-      type: V_SET_ROUTE,
-      route: updateRouteParameter({
-        route: route.route,
-        param: 'filter',
-        value: filtersToURI(filters.map(prefixFilter(prefix))),
-      }),
+    new Promise(resolve => {
+      const value = filtersToURI(filters.map(prefixFilter(prefix)));
+      dispatch({
+        type: V_SET_ROUTE,
+        route: updateRouteParameter({
+          route: route.route,
+          param: 'filter',
+          value,
+        }),
+      });
+      resolve(value);
     });
+
   const onDeleteFilter = ({ id }) =>
     dispatchNewFilters(URIToFilters(route.filter).filter(f => f.id !== id));
 
@@ -82,10 +87,12 @@ class SmartFilter extends React.Component {
     route: routePropType.isRequired,
     prefix: PropTypes.string.isRequired,
     children: PropTypes.node,
+    onFilterChange: PropTypes.func,
   };
 
   static defaultProps = {
     children: null,
+    onFilterChange: _ => _,
   };
 
   state = {};
@@ -148,11 +155,25 @@ class SmartFilter extends React.Component {
   };
 
   getFilterFunctions = () => {
-    const { route, prefix } = this.props;
-    return getFilterFunctions({
+    const { route, prefix, onFilterChange } = this.props;
+    const origFilterFns = getFilterFunctions({
       route,
       prefix,
     });
+    const shouldCallOnFilterChange = key =>
+      [
+        'onDeleteFilter',
+        'onDeleteFilterValue',
+        'onFilterValueChange',
+        'onAddFilter',
+      ].indexOf(key) !== -1;
+    return Object.keys(origFilterFns).reduce((filterFns, key) => {
+      let fn = origFilterFns[key];
+      if (shouldCallOnFilterChange(key)) {
+        fn = (...args) => origFilterFns[key](...args).then(onFilterChange);
+      }
+      return { ...filterFns, [key]: fn };
+    }, {});
   };
 
   handleUnselectFilter = () => {
