@@ -60,6 +60,14 @@ const displayFilterValue = ({ availableFilters, id, value }) => {
 const displayFilterLabel = ({ availableFilters, id }) =>
   availableFilters.find(f => f.id === id).label || id;
 
+const getItemWithLabel = ({ value, availableFilters, id }) => {
+  const { valueToLabel = v => v } = availableFilters.find(f => f.id === id);
+  return {
+    value,
+    label: valueToLabel(value),
+  };
+};
+
 class SmartFilter extends React.Component {
   static propTypes = {
     filters: PropTypes.arrayOf(
@@ -273,7 +281,11 @@ class SmartFilter extends React.Component {
                           value,
                         })}
                         onChange={this.handleFilterValueChange({ id, value })}
-                        selectedItem={value}
+                        selectedItem={getItemWithLabel({
+                          availableFilters,
+                          id,
+                          value,
+                        })}
                         inputRef={autoFocus}
                         onKeyDown={this.handleInputKeyDown({ id, value })}
                         onOuterClick={this.onOuterClick}
