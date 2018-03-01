@@ -48,7 +48,7 @@ const DEFAULT_TIME_PROPS = {
 
 const filterProps = {
   filter: 'p',
-  currentSearch: 'p',
+  searchId: 'p',
 };
 const DEFAULT_FILTER_PROPS = {
   filter: '',
