@@ -17,6 +17,9 @@
     &--name {
       width: 320px;
       font-family: $default-bold-font;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     &--accepted,
     &--rejected,
