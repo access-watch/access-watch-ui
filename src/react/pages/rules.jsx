@@ -38,7 +38,11 @@ const rulesResolvers = [
     id: 'remove',
     label: '',
     resolver: rule => (
-      <RuleButton rule={rule} className="rules__rule__remove-btn" />
+      <RuleButton
+        rule={rule}
+        className="rules__rule__remove-btn"
+        showBlockedText={false}
+      />
     ),
   },
 ];
