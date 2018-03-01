@@ -28,6 +28,8 @@ const createSpeedsResolvers = speedIds =>
 const createStatusResolvers = speedsResolvers => [
   {
     id: 'name',
+    // eslint-disable-next-line
+    resolver: ({ name }) => <span title={name}>{name}</span>,
   },
   ...speedsResolvers,
   {

@@ -5,12 +5,14 @@ import { FlagIcon } from 'access-watch-ui-components';
 
 import '../../../scss/address_label.scss';
 
+const addressLabel = ({ hostname, value }) => hostname || value;
+
 const AddressLabel = ({ address, ...htmlProps }) => (
-  <span {...htmlProps} className="address_label">
+  <span {...htmlProps} className="address_label" title={addressLabel(address)}>
     {address.countryCode && (
       <FlagIcon cc={address.countryCode} title={address.country} />
     )}
-    {address.hostname || address.value}
+    {addressLabel(address)}
   </span>
 );
 
