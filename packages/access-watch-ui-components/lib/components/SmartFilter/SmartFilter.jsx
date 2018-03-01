@@ -58,7 +58,7 @@ const displayFilterValue = ({ availableFilters, id, value }) => {
 };
 
 const displayFilterLabel = ({ availableFilters, id }) =>
-  availableFilters.find(f => f.id === id).label || id;
+  (availableFilters.find(f => f.id === id) || {}).label || id;
 
 const getItemWithLabel = ({ value, availableFilters, id }) => {
   const { valueToLabel = v => v } = availableFilters.find(f => f.id === id);

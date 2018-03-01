@@ -47,6 +47,7 @@ export default class WorldmapMain extends React.Component {
     color: PropTypes.string.isRequired,
     loading: PropTypes.bool,
     showLegend: PropTypes.bool,
+    onCountryClick: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -72,6 +73,10 @@ export default class WorldmapMain extends React.Component {
 
   handleMouseOut = () => {
     this.props.dispatch({ type: V_SHOW_TOOLTIP, visible: false });
+  };
+
+  handleCountryClick = cc => {
+    this.props.onCountryClick(cc);
   };
 
   render() {
@@ -106,6 +111,7 @@ export default class WorldmapMain extends React.Component {
                     ? colorMin
                     : getFill(cc, metrics[cc.toUpperCase()], color)
                 }
+                onClick={this.handleCountryClick}
               />
             ))}
           </svg>
