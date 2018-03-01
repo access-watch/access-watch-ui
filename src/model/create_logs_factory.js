@@ -202,6 +202,7 @@ export default ({ api, transformLog, store: logsStore = {}, handleAction }) => {
       logs$.map(logs => state => ({
         ...state,
         logs: append(logs, state.logs).slice(0, MAX_REQUESTS),
+        loading: false,
       })),
 
       earlierLogs(p).map(({ logs, end }) => state => {
