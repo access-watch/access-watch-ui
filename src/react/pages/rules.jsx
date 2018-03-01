@@ -43,7 +43,7 @@ const rulesResolvers = [
   },
 ];
 
-const EXPORTS_OPTIONS = ['nginx', 'apache'];
+const EXPORTS_OPTIONS = ['nginx', 'apache', 'txt'];
 
 const RulesPage = ({ rules }) => {
   const rulesValues = Object.values(rules.rules);
