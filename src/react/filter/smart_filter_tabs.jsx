@@ -64,8 +64,7 @@ class SmartFilterTabs extends React.Component {
     });
   };
 
-  selectTab = ({ id }) =>
-    this.selectSearch({ ...this.getSearch(id) });
+  selectTab = ({ id }) => this.selectSearch({ ...this.getSearch(id) });
 
   handleTabClick = ({ id }) => {
     const search = this.getCurrentSearch();
@@ -127,9 +126,7 @@ class SmartFilterTabs extends React.Component {
     const { groupId, searches, route } = this.props;
     const { searchId } = route;
     if (id === searchId) {
-      const index = searches.findIndex(
-        search => search.id === id
-      );
+      const index = searches.findIndex(search => search.id === id);
       this.selectTab(index > 0 ? searches[index - 1] : 'default');
     }
     dispatch({ type: V_DELETE_SEARCH, id, groupId });

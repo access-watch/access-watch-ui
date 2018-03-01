@@ -19,11 +19,7 @@ import LogsRow from '../logs/logs_row';
 import LogsSeparator from '../logs/logs_separator';
 import Filters from '../filter/filters';
 import TimeSelector from '../time/time_selector';
-import {
-  logPropType,
-  activityPropType,
-  searchesPropType,
-} from '../prop_types';
+import { logPropType, activityPropType, searchesPropType } from '../prop_types';
 
 import '../../../scss/requests_page.scss';
 

@@ -4,21 +4,11 @@ import uuid from 'uuid/v4';
 
 import { searchPropType } from '../prop_types';
 
-import {
-  dispatch,
-  V_ADD_SEARCH,
-  V_UPDATE_SEARCH,
-} from '../../event_hub';
+import { dispatch, V_ADD_SEARCH, V_UPDATE_SEARCH } from '../../event_hub';
 
 import '../../../scss/save_search.scss';
 
-const saveSearch = ({
-  search,
-  filter,
-  groupId,
-  label,
-  onAddSearch,
-}) => {
+const saveSearch = ({ search, filter, groupId, label, onAddSearch }) => {
   if (search.id) {
     dispatch({
       type: V_UPDATE_SEARCH,

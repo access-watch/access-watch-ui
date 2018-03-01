@@ -38,8 +38,7 @@ export const D_DELETE_SEARCH_SUCCESS = 'data.delete_search.success';
 export const D_DELETE_SEARCH_ERROR = 'data.delete_search.error';
 export const D_UPDATE_SEARCH_SUCCESS = 'data.update_search.success';
 export const D_UPDATE_SEARCH_ERROR = 'data.update_search.error';
-export const D_REORDER_SEARCH_SUCCESS =
-  'data.reorder_search.success';
+export const D_REORDER_SEARCH_SUCCESS = 'data.reorder_search.success';
 export const D_REORDER_SEARCH_ERROR = 'data.reorder_search.error';
 
 export const handleAction = type =>

@@ -142,14 +142,7 @@ export const onLogsPage = routeChange$
       )
   )
   .map(
-    ([
-      logs,
-      metrics,
-      route,
-      activity,
-      [details, detailsRoute],
-      searches,
-    ]) => ({
+    ([logs, metrics, route, activity, [details, detailsRoute], searches]) => ({
       element: (
         <RequestsPageComponent
           {...logs}
@@ -227,14 +220,7 @@ export const onStatusPage = status$.map(({ status, statusLoading }) => ({
 }));
 
 export const onAddressesPage = addresses$.map(
-  ({
-    route,
-    routeDetails,
-    addresses,
-    addressDetails,
-    activity,
-    searches,
-  }) => ({
+  ({ route, routeDetails, addresses, addressDetails, activity, searches }) => ({
     element: (
       <AddressesPageComponent
         addresses={addresses}

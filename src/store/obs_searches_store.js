@@ -69,9 +69,7 @@ const onDeleteSearchSuccess = Observable.fromEvent(
   ...state,
   searches: {
     ...state.searches,
-    [groupId]: state.searches[groupId].filter(
-      search => id !== search.id
-    ),
+    [groupId]: state.searches[groupId].filter(search => id !== search.id),
   },
   actionPending: false,
 }));
@@ -98,16 +96,14 @@ const reorderState = ({ oldIndex, newIndex, groupId }) => state => {
   };
 };
 
-const onReorderSearch = getViewObs(V_REORDER_SEARCH).map(
-  reorderState
-);
+const onReorderSearch = getViewObs(V_REORDER_SEARCH).map(reorderState);
 
-const onReorderSearchSuccess = getViewObs(
-  D_REORDER_SEARCH_SUCCESS
-).map(() => state => ({
-  ...state,
-  actionPending: false,
-}));
+const onReorderSearchSuccess = getViewObs(D_REORDER_SEARCH_SUCCESS).map(
+  () => state => ({
+    ...state,
+    actionPending: false,
+  })
+);
 
 const onReorderSearchError = getViewObs(D_REORDER_SEARCH_ERROR).map(
   ({ oldIndex, newIndex, ...query }) => state => ({
