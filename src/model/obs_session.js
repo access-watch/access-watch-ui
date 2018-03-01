@@ -6,9 +6,9 @@ import {
 import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
-import { getFilterGroupsObs } from '../api_manager/filter_groups_api';
+import { getSearchesObs } from '../api_manager/searches_api';
 import rules$ from '../store/obs_rules_store';
-import filterGroups$ from '../store/obs_filter_groups_store';
+import searches$ from '../store/obs_searches_store';
 import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
 import { viewEvents, V_SESSIONS_LOAD_MORE } from '../event_hub';
@@ -197,11 +197,11 @@ export const createSessions$ = ({
     allRoute$.switchMap(_ =>
       globalActivity$
         .combineLatest(
-          filterGroups$.map(({ filterGroups, actionPending }) => ({
-            filterGroups: filterGroups[type],
+          searches$.map(({ searches, actionPending }) => ({
+            searches: searches[type],
             actionPending,
           })),
-          getFilterGroupsObs()
+          getSearchesObs()
         )
         .takeUntil(routeChange$)
     )
@@ -209,7 +209,7 @@ export const createSessions$ = ({
     .withLatestFrom(route$.startWith({}), routeDetails$.startWith({}))
     .map(
       ([
-        [{ sessions }, sessionDetails, [activity, filterGroups]],
+        [{ sessions }, sessionDetails, [activity, searches]],
         route,
         routeDetails,
       ]) => ({
@@ -218,10 +218,10 @@ export const createSessions$ = ({
         sessions,
         sessionDetails,
         activity,
-        filterGroups,
+        searches,
       })
     );
 };
 
 rules$.connect();
-filterGroups$.connect();
+searches$.connect();

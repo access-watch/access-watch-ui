@@ -20,7 +20,7 @@ import SessionsFilter from '../sessions/sessions_filter';
 import {
   robotSessionsPropType,
   activityPropType,
-  filterGroupsPropType,
+  searchesPropType,
 } from '../prop_types';
 
 import '../../../scss/robots_page.scss';
@@ -74,7 +74,7 @@ const rowClassResolver = robot => {
   return status ? `robots__table__row--${status}` : '';
 };
 
-const RobotsPage = ({ route, robots, activity, filterGroups }) => (
+const RobotsPage = ({ route, robots, activity, searches }) => (
   <div className="robots-page page--sessions">
     <div className="page-header page-header--robots">
       <div className="page-header__header">
@@ -98,7 +98,7 @@ const RobotsPage = ({ route, robots, activity, filterGroups }) => (
           route={route}
           prefix="robot"
           availableFilters={filters.robot}
-          filterGroups={filterGroups}
+          searches={searches}
           groupId="robot"
         />
       </div>
@@ -123,7 +123,7 @@ RobotsPage.propTypes = {
   /* eslint-disable react/no-typos */
   robots: robotSessionsPropType.isRequired,
   activity: activityPropType.isRequired,
-  filterGroups: filterGroupsPropType.isRequired,
+  searches: searchesPropType.isRequired,
   /* eslint-enable react/no-typos */
 };
 

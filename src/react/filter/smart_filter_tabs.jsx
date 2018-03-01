@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SaveFilterGroup from './save_filter_group';
+import SaveSearch from './save_search';
 
 import {
   dispatch,
   V_SET_ROUTE,
-  V_DELETE_FILTER_GROUP,
-  V_REORDER_FILTER_GROUP,
-  V_UPDATE_FILTER_GROUP,
+  V_DELETE_SEARCH,
+  V_REORDER_SEARCH,
+  V_UPDATE_SEARCH,
 } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
-import { routePropType, filterGroupPropType } from '../prop_types';
+import { routePropType, searchPropType } from '../prop_types';
 
 import Tabs from '../utilities/tabs';
 
@@ -27,7 +27,7 @@ const autofocus = ref => {
 class SmartFilterTabs extends React.Component {
   static propTypes = {
     groupId: PropTypes.string.isRequired,
-    filterGroups: PropTypes.arrayOf(filterGroupPropType).isRequired,
+    searches: PropTypes.arrayOf(searchPropType).isRequired,
     route: routePropType.isRequired,
     actionPending: PropTypes.bool.isRequired,
   };
@@ -36,26 +36,26 @@ class SmartFilterTabs extends React.Component {
     editLabel: {},
   };
 
-  getFilterGroup = id => {
-    const { filterGroups } = this.props;
+  getSearch = id => {
+    const { searches } = this.props;
     return id === 'default'
       ? { id: 'default', filter: '' }
-      : filterGroups.find(fg => fg.id === id) || { id };
+      : searches.find(fg => fg.id === id) || { id };
   };
 
-  getCurrentFilterGroup = () => {
-    const { filterGroupId } = this.props.route;
-    return this.getFilterGroup(filterGroupId);
+  getCurrentSearch = () => {
+    const { searchId } = this.props.route;
+    return this.getSearch(searchId);
   };
 
-  selectFilterGroup = ({ id, filter = '' }) => {
+  selectSearch = ({ id, filter = '' }) => {
     const { route } = this.props;
     dispatch({
       type: V_SET_ROUTE,
       route: updateRouteParameter({
         route: updateRouteParameter({
           route: route.route,
-          param: 'filterGroupId',
+          param: 'searchId',
           value: id,
         }),
         param: 'filter',
@@ -65,20 +65,20 @@ class SmartFilterTabs extends React.Component {
   };
 
   selectTab = ({ id }) =>
-    this.selectFilterGroup({ ...this.getFilterGroup(id) });
+    this.selectSearch({ ...this.getSearch(id) });
 
   handleTabClick = ({ id }) => {
-    const filterGroup = this.getCurrentFilterGroup();
+    const search = this.getCurrentSearch();
     const { editLabel } = this.state;
-    if (id === filterGroup.id && !editLabel.id && id !== 'default') {
+    if (id === search.id && !editLabel.id && id !== 'default') {
       this.setState({
         editLabel: {
           id,
-          value: filterGroup.label,
+          value: search.label,
         },
       });
     }
-    if (id !== filterGroup.id) {
+    if (id !== search.id) {
       this.selectTab({ id });
     }
   };
@@ -104,11 +104,11 @@ class SmartFilterTabs extends React.Component {
   submitLabelValueChange = () => {
     const { editLabel } = this.state;
     const { groupId } = this.props;
-    const filterGroup = this.getCurrentFilterGroup();
-    if (editLabel.value !== '' && editLabel.value !== filterGroup.label) {
+    const search = this.getCurrentSearch();
+    if (editLabel.value !== '' && editLabel.value !== search.label) {
       dispatch({
-        type: V_UPDATE_FILTER_GROUP,
-        filterGroup: {
+        type: V_UPDATE_SEARCH,
+        search: {
           id: editLabel.id,
           label: editLabel.value,
         },
@@ -120,26 +120,26 @@ class SmartFilterTabs extends React.Component {
 
   handleOrderChange = ({ oldIndex, newIndex }) => {
     const { groupId } = this.props;
-    dispatch({ type: V_REORDER_FILTER_GROUP, oldIndex, newIndex, groupId });
+    dispatch({ type: V_REORDER_SEARCH, oldIndex, newIndex, groupId });
   };
 
   deleteTab = ({ id }) => {
-    const { groupId, filterGroups, route } = this.props;
-    const { filterGroupId } = route;
-    if (id === filterGroupId) {
-      const index = filterGroups.findIndex(
-        filterGroup => filterGroup.id === id
+    const { groupId, searches, route } = this.props;
+    const { searchId } = route;
+    if (id === searchId) {
+      const index = searches.findIndex(
+        search => search.id === id
       );
-      this.selectTab(index > 0 ? filterGroups[index - 1] : 'default');
+      this.selectTab(index > 0 ? searches[index - 1] : 'default');
     }
-    dispatch({ type: V_DELETE_FILTER_GROUP, id, groupId });
+    dispatch({ type: V_DELETE_SEARCH, id, groupId });
   };
 
   render() {
-    const { route, filterGroups, groupId, actionPending } = this.props;
-    const { filterGroupId, filter } = route;
+    const { route, searches, groupId, actionPending } = this.props;
+    const { searchId, filter } = route;
     const { editLabel } = this.state;
-    const filterGroup = this.getCurrentFilterGroup();
+    const search = this.getCurrentSearch();
 
     return (
       <div className="smart-filter-tabs">
@@ -151,7 +151,7 @@ class SmartFilterTabs extends React.Component {
               notDraggable: true,
               notCloseable: true,
             },
-            ...filterGroups.map(({ id, label = id }) => ({
+            ...searches.map(({ id, label = id }) => ({
               id,
               children:
                 editLabel.id === id ? (
@@ -168,22 +168,22 @@ class SmartFilterTabs extends React.Component {
                 ),
             })),
           ]}
-          currentTab={filterGroupId}
+          currentTab={searchId}
           onOrderChange={this.handleOrderChange}
           onTabClick={this.handleTabClick}
           onTabClose={this.deleteTab}
         />
-        <SaveFilterGroup
+        <SaveSearch
           filter={filter}
-          filterGroup={filterGroup}
+          search={search}
           groupId={groupId}
           onlyCreateFilter
-          onAddFilterGroup={this.selectFilterGroup}
-          index={filterGroups.length + 1}
+          onAddSearch={this.selectSearch}
+          index={searches.length + 1}
           actionPending={actionPending}
         >
           +
-        </SaveFilterGroup>
+        </SaveSearch>
       </div>
     );
   }

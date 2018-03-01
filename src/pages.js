@@ -8,8 +8,8 @@ import { metricsLoading$ } from './api_manager';
 import createLogs from './model/create_logs';
 import metrics$ from './model/obs_metrics';
 import addresses$ from './model/obs_addresses';
-import filterGroups$ from './store/obs_filter_groups_store';
-import { getFilterGroupsObs } from './api_manager/filter_groups_api';
+import searches$ from './store/obs_searches_store';
+import { getSearchesObs } from './api_manager/searches_api';
 
 import status$ from './model/obs_status';
 import robots$ from './model/obs_robots';
@@ -47,13 +47,13 @@ import {
  * @fires Pages#PageChange
  */
 export const onRobotsPage = robots$.map(
-  ({ route, routeDetails, robots, robotDetails, activity, filterGroups }) => ({
+  ({ route, routeDetails, robots, robotDetails, activity, searches }) => ({
     element: (
       <RobotsPageComponent
         robots={robots}
         route={route}
         activity={activity}
-        filterGroups={filterGroups}
+        searches={searches}
       />
     ),
     name: 'robots',
@@ -81,14 +81,14 @@ export const onMetricsPage = metrics$
     name: 'metrics',
   }));
 
-const logfilterGroupsObs = Observable.combineLatest(
-  filterGroups$.map(({ filterGroups, actionPending }) => ({
-    filterGroups: filterGroups.log,
+const logsearchesObs = Observable.combineLatest(
+  searches$.map(({ searches, actionPending }) => ({
+    searches: searches.log,
     actionPending,
   })),
-  getFilterGroupsObs()
-).map(([filterGroups]) => filterGroups);
-filterGroups$.connect();
+  getSearchesObs()
+).map(([searches]) => searches);
+searches$.connect();
 
 /**
  * @fires Pages#PageChange
@@ -130,7 +130,7 @@ export const onLogsPage = routeChange$
         // emitting [] because theres no side panel to show when this route is
         // not triggered
         .startWith([]),
-      logfilterGroupsObs
+      logsearchesObs
     )
       // continue to take from the even while details are open. We do this because
       // don't have a way to paginate upwards atm. but it could be useful at a
@@ -148,7 +148,7 @@ export const onLogsPage = routeChange$
       route,
       activity,
       [details, detailsRoute],
-      filterGroups,
+      searches,
     ]) => ({
       element: (
         <RequestsPageComponent
@@ -157,7 +157,7 @@ export const onLogsPage = routeChange$
           metrics={metrics}
           route={route}
           activity={activity}
-          filterGroups={filterGroups}
+          searches={searches}
         />
       ),
       sidePanel: details && {
@@ -200,17 +200,17 @@ export const onLogDetailsPage = requestDetailsRoute$
       ]),
       Observable.of(requestDetailsRoute),
       globalActivity$,
-      logfilterGroupsObs
+      logsearchesObs
     ).takeUntil(routeChange$)
   )
-  .map(([details, [logs, metrics], route, activity, filterGroups]) => ({
+  .map(([details, [logs, metrics], route, activity, searches]) => ({
     element: (
       <RequestsPageComponent
         {...logs}
         metrics={metrics}
         route={route}
         activity={activity}
-        filterGroups={filterGroups}
+        searches={searches}
       />
     ),
     sidePanel: {
@@ -233,14 +233,14 @@ export const onAddressesPage = addresses$.map(
     addresses,
     addressDetails,
     activity,
-    filterGroups,
+    searches,
   }) => ({
     element: (
       <AddressesPageComponent
         addresses={addresses}
         route={route}
         activity={activity}
-        filterGroups={filterGroups}
+        searches={searches}
       />
     ),
     name: 'addresses',

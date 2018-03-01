@@ -48,11 +48,11 @@ const DEFAULT_TIME_PROPS = {
 
 const filterProps = {
   filter: 'p',
-  currentFilterGroup: 'p',
+  currentSearch: 'p',
 };
 const DEFAULT_FILTER_PROPS = {
   filter: '',
-  filterGroupId: 'default',
+  searchId: 'default',
 };
 
 const sessionProps = {
