@@ -9,7 +9,7 @@ import '../../../scss/rules/condition_display.scss';
 const conditionDisplays = {
   address: c => <AddressLabel address={c.address} />,
   robot: c => (
-    <span className="rule-condition__robot">
+    <span className="rule-condition__robot" title={c.robot.name}>
       <IdentityIcon robot={c.robot} reputation={c.robot.reputation} />
       {c.robot.name}
     </span>
