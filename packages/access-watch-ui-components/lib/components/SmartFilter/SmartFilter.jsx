@@ -149,8 +149,19 @@ class SmartFilter extends React.Component {
     );
     const editFilter = { id };
     e.stopPropagation();
+    if (
+      id === this.state.editFilter.id &&
+      value === this.state.editFilter.value
+    ) {
+      return;
+    }
     if (value) {
       editFilter.value = value;
+      editFilter.previousSelectedItem = getItemWithLabel({
+        availableFilters,
+        id,
+        value,
+      });
     } else {
       if (values.length === availableValues.length) {
         editFilter.value = values[values.length - 1];
@@ -281,14 +292,9 @@ class SmartFilter extends React.Component {
                           value,
                         })}
                         onChange={this.handleFilterValueChange({ id, value })}
-                        selectedItem={getItemWithLabel({
-                          availableFilters,
-                          id,
-                          value,
-                        })}
+                        selectedItem={editFilter.previousSelectedItem}
                         inputRef={autoFocus}
                         onKeyDown={this.handleInputKeyDown({ id, value })}
-                        onOuterClick={this.onOuterClick}
                       />
                     ) : (
                       displayFilterValue({ availableFilters, id, value })
