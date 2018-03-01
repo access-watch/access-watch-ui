@@ -12,6 +12,7 @@ import { timeDisplay } from '../../utilities/timerange';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import { handleTimeRangeChanged } from '../../utilities/activity';
+import { filtersToURI } from '../../utilities/filter';
 
 import CircleChartContainer from '../circle_chart/circle_chart_container';
 import '../../../scss/metrics_page.scss';
@@ -53,6 +54,9 @@ const humansRobotsChartOrderFunction = basicArrComp.bind(null, [
   'robots',
 ]);
 
+const identityTypeLabelToId = label =>
+  label === 'humans' ? 'browser' : 'robot';
+
 class MetricsPage extends React.Component {
   static propTypes = {
     type: PropTypes.arrayOf(
@@ -85,15 +89,45 @@ class MetricsPage extends React.Component {
     graphActivity: activityPropType.isRequired,
   };
 
-  handleRobotReputationChartClick = robotName => {
-    dispatch({ type: V_SET_ROUTE, route: `/robots?reputation=${robotName}` });
+  goToRequestsWithFilter = filters => {
+    const filter = filtersToURI(
+      Object.keys(filters).map(key => ({ id: key, values: [filters[key]] }))
+    );
+    dispatch({
+      type: V_SET_ROUTE,
+      route: `requests?searchId=default&filter=${filter}`,
+    });
+  };
+
+  handleRobotReputationChartClick = robotReputation => {
+    this.goToRequestsWithFilter({
+      'reputation.status': robotReputation,
+      'identity.type': 'robot',
+    });
   };
 
   handleHumansRobotsChartClick = type => {
-    if (type === 'robots') {
-      dispatch({ type: V_SET_ROUTE, route: '/robots' });
+    this.goToRequestsWithFilter({
+      'identity.type': identityTypeLabelToId(type),
+    });
+  };
+
+  handleCountryClick = countryCode => {
+    const { worldMapFilters } = this.props.route;
+    const baseFilter = { 'address.country_code': countryCode.toUpperCase() };
+    if (worldMapFilters === 'humans' || worldMapFilters === 'robots') {
+      this.goToRequestsWithFilter({
+        ...baseFilter,
+        'identity.type': identityTypeLabelToId(worldMapFilters),
+      });
+    } else if (worldMapFilters === 'all') {
+      this.goToRequestsWithFilter(baseFilter);
     } else {
-      // TODO add redirect to humans page
+      this.goToRequestsWithFilter({
+        ...baseFilter,
+        'reputation.status': worldMapFilters,
+        'identity.type': 'robot',
+      });
     }
   };
 
@@ -233,6 +267,7 @@ class MetricsPage extends React.Component {
                     loading={worldmap.loading}
                     dispatch={dispatch}
                     color={mapColor}
+                    onCountryClick={this.handleCountryClick}
                   />
                 </div>
               </Col>
