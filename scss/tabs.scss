@@ -1,0 +1,57 @@
+@import 'vars';
+@import 'mixins';
+
+.aw-tabs {
+  display: inline-flex;
+  border-bottom: 1px $light-white-bg solid;
+}
+
+.aw-tab {
+  @include reset-button();
+  border: 1px $light-white-bg solid;
+  background-color: $light-purple;
+  border-radius: 6px 6px 0 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-bottom: none;
+  border-left: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+  color: $light-gray;
+  &:hover {
+    background-color: darken($light-purple, 5%);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  &--active {
+    &,
+    &:hover {
+      border-color: $brand-blue;
+      border-left: 1px solid $brand-blue;
+      background-color: $brand-purple;
+      color: white;
+    }
+  }
+}
+
+.aw-tab__label {
+  @include reset-button();
+  cursor: pointer;
+}
+
+.aw-tab__close {
+  @include reset-button();
+  @include cross(5px, 10px, 1px, white);
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  top: 0;
+  right: 0;
+  margin: 2px;
+  &:before,
+  &:after {
+    top: 0;
+    left: 50%;
+  }
+}

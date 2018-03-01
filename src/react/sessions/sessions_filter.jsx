@@ -1,13 +1,13 @@
 import React from 'react';
 
 import SessionsVisualisationSwitch from './sessions_visualisation_switch';
-import SmartFilter from '../filter/smart_filter';
+import Filters from '../filter/filters';
 import { routePropType } from '../prop_types';
 
 const SessionsFilters = ({ route, ...filterProps }) => (
-  <SmartFilter route={route} {...filterProps}>
+  <Filters route={route} {...filterProps}>
     <SessionsVisualisationSwitch route={route} />
-  </SmartFilter>
+  </Filters>
 );
 
 SessionsFilters.propTypes = {

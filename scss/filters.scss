@@ -1,0 +1,30 @@
+@import 'vars';
+@import 'mixins';
+
+$save-icon-size: 19px;
+
+.save-filter-group {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.filters-save-icon {
+  height: $save-icon-size;
+  width: $save-icon-size;
+  display: inline-flex;
+  align-items: center;
+  svg {
+    fill: white;
+  }
+}
+
+.smart-filter-tabs {
+  display: flex;
+  align-items: center;
+}
+
+.smart-filter-tabs__edit {
+  @include reset-input();
+  box-shadow: 0 1px $v-light-gray;
+}

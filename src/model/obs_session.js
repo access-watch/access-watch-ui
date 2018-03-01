@@ -6,7 +6,9 @@ import {
 import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
+import { getSearchesObs } from '../api_manager/searches_api';
 import rules$ from '../store/obs_rules_store';
+import searches$ from '../store/obs_searches_store';
 import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
 import { viewEvents, V_SESSIONS_LOAD_MORE } from '../event_hub';
@@ -192,16 +194,34 @@ export const createSessions$ = ({
         }))
         .switchMap(p => detailsSessions$(p).takeUntil(routeChange$))
     ),
-    allRoute$.switchMap(_ => globalActivity$.takeUntil(routeChange$))
+    allRoute$.switchMap(_ =>
+      globalActivity$
+        .combineLatest(
+          searches$.map(({ searches, actionPending }) => ({
+            searches: searches[type],
+            actionPending,
+          })),
+          getSearchesObs()
+        )
+        .takeUntil(routeChange$)
+    )
   )
     .withLatestFrom(route$.startWith({}), routeDetails$.startWith({}))
-    .map(([[{ sessions }, sessionDetails, activity], route, routeDetails]) => ({
-      route,
-      routeDetails,
-      sessions,
-      sessionDetails,
-      activity,
-    }));
+    .map(
+      ([
+        [{ sessions }, sessionDetails, [activity, searches]],
+        route,
+        routeDetails,
+      ]) => ({
+        route,
+        routeDetails,
+        sessions,
+        sessionDetails,
+        activity,
+        searches,
+      })
+    );
 };
 
 rules$.connect();
+searches$.connect();

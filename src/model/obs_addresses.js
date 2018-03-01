@@ -17,16 +17,14 @@ const addressSessions$ = createSessions$({
 });
 
 const obsAddresses = addressSessions$.map(
-  ({ sessions: addresses, sessionDetails, route, routeDetails, activity }) => ({
-    route,
-    routeDetails,
+  ({ sessions: addresses, sessionDetails, ...sessionProps }) => ({
     addresses,
     addressDetails: sessionDetails && {
       address: sessionDetails.session,
       logs: sessionDetails.logs,
       rule: sessionDetails.rule,
     },
-    activity,
+    ...sessionProps,
   })
 );
 

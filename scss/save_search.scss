@@ -1,0 +1,8 @@
+@import 'mixins';
+
+.save-filter-group {
+  @include reset-button();
+  cursor: pointer;
+  padding: 0 8px;
+  font-size: 22px;
+}

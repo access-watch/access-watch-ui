@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const filterPropTypesShape = {
+const filterPropTypeShape = {
   id: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.number, PropTypes.string])
@@ -11,10 +11,10 @@ const filterDefaultProps = {
   values: null,
 };
 
-const filterPropTypes = PropTypes.shape(filterPropTypesShape);
+const filterPropType = PropTypes.shape(filterPropTypeShape);
 
-const availableFilterPropTypes = PropTypes.shape({
-  ...filterPropTypesShape,
+export const availableFilterPropType = PropTypes.shape({
+  ...filterPropTypeShape,
   label: PropTypes.string,
   fullText: PropTypes.bool,
   valueToLabel: PropTypes.func,
@@ -27,16 +27,12 @@ const availableFilterDefaultProps = {
   valueToLabel: v => v,
 };
 
-export const filtersPropTypes = {
-  filters: PropTypes.arrayOf(filterPropTypes),
-  availableFilters: PropTypes.arrayOf(availableFilterPropTypes),
+export const filtersPropType = {
+  filters: PropTypes.arrayOf(filterPropType),
+  availableFilters: PropTypes.arrayOf(availableFilterPropType),
 };
 
 export const filtersDefaultProps = {
   filters: filterDefaultProps,
   availableFilters: availableFilterDefaultProps,
-};
-
-export default {
-  filters: PropTypes.shape(),
 };

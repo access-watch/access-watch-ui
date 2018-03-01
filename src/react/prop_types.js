@@ -152,3 +152,14 @@ export const metricsPropType = PropTypes.shape({
   status: PropTypes.objectOf(metricsStatusPropType).isRequired,
   type: PropTypes.objectOf(metricsStatusPropType).isRequired,
 });
+
+export const searchPropType = PropTypes.shape({
+  id: PropTypes.string,
+  filter: PropTypes.string,
+  label: PropTypes.string,
+});
+
+export const searchesPropType = PropTypes.shape({
+  searches: PropTypes.arrayOf(searchPropType),
+  actionPending: PropTypes.bool.isRequired,
+});

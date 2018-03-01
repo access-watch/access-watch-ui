@@ -48,9 +48,11 @@ const DEFAULT_TIME_PROPS = {
 
 const filterProps = {
   filter: 'p',
+  searchId: 'p',
 };
 const DEFAULT_FILTER_PROPS = {
   filter: '',
+  searchId: 'default',
 };
 
 const sessionProps = {
