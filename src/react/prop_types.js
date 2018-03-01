@@ -153,13 +153,13 @@ export const metricsPropType = PropTypes.shape({
   type: PropTypes.objectOf(metricsStatusPropType).isRequired,
 });
 
-export const filterGroupPropType = PropTypes.shape({
+export const searchPropType = PropTypes.shape({
   id: PropTypes.string,
   filter: PropTypes.string,
   label: PropTypes.string,
 });
 
-export const filterGroupsPropType = PropTypes.shape({
-  filterGroups: PropTypes.arrayOf(filterGroupPropType),
+export const searchesPropType = PropTypes.shape({
+  searches: PropTypes.arrayOf(searchPropType),
   actionPending: PropTypes.bool.isRequired,
 });

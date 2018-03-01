@@ -20,7 +20,7 @@ import {
   routePropType,
   addressSessionsPropType,
   activityPropType,
-  filterGroupsPropType,
+  searchesPropType,
 } from '../prop_types';
 
 import '../../../scss/sessions/sessions_page.scss';
@@ -31,7 +31,7 @@ const rowClassResolver = address => {
   return status ? `addresses__table__row--${status}` : '';
 };
 
-const AddressesPage = ({ route, addresses, activity, filterGroups }) => (
+const AddressesPage = ({ route, addresses, activity, searches }) => (
   <div className="addresses-page page--sessions">
     <div className="page-header page-header--addresses">
       <div className="page-header__header">
@@ -54,7 +54,7 @@ const AddressesPage = ({ route, addresses, activity, filterGroups }) => (
           route={route}
           prefix="address"
           availableFilters={filters.address}
-          filterGroups={filterGroups}
+          searches={searches}
           groupId="address"
         />
       </div>
@@ -77,7 +77,7 @@ AddressesPage.propTypes = {
   route: routePropType.isRequired,
   addresses: addressSessionsPropType.isRequired,
   activity: activityPropType.isRequired,
-  filterGroups: filterGroupsPropType.isRequired,
+  searches: searchesPropType.isRequired,
 };
 /* eslint-enable react/no-typos */
 

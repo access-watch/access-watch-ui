@@ -22,7 +22,7 @@ import TimeSelector from '../time/time_selector';
 import {
   logPropType,
   activityPropType,
-  filterGroupsPropType,
+  searchesPropType,
 } from '../prop_types';
 
 import '../../../scss/requests_page.scss';
@@ -56,7 +56,7 @@ class LogsPage extends React.Component {
     }).isRequired,
     logEnd: PropTypes.bool,
     activity: activityPropType.isRequired,
-    filterGroups: filterGroupsPropType.isRequired,
+    searches: searchesPropType.isRequired,
   };
 
   static defaultProps = {
@@ -171,7 +171,7 @@ class LogsPage extends React.Component {
       earlierLoading,
       logEnd,
       activity,
-      filterGroups,
+      searches,
     } = this.props;
 
     return (
@@ -201,7 +201,7 @@ class LogsPage extends React.Component {
               route={route}
               prefix=""
               availableFilters={filters.log}
-              filterGroups={filterGroups}
+              searches={searches}
               groupId="log"
             />
           </div>
