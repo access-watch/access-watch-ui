@@ -24,6 +24,7 @@ class RuleButton extends React.Component {
     actionPending: PropTypes.bool,
     type: PropTypes.string,
     className: PropTypes.string,
+    showBlockedText: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -32,6 +33,7 @@ class RuleButton extends React.Component {
     rule: null,
     type: null,
     className: '',
+    showBlockedText: true,
   };
 
   constructor(props) {
@@ -52,16 +54,27 @@ class RuleButton extends React.Component {
   }
 
   render() {
-    const { rule, actionPending, className, type, ...props } = this.props;
+    const {
+      rule,
+      actionPending,
+      className,
+      type,
+      showBlockedText,
+      ...props
+    } = this.props;
     const label = rule ? 'Undo' : 'Block';
     return (
       <span className="rule-button-wrapper">
-        {rule && (
-          <span className="rule-button__blocked">
-            <SVGIcon svg={blockedIcon} className="rule-button__blocked__icon" />
-            You blocked this {type}.
-          </span>
-        )}
+        {rule &&
+          showBlockedText && (
+            <span className="rule-button__blocked">
+              <SVGIcon
+                svg={blockedIcon}
+                className="rule-button__blocked__icon"
+              />
+              You blocked this {type}.
+            </span>
+          )}
         <Button
           disabled={actionPending}
           onClick={this.handleClick}
