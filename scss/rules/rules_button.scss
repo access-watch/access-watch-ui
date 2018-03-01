@@ -19,6 +19,7 @@ $session-details-action-color: #fff;
 
 .rule-button {
   @include btn-type(white, transparent);
+  font-size: inherit;
 
   &--block {
     @include btn-icon(url('../../assets/blocked-white.svg'));
@@ -37,4 +38,33 @@ $session-details-action-color: #fff;
       border-color: inherit;
     }
   }
+  &--reset {
+    border: none;
+    color: $gray;
+    padding-left: 0;
+    padding-right: 0;
+    transition: color 0.2s;
+    &:hover {
+      color: $light-gray;
+      background-color: unset;
+    }
+  }
+}
+
+.rule-button-wrapper {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.rule-button__blocked {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.rule-button__blocked__icon {
+  fill: map-get($statuses, 'bad');
+  height: 16px;
+  margin-right: 5px;
 }
