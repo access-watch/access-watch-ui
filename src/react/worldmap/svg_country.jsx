@@ -9,6 +9,7 @@ export default class Country extends React.Component {
     polygons: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
     hover: PropTypes.bool.isRequired,
     fill: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
   };
 
   handleMouseOut = _ => {
@@ -17,6 +18,12 @@ export default class Country extends React.Component {
 
   handleMouseOver = _ => {
     this.props.onFocus(this.props.cc);
+  };
+
+  handleClick = _ => {
+    const { onClick, cc } = this.props;
+    onClick(cc);
+    this.handleMouseOver();
   };
 
   render() {
@@ -29,6 +36,7 @@ export default class Country extends React.Component {
         onMouseOut={this.handleMouseOut}
         onBlur={this.handleMouseOut}
         id={cc}
+        onClick={this.handleClick}
       >
         {polygons.map(poly => (
           <polygon
@@ -39,6 +47,7 @@ export default class Country extends React.Component {
               stroke: hover ? '#000000' : 'none',
               fill,
               transition: 'stroke .2s',
+              cursor: 'pointer',
             }}
           />
         ))}
