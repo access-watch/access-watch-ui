@@ -47,6 +47,7 @@ export default class Country extends React.Component {
               stroke: hover ? '#000000' : 'none',
               fill,
               transition: 'stroke .2s',
+              cursor: 'pointer',
             }}
           />
         ))}
