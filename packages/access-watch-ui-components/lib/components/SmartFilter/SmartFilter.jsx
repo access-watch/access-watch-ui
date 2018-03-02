@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import Pill from '../Pill';
 import Autocomplete from '../Autocomplete';
@@ -13,6 +14,8 @@ const itemClass = beBc('item');
 const getItemElementClass = getElementClass(itemClass);
 const itemValuesClass = getItemElementClass('values');
 const itemIdClass = getItemElementClass('id');
+const itemNegativeClass = getItemElementClass('negative');
+const itemNegativeLabelClass = getItemElementClass('negative-label');
 const itemValueClass = getItemElementClass('value');
 const itemPlaceholderClass = getItemElementClass('placeholder');
 const itemValueWrapperClass = `${itemValueClass}-wrapper`;
@@ -88,6 +91,7 @@ class SmartFilter extends React.Component {
     ),
     selectedFilter: PropTypes.string,
     onUnselectFilter: PropTypes.func,
+    negative: PropTypes.bool,
   };
 
   state = {
@@ -257,6 +261,12 @@ class SmartFilter extends React.Component {
     this.setState({ editFilter: {} });
   };
 
+  handleInvertFilter = ({ id }) => e => {
+    const { onInvertFilter } = this.props;
+    e.stopPropagation();
+    onInvertFilter({ id });
+  };
+
   render() {
     const { filters, availableFilters } = this.props;
     const { editFilter, addFilter } = this.state;
@@ -266,13 +276,20 @@ class SmartFilter extends React.Component {
       filters.length < availableFilters.length && !addingFilterValue;
     return (
       <div className={baseClass}>
-        {filters.map(({ id, label = id, values = [] }) => (
+        {filters.map(({ id, label = id, values = [], negative }) => (
           <Pill
-            className={itemClass}
+            className={cx(itemClass, { [`${itemClass}--negative`]: negative })}
             onClick={this.handleFilterClick({ id })}
             onDelete={this.deleteFilter({ id })}
             key={id}
           >
+            <button
+              className={cx(itemNegativeClass, {
+                [`${itemNegativeClass}--active`]: negative,
+              })}
+              onClick={this.handleInvertFilter({ id })}
+            />
+            {negative && <span className={itemNegativeLabelClass}>NOT</span>}
             <div className={itemIdClass}>
               {displayFilterLabel({ availableFilters, id })}
             </div>

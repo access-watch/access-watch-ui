@@ -1,6 +1,8 @@
 @import '../vars';
 @import '../mixins';
 
+$invert-transition-duration: 0.3s;
+
 .smart-filter {
   display: flex;
   padding: 4px;
@@ -13,6 +15,8 @@
 }
 
 .smart-filter__item {
+  display: inline-flex;
+  align-items: center;
   border: solid 1px transparent;
   margin: 0 8px;
   background-color: white;
@@ -46,5 +50,37 @@
   }
   &__placeholder {
     color: $v-light-gray;
+  }
+  &__negative {
+    @include reset-button();
+    position: relative;
+    height: 14px;
+    width: 14px;
+    border-radius: 100%;
+    background-color: $main-color;
+    transition: transform $invert-transition-duration;
+    &:before {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      background-color: white;
+      transform: rotateZ(45deg) translate(-16.66%, -16.66%);
+      transform-origin: center;
+    }
+    &--active {
+      transform: rotateZ(180deg);
+    }
+    margin-right: 6px;
+    border: solid 1px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  &__negative-label {
+    font-size: 12px;
+    font-family: $default-bold-font;
+    margin-right: 4px;
   }
 }

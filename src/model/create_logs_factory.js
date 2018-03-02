@@ -21,7 +21,7 @@ const URIToFilters = createURIToFilters();
 
 const toLowerCase = v => (typeof v === 'string' ? v.toLowerCase() : v);
 
-const getLogFilter = ({ id, values }) => log => {
+const getLogFilter = ({ id, values, negative }) => log => {
   const filterDef = filtersDef.find(f => f.id === id) || {};
   const keyPath = id.split('.');
   const logValue = getIn(log, keyPath);
@@ -33,7 +33,8 @@ const getLogFilter = ({ id, values }) => log => {
   if (Array.isArray(logValue)) {
     compFn = v => logValue.map(toLowerCase).indexOf(toLowerCase(v)) !== -1;
   }
-  return values.findIndex(compFn) !== -1;
+  const compValue = values.findIndex(compFn) !== -1;
+  return negative ? !compValue : compValue;
 };
 
 const getLogFilters = filters => log =>

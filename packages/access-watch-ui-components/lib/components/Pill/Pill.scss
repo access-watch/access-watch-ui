@@ -31,7 +31,7 @@ $delete-width: 20px;
 }
 
 .aw-pill__delete-btn {
-  @include reset-btn-style();
+  @include reset-button();
   @include cross(0, 10px, 1px, $main-color);
   position: relative;
   margin: 5px;
