@@ -33,7 +33,8 @@ const getLogFilter = ({ id, values, negative }) => log => {
   if (Array.isArray(logValue)) {
     compFn = v => logValue.map(toLowerCase).indexOf(toLowerCase(v)) !== -1;
   }
-  return values.findIndex(v => (negative ? !compFn(v) : compFn(v))) !== -1;
+  const compValue = values.findIndex(compFn) !== -1;
+  return negative ? !compValue : compValue;
 };
 
 const getLogFilters = filters => log =>
