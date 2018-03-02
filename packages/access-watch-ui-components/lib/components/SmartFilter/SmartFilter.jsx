@@ -117,21 +117,16 @@ class SmartFilter extends React.Component {
   }
 
   deleteFilterValue = ({ id, value, updateState = true }) => e => {
-    const { filters, onDeleteFilterValue } = this.props;
+    const { onDeleteFilterValue } = this.props;
     const { editFilter } = this.state;
-    const { values = [] } = filters.find(f => f.id === id);
     e.stopPropagation();
-    if (values.length <= 1) {
-      this.deleteFilter({ id })(e);
-    } else {
-      onDeleteFilterValue({ id, value });
-      if (
-        editFilter.id === id &&
-        (editFilter.value === value || !value) &&
-        updateState
-      ) {
-        this.setState({ editFilter: {} });
-      }
+    onDeleteFilterValue({ id, value });
+    if (
+      editFilter.id === id &&
+      (editFilter.value === value || !value) &&
+      updateState
+    ) {
+      this.setState({ editFilter: {} });
     }
   };
 
@@ -276,7 +271,7 @@ class SmartFilter extends React.Component {
       filters.length < availableFilters.length && !addingFilterValue;
     return (
       <div className={baseClass}>
-        {filters.map(({ id, label = id, values = [], negative }) => (
+        {filters.map(({ id, label = id, values, negative }) => (
           <Pill
             className={cx(itemClass, { [`${itemClass}--negative`]: negative })}
             onClick={this.handleFilterClick({ id })}
@@ -293,32 +288,33 @@ class SmartFilter extends React.Component {
             <div className={itemIdClass}>
               {displayFilterLabel({ availableFilters, id })}
             </div>
-            :
+            {(values || addingFilterValue) && ':'}
             <div className={itemValuesClass}>
-              {values.map(value => (
-                <div key={value} className={itemValueWrapperClass}>
-                  <Pill
-                    className={getClassName(itemValueClass)({ id, value })}
-                    onClick={this.handleFilterClick({ id, value })}
-                    onDelete={this.deleteFilterValue({ id, value })}
-                  >
-                    {isEditedValue(editFilter, id, value) ? (
-                      <Autocomplete
-                        items={getAvailableValues(filters, availableFilters, {
-                          id,
-                          value,
-                        })}
-                        onChange={this.handleFilterValueChange({ id, value })}
-                        selectedItem={editFilter.previousSelectedItem}
-                        inputRef={autoFocus}
-                        onKeyDown={this.handleInputKeyDown({ id, value })}
-                      />
-                    ) : (
-                      displayFilterValue({ availableFilters, id, value })
-                    )}
-                  </Pill>
-                </div>
-              ))}
+              {values &&
+                values.map(value => (
+                  <div key={value} className={itemValueWrapperClass}>
+                    <Pill
+                      className={getClassName(itemValueClass)({ id, value })}
+                      onClick={this.handleFilterClick({ id, value })}
+                      onDelete={this.deleteFilterValue({ id, value })}
+                    >
+                      {isEditedValue(editFilter, id, value) ? (
+                        <Autocomplete
+                          items={getAvailableValues(filters, availableFilters, {
+                            id,
+                            value,
+                          })}
+                          onChange={this.handleFilterValueChange({ id, value })}
+                          selectedItem={editFilter.previousSelectedItem}
+                          inputRef={autoFocus}
+                          onKeyDown={this.handleInputKeyDown({ id, value })}
+                        />
+                      ) : (
+                        displayFilterValue({ availableFilters, id, value })
+                      )}
+                    </Pill>
+                  </div>
+                ))}
               {addingFilterValue &&
                 editFilter.id === id && (
                   <Autocomplete

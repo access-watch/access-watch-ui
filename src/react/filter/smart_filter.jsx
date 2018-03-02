@@ -59,7 +59,7 @@ const getFilterFunctions = ({ route, prefix }) => {
           ...f,
           values: oldValue
             ? f.values.map(value => (oldValue === value ? newValue : value))
-            : f.values.concat([newValue]),
+            : [...(f.values || []), newValue],
         }),
       })
     );
@@ -100,18 +100,18 @@ class SmartFilter extends React.Component {
   onFilterValueChange = args => {
     const { id, newValue: newValueRaw } = args;
     const { newFilter } = this.state;
-    const { onAddFilter, onFilterValueChange } = this.getFilterFunctions();
+    const { onFilterValueChange } = this.getFilterFunctions();
     const newValue = newValueRaw.trim();
     if (newFilter === id) {
-      onAddFilter({ id, values: [newValue] });
       this.setState({ newFilter: null });
-    } else {
-      onFilterValueChange({ ...args, newValue });
     }
+    onFilterValueChange({ ...args, newValue });
   };
 
   onAddFilter = ({ id }) => {
+    const { onAddFilter } = this.getFilterFunctions();
     this.setState({ newFilter: id });
+    onAddFilter({ id });
   };
 
   onDeleteFilter = ({ id }) => {
@@ -191,9 +191,7 @@ class SmartFilter extends React.Component {
     const { newFilter } = this.state;
     const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
     const { filter = '' } = route;
-    const filters = newFilter
-      ? [...URIToFilters(filter), { id: newFilter }]
-      : URIToFilters(filter);
+    const filters = URIToFilters(filter);
     return (
       <div className="smart-filter__wrapper">
         <FilterHelper
