@@ -15,7 +15,7 @@ const getItemElementClass = getElementClass(itemClass);
 const itemValuesClass = getItemElementClass('values');
 const itemIdClass = getItemElementClass('id');
 const itemNegativeClass = getItemElementClass('negative');
-const itemNegativeLabelClass = getItemElementClass('negative-label');
+const itemPreLabelClass = getItemElementClass('pre-label');
 const itemValueClass = getItemElementClass('value');
 const itemPlaceholderClass = getItemElementClass('placeholder');
 const itemValueWrapperClass = `${itemValueClass}-wrapper`;
@@ -271,7 +271,7 @@ class SmartFilter extends React.Component {
       filters.length < availableFilters.length && !addingFilterValue;
     return (
       <div className={baseClass}>
-        {filters.map(({ id, label = id, values, negative }) => (
+        {filters.map(({ id, label = id, values, negative, exists }) => (
           <Pill
             className={cx(itemClass, { [`${itemClass}--negative`]: negative })}
             onClick={this.handleFilterClick({ id })}
@@ -284,7 +284,8 @@ class SmartFilter extends React.Component {
               })}
               onClick={this.handleInvertFilter({ id })}
             />
-            {negative && <span className={itemNegativeLabelClass}>NOT</span>}
+            {negative && <span className={itemPreLabelClass}>NOT</span>}
+            {exists && <span className={itemPreLabelClass}>EXISTS</span>}
             <div className={itemIdClass}>
               {displayFilterLabel({ availableFilters, id })}
             </div>
