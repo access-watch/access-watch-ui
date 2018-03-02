@@ -34,50 +34,50 @@ const getFilterFunctions = ({ route, prefix }) => {
   const onDeleteFilter = ({ id }) =>
     dispatchNewFilters(URIToFilters(route.filter).filter(f => f.id !== id));
 
+  const updateFilter = ({ id, updateFn }) =>
+    URIToFilters(route.filter).reduce(
+      (newFilters, f) => [...newFilters, f.id === id ? updateFn(f) : f],
+      []
+    );
+
   const onDeleteFilterValue = ({ id, value }) =>
     dispatchNewFilters(
-      URIToFilters(route.filter).reduce(
-        (newFilters, f) => [
-          ...newFilters,
-          f.id === id
-            ? {
-                ...f,
-                values: f.values.filter(val => value !== val),
-              }
-            : f,
-        ],
-        []
-      )
+      updateFilter({
+        id,
+        updateFn: f => ({
+          ...f,
+          values: f.values.filter(val => value !== val),
+        }),
+      })
     );
 
   const onFilterValueChange = ({ id, newValue, oldValue }) =>
     dispatchNewFilters(
-      URIToFilters(route.filter).reduce(
-        (newFilters, f) => [
-          ...newFilters,
-          f.id === id
-            ? {
-                ...f,
-                values: oldValue
-                  ? f.values.map(
-                      value => (oldValue === value ? newValue : value)
-                    )
-                  : f.values.concat([newValue]),
-              }
-            : f,
-        ],
-        []
-      )
+      updateFilter({
+        id,
+        updateFn: f => ({
+          ...f,
+          values: oldValue
+            ? f.values.map(value => (oldValue === value ? newValue : value))
+            : f.values.concat([newValue]),
+        }),
+      })
     );
 
   const onAddFilter = filter =>
     dispatchNewFilters(URIToFilters(route.filter).concat([filter]));
+
+  const onInvertFilter = ({ id }) =>
+    dispatchNewFilters(
+      updateFilter({ id, updateFn: f => ({ ...f, negative: !f.negative }) })
+    );
 
   return {
     onDeleteFilter,
     onDeleteFilterValue,
     onFilterValueChange,
     onAddFilter,
+    onInvertFilter,
     URIToFilters,
   };
 };
@@ -154,6 +154,11 @@ class SmartFilter extends React.Component {
     }
   };
 
+  onInvertFilter = ({ id }) => {
+    const { onInvertFilter } = this.getFilterFunctions();
+    onInvertFilter({ id });
+  };
+
   getFilterFunctions = () => {
     const { route, prefix, onFilterChange } = this.props;
     const origFilterFns = getFilterFunctions({
@@ -166,6 +171,7 @@ class SmartFilter extends React.Component {
         'onDeleteFilterValue',
         'onFilterValueChange',
         'onAddFilter',
+        'onInvertFilter',
       ].indexOf(key) !== -1;
     return Object.keys(origFilterFns).reduce((filterFns, key) => {
       let fn = origFilterFns[key];
@@ -204,6 +210,7 @@ class SmartFilter extends React.Component {
           onDeleteFilter={this.onDeleteFilter}
           selectedFilter={newFilter}
           onUnselectFilter={this.handleUnselectFilter}
+          onInvertFilter={this.onInvertFilter}
           {...props}
         />
         <div className="smart-filter__children">{children}</div>
