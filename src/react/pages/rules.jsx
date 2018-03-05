@@ -36,6 +36,7 @@ const rulesResolvers = [
     id: 'created',
     // eslint-disable-next-line
     resolver: ({ created }) => <TimeAgo time={new Date(created * 1000)} />,
+    sortable: true,
   },
   {
     id: 'remove',
@@ -89,14 +90,17 @@ class RulesPage extends React.Component {
     const { rules, route } = this.props;
     const { sort } = route;
     const rulesValues = Object.values(rules.rules).sort((a, b) => {
-      const sortIsActivity = sort.indexOf('Activity') !== -1;
-      const sortId = sort.slice(
-        0,
-        sort.length - (sortIsActivity ? 'Activity'.length : '')
-      );
-      const getValue = speed =>
-        speed[sortId][sortIsActivity ? 'speed' : 'count'];
-      return getValue(a) < getValue(b);
+      if (sort.indexOf('passed') === 0 || sort.indexOf('blocked') !== 0) {
+        const sortIsActivity = sort.indexOf('Activity') !== -1;
+        const sortId = sort.slice(
+          0,
+          sort.length - (sortIsActivity ? 'Activity'.length : '')
+        );
+        const getValue = speed =>
+          speed[sortId][sortIsActivity ? 'speed' : 'count'];
+        return getValue(a) < getValue(b);
+      }
+      return a[sort] < b[sort];
     });
     return (
       <div className="rules">
