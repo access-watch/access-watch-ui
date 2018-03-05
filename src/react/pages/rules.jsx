@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import { capitalize } from '../../utilities/string';
 import { convertBackendKeysRecursive } from '../../utilities/object';
+import { updateRouteParameter } from '../../utilities/route_utils';
 import { dispatch, V_SET_ROUTE } from '../../event_hub';
+import { routePropType } from '../prop_types';
 
 import Table from '../table/table';
 import TimeAgo from '../utilities/time_ago';
@@ -28,8 +30,8 @@ const rulesResolvers = [
       <ConditionDisplay condition={convertBackendKeysRecursive(condition)} />
     ),
   },
-  ...createSpeedResolvers({ id: 'blocked' }),
-  ...createSpeedResolvers({ id: 'passed' }),
+  ...createSpeedResolvers({ id: 'blocked', sortable: true }),
+  ...createSpeedResolvers({ id: 'passed', sortable: true }),
   {
     id: 'created',
     // eslint-disable-next-line
@@ -55,6 +57,7 @@ class RulesPage extends React.Component {
     rules: PropTypes.shape({
       rules: PropTypes.object.isRequired,
     }).isRequired,
+    route: routePropType.isRequired,
   };
 
   static defaultProps = {
@@ -62,14 +65,39 @@ class RulesPage extends React.Component {
   };
 
   openDetails = id => {
-    const { rules } = this.props;
+    const { rules, route } = this.props;
     const rule = rules.rules[id];
-    dispatch({ type: V_SET_ROUTE, route: `rules/${rule.id}` });
+    dispatch({
+      type: V_SET_ROUTE,
+      route: `rules/${rule.id}?sort=${route.sort}`,
+    });
+  };
+
+  handleSortChange = sort => {
+    const { route } = this.props;
+    dispatch({
+      type: V_SET_ROUTE,
+      route: updateRouteParameter({
+        route: route.route,
+        param: 'sort',
+        value: sort,
+      }),
+    });
   };
 
   render() {
-    const { rules } = this.props;
-    const rulesValues = Object.values(rules.rules);
+    const { rules, route } = this.props;
+    const { sort } = route;
+    const rulesValues = Object.values(rules.rules).sort((a, b) => {
+      const sortIsActivity = sort.indexOf('Activity') !== -1;
+      const sortId = sort.slice(
+        0,
+        sort.length - (sortIsActivity ? 'Activity'.length : '')
+      );
+      const getValue = speed =>
+        speed[sortId][sortIsActivity ? 'speed' : 'count'];
+      return getValue(a) < getValue(b);
+    });
     return (
       <div className="rules">
         <div className="rules__title">Rules</div>
@@ -82,6 +110,8 @@ class RulesPage extends React.Component {
             entries={rulesValues}
             resolvers={rulesResolvers}
             onEntryClick={this.openDetails}
+            currentSort={sort}
+            onSortChange={this.handleSortChange}
           />
         )}
         {rulesValues.length === 0 && (

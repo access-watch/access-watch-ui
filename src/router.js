@@ -99,6 +99,9 @@ const routerStateStoreConfig = {
   [ROUTE_ADDRESSES_DETAILS]: {
     ...timeProps,
   },
+  [ROUTE_RULES]: {
+    sort: 'p',
+  },
 };
 const routerStateStore = new RouterStateStore(
   ROUTE_STATE_LOCAL_STORAGE_ID,
@@ -130,6 +133,10 @@ export const METRICS_DEFAULT_PARAMS = {
 export const ADDRESSES_DEFAULT_PARAMS = {
   ...DEFAULT_SESSION_PROPS,
   visType: 'table',
+};
+
+export const RULES_DEFAULT_PARAMS = {
+  sort: 'passedActivity',
 };
 
 const valueConverters = {
@@ -264,6 +271,7 @@ const appRoute = {
   },
   '/rules': {
     '/': {
+      defaultParams: RULES_DEFAULT_PARAMS,
       name: ROUTE_RULES,
     },
     '/:id': {
