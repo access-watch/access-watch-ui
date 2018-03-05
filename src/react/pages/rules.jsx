@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { capitalize } from '../../utilities/string';
 import { convertBackendKeysRecursive } from '../../utilities/object';
 
-import RoundedTable from '../table/rounded_table';
+import Table from '../table/table';
 import TimeAgo from '../utilities/time_ago';
 import RuleButton from '../rules/rule_button';
 import createSpeedResolvers from '../activity/speed_resolver';
@@ -59,7 +59,7 @@ const RulesPage = ({ rules }) => {
         {EXPORTS_OPTIONS.map(id => <ExportButton id={id} key={id} />)}
       </div>
       {rulesValues.length > 0 && (
-        <RoundedTable entries={rulesValues} resolvers={rulesResolvers} />
+        <Table entries={rulesValues} resolvers={rulesResolvers} />
       )}
       {rulesValues.length === 0 && (
         <div className="rules__empty">No rules have been set.</div>
