@@ -24,6 +24,7 @@ export const ROUTE_STATUS = 'status';
 export const ROUTE_ADDRESSES = 'addresses';
 export const ROUTE_ADDRESSES_DETAILS = 'addresses_details';
 export const ROUTE_RULES = 'rules';
+export const ROUTE_RULES_DETAILS = 'rules_details';
 
 const ROUTE_STATE_LOCAL_STORAGE_ID = 'aw-route-state';
 
@@ -265,6 +266,9 @@ const appRoute = {
     '/': {
       name: ROUTE_RULES,
     },
+    '/:id': {
+      name: ROUTE_RULES_DETAILS,
+    },
   },
 };
 
@@ -370,3 +374,5 @@ export const addressesRoute$ = withRoute(ROUTE_ADDRESSES);
 export const addressDetailsRoute$ = withRoute(ROUTE_ADDRESSES_DETAILS);
 
 export const rulesRoute$ = withRoute(ROUTE_RULES);
+
+export const rulesDetailsRoute$ = withRoute(ROUTE_RULES_DETAILS);

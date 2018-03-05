@@ -29,8 +29,17 @@ const emitRules = rules => {
 
 const updateRules = () => getRules().then(emitRules);
 
-export const getRulesObs = (_, pollInterval = 5000) =>
-  poll(updateRules, pollInterval);
+let rulesObs;
+
+export const getRulesObs = (_, pollInterval = 5000) => {
+  if (!rulesObs) {
+    rulesObs = poll(updateRules, pollInterval);
+    rulesObs.finally(() => {
+      rulesObs = null;
+    });
+  }
+  return rulesObs;
+};
 
 const conditionCreators = {
   address: address => ({

@@ -77,7 +77,7 @@ export const createSessionDetailsObs = ({
             getRulesObs()
           )
         )
-        .map(([session, logs, rule]) => ({ session, logs, rule }))
+        .map(([session, logs, rule = {}]) => ({ session, logs, rule }))
     );
 
 const timerangeChanged = ({ timerangeFrom, timerangeTo }, { timerange }) =>
