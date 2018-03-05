@@ -36,7 +36,7 @@ $rules-vertical-padding: 40px;
         @include activityResolver();
       }
     }
-    &--created {
+    &--created, &--last_hit {
       width: 150px;
     }
     &--remove {

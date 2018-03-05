@@ -33,6 +33,14 @@ const rulesResolvers = [
   ...createSpeedResolvers({ id: 'blocked', sortable: true }),
   ...createSpeedResolvers({ id: 'passed', sortable: true }),
   {
+    id: 'last_hit',
+    label: 'Last hit',
+    // eslint-disable-next-line
+    resolver: ({ last_hit: lastHit }) =>
+      lastHit ? <TimeAgo time={new Date(lastHit * 1000)} /> : '',
+    sortable: true,
+  },
+  {
     id: 'created',
     // eslint-disable-next-line
     resolver: ({ created }) => <TimeAgo time={new Date(created * 1000)} />,
@@ -90,7 +98,7 @@ class RulesPage extends React.Component {
     const { rules, route } = this.props;
     const { sort } = route;
     const rulesValues = Object.values(rules.rules).sort((a, b) => {
-      if (sort.indexOf('passed') === 0 || sort.indexOf('blocked') !== 0) {
+      if (sort.indexOf('passed') === 0 || sort.indexOf('blocked') === 0) {
         const sortIsActivity = sort.indexOf('Activity') !== -1;
         const sortId = sort.slice(
           0,
@@ -100,7 +108,7 @@ class RulesPage extends React.Component {
           speed[sortId][sortIsActivity ? 'speed' : 'count'];
         return getValue(a) < getValue(b);
       }
-      return a[sort] < b[sort];
+      return (a[sort] || 0) < (b[sort] || 0);
     });
     return (
       <div className="rules">
