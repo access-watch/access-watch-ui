@@ -20,8 +20,9 @@ const rulesDetails$ = rulesDetailsRoute$.switchMap(({ id }) =>
   rulesStore$
     .filter(({ rules }) => Object.keys(rules).length > 0)
     .take(1)
-    .map(({ rules }) => rules[id])
-    .flatMap(({ condition }) => {
+    .map(({ rules, actionPending }) => ({ rule: rules[id], actionPending }))
+    .flatMap(rule => {
+      const { condition } = rule.rule;
       const logMapping =
         condition.type === 'address' ? addressLogMapping : robotLogMapping;
       const { type } = condition;
@@ -30,9 +31,13 @@ const rulesDetails$ = rulesDetailsRoute$.switchMap(({ id }) =>
         sessionDetails$: Observable.never(),
         type,
         routeId: 'id',
+        withRule: false,
       })({ id: getIn(condition, logMapping.split('.')) }).map(session => ({
         type,
-        session,
+        session: {
+          ...session,
+          rule,
+        },
       }));
     })
     .takeUntil(routeChange$)
