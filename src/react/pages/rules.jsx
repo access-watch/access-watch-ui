@@ -11,7 +11,6 @@ import RuleButton from '../rules/rule_button';
 import createSpeedResolvers from '../activity/speed_resolver';
 import ConditionDisplay from '../rules/condition_display';
 import ExportButton from '../rules/export_button';
-import { routePropType } from '../prop_types';
 
 import '../../../scss/rules_page.scss';
 
@@ -56,7 +55,6 @@ class RulesPage extends React.Component {
     rules: PropTypes.shape({
       rules: PropTypes.object.isRequired,
     }).isRequired,
-    route: routePropType.isRequired,
   };
 
   static defaultProps = {
@@ -64,9 +62,9 @@ class RulesPage extends React.Component {
   };
 
   openDetails = id => {
-    const { rules, route } = this.props;
+    const { rules } = this.props;
     const rule = rules.rules[id];
-    dispatch({ type: V_SET_ROUTE, route: `${route.route}/${rule.id}` });
+    dispatch({ type: V_SET_ROUTE, route: `rules/${rule.id}` });
   };
 
   render() {
