@@ -1,21 +1,13 @@
 @import 'vars';
 @import 'mixins';
 
-$rules-vertical-padding: 40px;
-
-.rules {
-  padding-top: 80px;
-}
-
-.rules__title {
-  font-size: 25px;
-  margin: 25px 0;
-  padding: 0 $rules-vertical-padding;
-}
-
 .rules__export {
-  padding: 0 $rules-vertical-padding;
-  margin: 20px 0;
+  font-size: 16px;
+  padding-left: 20px;
+  background-color: $light-purple;
+  height: 42px;
+  display: flex;
+  align-items: center;
 }
 
 .rules {
@@ -36,7 +28,8 @@ $rules-vertical-padding: 40px;
         @include activityResolver();
       }
     }
-    &--created, &--last_hit {
+    &--created,
+    &--last_hit {
       width: 150px;
     }
     &--remove {

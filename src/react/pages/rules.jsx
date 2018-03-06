@@ -112,10 +112,19 @@ class RulesPage extends React.Component {
     });
     return (
       <div className="rules">
-        <div className="rules__title">Rules</div>
-        <div className="rules__export">
-          Export :
-          {EXPORTS_OPTIONS.map(id => <ExportButton id={id} key={id} />)}
+        <div className="page-header page-header--robots">
+          <div className="page-header__header">
+            <span className="page-header__header-title">Rules</span>
+          </div>
+          <div
+            className="page-header__body"
+            style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+          >
+            <div className="rules__export">
+              Export :
+              {EXPORTS_OPTIONS.map(id => <ExportButton id={id} key={id} />)}
+            </div>
+          </div>
         </div>
         {rulesValues.length > 0 && (
           <Table
