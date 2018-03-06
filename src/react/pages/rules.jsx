@@ -106,9 +106,9 @@ class RulesPage extends React.Component {
         );
         const getValue = speed =>
           speed[sortId][sortIsActivity ? 'speed' : 'count'];
-        return getValue(a) < getValue(b);
+        return getValue(b) - getValue(a);
       }
-      return (a[sort] || 0) < (b[sort] || 0);
+      return (b[sort] || 0) - (a[sort] || 0);
     });
     return (
       <div className="rules">
