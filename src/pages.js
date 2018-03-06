@@ -244,9 +244,30 @@ export const onAddressesPage = addresses$.map(
   })
 );
 
-export const onRulesPage = rules$.map(({ rules }) => ({
-  element: <RulesPageComponent rules={rules} />,
+export const onRulesPage = rules$.map(({ rules, rulesDetails, route }) => ({
+  element: <RulesPageComponent rules={rules} route={route} />,
   name: 'rules',
+  ...(rulesDetails
+    ? {
+        sidePanel: {
+          element:
+            rulesDetails.type === 'address' ? (
+              <AddressDetails
+                address={rulesDetails.session.session}
+                {...rulesDetails.session}
+                route={route}
+              />
+            ) : (
+              <SessionDetailsComponent
+                {...rulesDetails.session}
+                route={route}
+              />
+            ),
+          BEMblock: 'session-details',
+          bgRoute: 'rules',
+        },
+      }
+    : {}),
 }));
 
 /**

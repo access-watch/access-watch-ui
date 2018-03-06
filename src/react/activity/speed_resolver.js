@@ -5,11 +5,16 @@ import { formatNumber } from '../../i18n';
 
 import ActivityCell from './activity_cell';
 
-const createSpeedResolvers = ({ id, label = capitalize(id) }) => [
+const createSpeedResolvers = ({
+  id,
+  label = capitalize(id),
+  sortable = false,
+}) => [
   {
     id,
     label,
     resolver: obj => formatNumber(obj[id].count),
+    sortable,
   },
   {
     id: `${id}Activity`,
@@ -21,6 +26,7 @@ const createSpeedResolvers = ({ id, label = capitalize(id) }) => [
         speed={obj[id].speed}
       />
     ),
+    sortable,
   },
 ];
 

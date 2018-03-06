@@ -86,6 +86,9 @@ const SessionDetails = ({
   const description =
     (robot && robot.description) || (identity && identity.description);
 
+  const agentType =
+    (robot && robot.label) || (identity && identity.label) || '';
+
   return (
     <AbstractSessionDetails
       title={title}
@@ -101,9 +104,9 @@ const SessionDetails = ({
           key="agentType"
           modifier="agent-type"
           label="Agent Type"
-          value={identity.label}
+          value={agentType}
         >
-          {identity.label}
+          {agentType}
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"

@@ -13,8 +13,11 @@ const cModifier = (cn, sfx) => `${cn}--${sfx}`;
 const headerCellClass = 'aw-table__header__cell';
 
 const tryResolver = ({ resolver, id, entry }) => {
-  const result = resolver(entry);
-  if (!result && typeof result !== 'string') {
+  let result = resolver(entry);
+  if (result === 0) {
+    result = '0';
+  }
+  if (typeof result !== 'string' && !React.isValidElement(result)) {
     // eslint-disable-next-line
     console.warn(
       'Table Warning, could not resolve property ' + id + ' for entry ',

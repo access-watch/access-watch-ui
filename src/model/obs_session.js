@@ -48,6 +48,7 @@ export const createSessionDetailsObs = ({
   sessionDetails$,
   lastSessions = { sessions: [] },
   type,
+  withRule = true,
 }) => p =>
   Observable.of(p)
     .map(r => lastSessions.sessions.find(({ id }) => id === r[routeId]))
@@ -69,15 +70,19 @@ export const createSessionDetailsObs = ({
               filter: `${logMapping}:${getIn(session, logMapping.split('.'))}`,
               ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
             }),
-            rules$.map(({ rules, actionPending }) => ({
-              ...Object.values(rules).find(matchCondition(type)(session)),
-              actionPending,
-            })),
-            // We explicitly need to say we want to poll rules while here
-            getRulesObs()
+            ...(withRule
+              ? [
+                  rules$.map(({ rules, actionPending }) => ({
+                    ...Object.values(rules).find(matchCondition(type)(session)),
+                    actionPending,
+                  })),
+                  // We explicitly need to say we want to poll rules while here
+                  getRulesObs(),
+                ]
+              : [])
           )
         )
-        .map(([session, logs, rule]) => ({ session, logs, rule }))
+        .map(([session, logs, rule = {}]) => ({ session, logs, rule }))
     );
 
 const timerangeChanged = ({ timerangeFrom, timerangeTo }, { timerange }) =>
