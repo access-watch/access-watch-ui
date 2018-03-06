@@ -14,11 +14,9 @@
   .aw-table__header__cell,
   .aw-table__body__cell {
     &--type {
-      width: 150px;
       font-family: $default-bold-font;
     }
     &--value {
-      width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -30,7 +28,7 @@
     }
     &--created,
     &--last_hit {
-      width: 150px;
+      min-width: 110px;
     }
     &--remove {
       position: relative;
