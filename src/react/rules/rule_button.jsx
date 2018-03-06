@@ -48,7 +48,10 @@ class RuleButton extends React.Component {
       if (rule) {
         dispatch({ type: V_REMOVE_RULE, rule });
       } else {
-        dispatch({ type: V_ADD_RULE, rule: { type, value } });
+        dispatch({
+          type: V_ADD_RULE,
+          rule: { condition: { type, value }, type: 'blocked' },
+        });
       }
     }
   }

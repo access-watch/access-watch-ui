@@ -95,7 +95,8 @@ export const deleteRule = ({ id }) => api.delete(`/rules/${id}`);
 
 viewEvents.on(V_ADD_RULE, ({ rule }) => {
   postRule({
-    condition: createCondition(rule),
+    ...rule,
+    condition: createCondition(rule.condition),
   })
     .then(() => {
       updateRules().then(() => {
