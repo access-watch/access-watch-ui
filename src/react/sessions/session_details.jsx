@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Loader } from 'access-watch-ui-components';
 
 import TimeAgo from '../utilities/time_ago';
-import RuleButton from '../rules/rule_button';
+import RuleActions from '../rules/rule_actions';
 import { formatNumber } from '../../i18n';
 import { getIn } from '../../utilities/object';
 import AbstractSessionDetails from './abstract_session_details';
@@ -133,9 +133,8 @@ const SessionDetails = ({
       actionChildren={
         !loading &&
         robot && (
-          <RuleButton
-            value={robot}
-            type="robot"
+          <RuleActions
+            condition={{ type: 'robot', robot }}
             {...(rule.id ? { rule } : {})}
             actionPending={rule.actionPending}
           />

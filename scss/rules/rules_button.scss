@@ -1,7 +1,7 @@
 @import '../vars';
 @import '../button'; // need those mixins :s
 
-@mixin btn-icon ($icon) {
+@mixin btn-icon($icon) {
   &::before {
     background-size: contain;
     background-repeat: no-repeat;
@@ -17,19 +17,31 @@
 
 $session-details-action-color: #fff;
 
+.rule-button-wrapper {
+  &--blocked {
+    .rule-button {
+      @include btn-icon(url('../../assets/blocked-white.svg'));
+      &:hover {
+        border-color: $red;
+      }
+    }
+  }
+  &--whitelist {
+    .rule-button {
+      @include btn-icon(url('../../assets/verified-white.svg'));
+      &:hover {
+        border-color: $brand-blue;
+      }
+    }
+  }
+}
+
 .rule-button {
   @include btn-type(white, transparent);
   font-size: inherit;
 
-  &--block {
-    @include btn-icon(url('../../assets/blocked-white.svg'));
-    border-radius: 2px;
-    transition: border-color 0.2s ease;
-
-    &:hover {
-      border-color: $red;
-    }
-  }
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
 
   &--disabled {
     cursor: not-allowed;
@@ -47,6 +59,9 @@ $session-details-action-color: #fff;
     &:hover {
       color: $light-gray;
       background-color: unset;
+    }
+    &:before {
+      display: none !important;
     }
   }
 }
