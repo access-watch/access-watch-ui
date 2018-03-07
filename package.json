@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "1.9.3",
+  "version": "2.0.1",
   "description": "The Access Watch User Interface",
   "repository": {
     "type": "git",
@@ -34,12 +34,12 @@
   },
   "devDependencies": {
     "access-watch-sdk": "^0.1.5",
-    "access-watch-ui-components": "^1.1.3",
+    "access-watch-ui-components": "^2.0.1",
     "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.24.1",
     "babel-eslint": "^8.0.2",
-    "babel-loader": "^7.0.0",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-jest": "^22.2.0",
     "babel-preset-react": "^6.24.1",
