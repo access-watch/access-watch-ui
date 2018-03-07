@@ -33,7 +33,8 @@ const BlockButton = ({ className, showFullText, ...props }) => (
           className={cx(
             baseClass,
             className,
-            `${className}--blocked`,
+            cSfx('blocked'),
+            className ? `${className}--blocked` : '',
             { [cSfx('block')]: !active },
             { [cSfx('reset')]: active },
             { [cSfx('disabled')]: actionPending }

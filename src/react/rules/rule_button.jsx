@@ -29,8 +29,9 @@ class RuleButton extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  handleClick(e) {
     const { condition, rule, actionPending, type } = this.props;
+    e.stopPropagation();
     if (!actionPending) {
       if (rule && rule.type === type) {
         dispatch({ type: V_REMOVE_RULE, rule });

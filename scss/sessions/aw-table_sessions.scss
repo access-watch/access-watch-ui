@@ -1,5 +1,6 @@
 @import '../vars';
 @import '../table_mixins';
+@import '../mixins';
 
 .aw-table__sessions__reputation-preview {
   width: $reputation-preview-width;
@@ -24,5 +25,33 @@
 @include table-body-cell() {
   &--count {
     padding-right: 25px;
+  }
+  &--rule {
+    .rule-button {
+      font-size: 0;
+      border: none;
+      padding: 0;
+      @include white-to-brand-purple();
+      opacity: 0.5;
+      &:hover {
+        opacity: 0.8;
+      }
+      &--reset {
+        opacity: 1;
+        &:before {
+          display: inline-block;
+        }
+      }
+      &--blocked {
+        &:before {
+          background-image: url('../../assets/blocked-white.svg');
+        }
+      }
+      &--whitelist {
+        &:before {
+          background-image: url('../../assets/verified-white.svg');
+        }
+      }
+    }
   }
 }

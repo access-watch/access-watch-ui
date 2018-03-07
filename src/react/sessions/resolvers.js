@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { formatNumber, formatSpeedMin } from '../../i18n';
 import ActivityCell from '../activity/activity_cell';
+import RuleActions from '../rules/rule_actions';
 
 import '../../../scss/sessions/aw-table_sessions.scss';
 
@@ -29,6 +30,17 @@ export const tableResolvers = [
     label: 'Activity (last 15m)',
     resolver: ActivityCell,
     sortable: true,
+  },
+  {
+    id: 'rule',
+    // eslint-disable-next-line
+    resolver: ({ rule, type, ...session }) => (
+      <RuleActions
+        showFullText={false}
+        condition={{ type, value: session[type] }}
+        rule={rule}
+      />
+    ),
   },
 ];
 

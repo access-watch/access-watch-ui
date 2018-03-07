@@ -26,7 +26,8 @@ const WhitelistButton = ({ className, showFullText, ...props }) => (
           className={cx(
             baseClass,
             className,
-            `${className}--whitelist`,
+            cSfx('whitelist'),
+            className ? `${className}--whitelist` : '',
             { [cSfx('block')]: !active },
             { [cSfx('reset')]: active },
             { [cSfx('disabled')]: actionPending }

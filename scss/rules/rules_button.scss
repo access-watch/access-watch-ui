@@ -17,31 +17,25 @@
 
 $session-details-action-color: #fff;
 
-.rule-button-wrapper {
-  &--blocked {
-    .rule-button {
-      @include btn-icon(url('../../assets/blocked-white.svg'));
-      &:hover {
-        border-color: $red;
-      }
-    }
-  }
-  &--whitelist {
-    .rule-button {
-      @include btn-icon(url('../../assets/verified-white.svg'));
-      &:hover {
-        border-color: $brand-blue;
-      }
-    }
-  }
-}
-
 .rule-button {
   @include btn-type(white, transparent);
   font-size: inherit;
 
   border-radius: 2px;
   transition: border-color 0.2s ease;
+  &--blocked {
+    @include btn-icon(url('../../assets/blocked-white.svg'));
+    &:hover {
+      border-color: $red;
+    }
+  }
+
+  &--whitelist {
+    @include btn-icon(url('../../assets/verified-white.svg'));
+    &:hover {
+      border-color: $brand-blue;
+    }
+  }
 
   &--disabled {
     cursor: not-allowed;
@@ -61,7 +55,7 @@ $session-details-action-color: #fff;
       background-color: unset;
     }
     &:before {
-      display: none !important;
+      display: none;
     }
   }
 }
