@@ -19,6 +19,7 @@ import '../../../scss/sessions/session_details.scss';
 const handleGetEarlierLogs = session => {
   const logMapping = getLogMapping(session);
   const value = getIn(session, getLogMapping(session).split('.'));
+  console.log(session);
   return requestEarlierLogs({ logMapping, value });
 };
 
@@ -97,7 +98,7 @@ const SessionDetails = ({
       moreButton={moreButton}
       description={description}
       requestInfo={requestInfo}
-      handleGetEarlierLogs={handleGetEarlierLogs(realSession)}
+      handleGetEarlierLogs={handleGetEarlierLogs(session)}
       headerRowChildren={[
         <AbstractSessionDetailsRowBlock
           key="agentType"
