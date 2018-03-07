@@ -3,7 +3,7 @@
 @import '../mixins';
 
 .aw-table__sessions__reputation-preview {
-  width: $reputation-preview-width;
+  min-width: $reputation-preview-width;
   padding: 0;
   @each $reputation, $color in $reputation-preview-colors {
     &--#{$reputation} {
@@ -16,19 +16,21 @@
   &--count {
     text-align: right;
     margin-right: 10px;
+    min-width: 100px;
   }
   &--reputationPreview {
     padding: 0;
   }
+  &--rule {
+    min-width: 80px;
+  }
 }
 
 @include table-body-cell() {
-  &--count {
-    padding-right: 25px;
-  }
-  &--rule {
+  &--actions {
+    min-width: 140px;
     .rule-button {
-      font-size: 0;
+      font-size: 10px;
       border: none;
       padding: 0;
       @include white-to-brand-purple();

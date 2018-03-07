@@ -2,6 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { formatNumber, formatSpeedMin } from '../../i18n';
+import { capitalize } from '../../utilities/string';
 import ActivityCell from '../activity/activity_cell';
 import RuleActions from '../rules/rule_actions';
 
@@ -33,6 +34,12 @@ export const tableResolvers = [
   },
   {
     id: 'rule',
+    // eslint-disable-next-line
+    resolver: ({ rule }) => (rule ? capitalize(rule.type) : ''),
+  },
+  {
+    id: 'actions',
+    label: '',
     // eslint-disable-next-line
     resolver: ({ rule, type, ...session }) => (
       <RuleActions
