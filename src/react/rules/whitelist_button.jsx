@@ -13,7 +13,7 @@ const baseClass = 'rule-button';
 const cSfx = sfx => `${baseClass}--${sfx}`;
 
 const WhitelistButton = ({ className, showFullText, ...props }) => (
-  <RuleButton type="whitelist" {...props}>
+  <RuleButton type="whitelisted" {...props}>
     {({ active, actionPending, onToggle }) => (
       <span className="rule-button-wrapper rule-button-wrapper--whitelist">
         {active &&
