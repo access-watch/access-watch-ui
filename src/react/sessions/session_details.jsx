@@ -28,7 +28,6 @@ const SessionDetails = ({
   muteParentEsc,
   requestInfo,
   session: realSession,
-  rule,
 }) => {
   let session = { ...realSession };
   const loading = !session;
@@ -64,6 +63,7 @@ const SessionDetails = ({
     count,
     speed,
     reputation,
+    rule = {},
   } = session;
 
   let title;
@@ -150,7 +150,6 @@ const SessionDetails = ({
 SessionDetails.propTypes = {
   session: PropTypes.shape({
     id: PropTypes.string,
-    actionables: PropTypes.array,
     actionPending: PropTypes.bool,
     country: PropTypes.string,
     count: PropTypes.number,
@@ -158,6 +157,10 @@ SessionDetails.propTypes = {
     robot: PropTypes.object,
     reputation: PropTypes.object,
     identity: PropTypes.object,
+    rule: PropTypes.shape({
+      id: PropTypes.string,
+      actionPending: PropTypes.bool,
+    }),
   }).isRequired,
 
   logs: PropTypes.shape({
@@ -167,15 +170,10 @@ SessionDetails.propTypes = {
   requestInfo: logPropType,
   route: routePropType.isRequired,
   muteParentEsc: PropTypes.func,
-  rule: PropTypes.shape({
-    id: PropTypes.string,
-    actionPending: PropTypes.bool,
-  }),
 };
 
 SessionDetails.defaultProps = {
   requestInfo: null,
   muteParentEsc: _ => _,
-  rule: null,
 };
 export default SessionDetails;
