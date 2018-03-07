@@ -31,13 +31,9 @@ const rulesDetails$ = rulesDetailsRoute$.switchMap(({ id }) =>
         sessionDetails$: Observable.never(),
         type,
         routeId: 'id',
-        withRule: false,
       })({ id: getIn(condition, logMapping.split('.')) }).map(session => ({
         type,
-        session: {
-          ...session,
-          rule,
-        },
+        session,
       }));
     })
     .takeUntil(routeChange$)
