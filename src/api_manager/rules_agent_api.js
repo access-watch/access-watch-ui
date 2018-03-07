@@ -98,10 +98,8 @@ viewEvents.on(V_ADD_RULE, ({ rule }) => {
     ...rule,
     condition: createCondition(rule.condition),
   })
-    .then(() => {
-      updateRules().then(() => {
-        dataEvents.emit(D_ADD_RULE_SUCCESS, null);
-      });
+    .then(addedRule => {
+      dataEvents.emit(D_ADD_RULE_SUCCESS, { rule: addedRule });
     })
     .catch(err => {
       dataEvents.emit(D_ADD_RULE_ERROR, err);

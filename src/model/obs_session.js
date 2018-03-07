@@ -6,11 +6,17 @@ import {
 import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
 import { getSearchesObs } from '../api_manager/searches_api';
-import rules$ from '../store/obs_rules_store';
 import searches$ from '../store/obs_searches_store';
 import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
-import { viewEvents, V_SESSIONS_LOAD_MORE } from '../event_hub';
+import {
+  viewEvents,
+  V_SESSIONS_LOAD_MORE,
+  dataEvents,
+  D_ADD_RULE_SUCCESS,
+  D_REMOVE_RULE_SUCCESS,
+} from '../event_hub';
+import { matchCondition } from '../api_manager/rules_agent_api';
 
 const MORE_SESSIONS_LIMIT = 50;
 
@@ -126,6 +132,25 @@ export const createSessions$ = ({
 
   const parameters$ = createParametersObs({ route$, lastSessions });
 
+  const rulesReducer$ = Observable.merge(
+    Observable.fromEvent(dataEvents, D_ADD_RULE_SUCCESS).map(
+      ({ rule }) => sessions =>
+        sessions.map(session => ({
+          ...session,
+          ...(matchCondition(type)(session)(rule) ? { rule } : {}),
+        }))
+    ),
+    Observable.fromEvent(dataEvents, D_REMOVE_RULE_SUCCESS).map(
+      ({ rule }) => sessions =>
+        sessions.map(session => ({
+          ...session,
+          ...(session.rule && session.rule.id === rule.id
+            ? { rule: null }
+            : {}),
+        }))
+    )
+  );
+
   const allSessions$ = ({
     sort,
     limit,
@@ -144,20 +169,24 @@ export const createSessions$ = ({
       timerangeTo,
       ...createFilter(rest),
       filter,
-    })
-      .do(sessions => {
-        lastSessions.timerange = !!(timerangeFrom && timerangeTo);
-        lastSessions.sessions = [...sessions];
-      })
-      .do(sessions => {
-        const sessionId = rest[routeId];
-        if (sessionId) {
-          const sessionDetails = sessions.find(({ id }) => id === sessionId);
-          if (sessionDetails) {
-            sessionDetailsObserver.next(sessionDetails);
+    }).switchMap(s =>
+      Observable.of(s)
+        .merge(rulesReducer$)
+        .scan((state, reducer) => reducer(state))
+        .do(sessions => {
+          lastSessions.timerange = !!(timerangeFrom && timerangeTo);
+          lastSessions.sessions = [...sessions];
+        })
+        .do(sessions => {
+          const sessionId = rest[routeId];
+          if (sessionId) {
+            const sessionDetails = sessions.find(({ id }) => id === sessionId);
+            if (sessionDetails) {
+              sessionDetailsObserver.next(sessionDetails);
+            }
           }
-        }
-      });
+        })
+    );
 
   const globalSessions$ = createGlobalSessions$({
     parameters$,
@@ -216,5 +245,4 @@ export const createSessions$ = ({
     );
 };
 
-rules$.connect();
 searches$.connect();

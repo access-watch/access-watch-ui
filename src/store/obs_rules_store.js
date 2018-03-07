@@ -35,11 +35,22 @@ const onViewActions = Observable.merge(
   actionPending: true,
 }));
 
-const onAddRuleResolved = Observable.merge(
-  Observable.fromEvent(dataEvents, D_ADD_RULE_SUCCESS),
-  Observable.fromEvent(dataEvents, D_ADD_RULE_ERROR)
-).map(_ => state => ({
+const onAddRuleError = Observable.fromEvent(dataEvents, D_ADD_RULE_ERROR).map(
+  _ => state => ({
+    ...state,
+    actionPending: false,
+  })
+);
+
+const onAddRuleSuccess = Observable.fromEvent(
+  dataEvents,
+  D_ADD_RULE_SUCCESS
+).map(({ rule }) => state => ({
   ...state,
+  rules: {
+    ...omit(state.rules, rule.id),
+    [rule.id]: rule,
+  },
   actionPending: false,
 }));
 
@@ -65,7 +76,8 @@ const onRemoveRuleError = Observable.fromEvent(
 const rulesReducer$ = Observable.merge(
   onRules,
   onViewActions,
-  onAddRuleResolved,
+  onAddRuleSuccess,
+  onAddRuleError,
   onRemoveRuleSuccess,
   onRemoveRuleError
 );
