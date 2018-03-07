@@ -1,6 +1,12 @@
 @import 'vars';
 
-@mixin filter-with-circle($global, $text-size, $horizontal-padding, $vertical-padding, $colors-map) {
+@mixin filter-with-circle(
+  $global,
+  $text-size,
+  $horizontal-padding,
+  $vertical-padding,
+  $colors-map
+) {
   &--#{$global} {
     padding-left: 0;
     &::before {
@@ -28,8 +34,20 @@ $filter-color: $brand-purple;
 $filter-font-size: 11px;
 
 .smart-filter__item__value {
-  @include filter-with-circle('reputation-status', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $statuses);
-  @include filter-with-circle('identity-type', $filter-font-size, $filter-horizontal-padding, $filter-vertical-padding, $type-map);
+  @mixin smart-filter-circle($global, $colors-map) {
+    @include filter-with-circle(
+      $global,
+      $filter-font-size,
+      $filter-horizontal-padding,
+      $filter-vertical-padding,
+      $colors-map
+    );
+  }
+
+  @include smart-filter-circle('reputation-status', $statuses);
+  @include smart-filter-circle('address-reputation-status', $statuses);
+  @include smart-filter-circle('robot-reputation-status', $statuses);
+  @include smart-filter-circle('identity-type', $type-map);
 }
 
 .smart-filter__wrapper {

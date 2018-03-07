@@ -20,7 +20,7 @@ const itemValueClass = getItemElementClass('value');
 const itemPlaceholderClass = getItemElementClass('placeholder');
 const itemValueWrapperClass = `${itemValueClass}-wrapper`;
 
-const classNameFriendly = str => str.replace('.', '-');
+const classNameFriendly = str => str.replace(/\./g, '-');
 const getClassName = base => ({ id, value }) => {
   const compose = s => `${base}--${classNameFriendly(s)}`;
   return `${base} ${compose(id)} ${compose(value)}`;
