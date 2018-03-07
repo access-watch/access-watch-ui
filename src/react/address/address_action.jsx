@@ -13,6 +13,7 @@ export const AddressAction = ({ address, rule, actionPending }) => (
     }}
     rule={rule}
     actionPending={actionPending}
+    showOnlyActive
   />
 );
 

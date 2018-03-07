@@ -137,6 +137,7 @@ const SessionDetails = ({
             condition={{ type: 'robot', robot }}
             {...(rule.id ? { rule } : {})}
             actionPending={rule.actionPending}
+            showOnlyActive
           />
         )
       }
