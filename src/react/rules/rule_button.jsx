@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { V_ADD_RULE, V_REMOVE_RULE, dispatch } from '../../event_hub';
+import { V_ADD_RULE, V_DELETE_RULE, dispatch } from '../../event_hub';
 import RulePropTypes from './rule_prop_types';
 
 import blockedIcon from '!raw-loader!../../../assets/blocked-nofill.svg'; // eslint-disable-line
@@ -34,7 +34,7 @@ class RuleButton extends React.Component {
     e.stopPropagation();
     if (!actionPending) {
       if (rule && rule.type === type) {
-        dispatch({ type: V_REMOVE_RULE, rule });
+        dispatch({ type: V_DELETE_RULE, rule });
       } else {
         dispatch({
           type: V_ADD_RULE,

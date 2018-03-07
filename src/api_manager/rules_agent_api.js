@@ -6,9 +6,9 @@ import {
   D_RULES,
   D_ADD_RULE_SUCCESS,
   D_ADD_RULE_ERROR,
-  V_REMOVE_RULE,
-  D_REMOVE_RULE_SUCCESS,
-  D_REMOVE_RULE_ERROR,
+  V_DELETE_RULE,
+  D_DELETE_RULE_SUCCESS,
+  D_DELETE_RULE_ERROR,
 } from '../event_hub';
 
 import { getAvgSpeedAndCount } from './utils';
@@ -106,12 +106,12 @@ viewEvents.on(V_ADD_RULE, ({ rule }) => {
     });
 });
 
-viewEvents.on(V_REMOVE_RULE, ({ rule }) => {
+viewEvents.on(V_DELETE_RULE, ({ rule }) => {
   deleteRule(rule)
     .then(() => {
-      dataEvents.emit(D_REMOVE_RULE_SUCCESS, { rule });
+      dataEvents.emit(D_DELETE_RULE_SUCCESS, { rule });
     })
     .catch(err => {
-      dataEvents.emit(D_REMOVE_RULE_ERROR, err);
+      dataEvents.emit(D_DELETE_RULE_ERROR, err);
     });
 });

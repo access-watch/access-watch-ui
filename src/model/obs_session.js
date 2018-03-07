@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import omit from 'blacklist';
 import {
   getSessionsObs,
   getSessionDetailsObs,
@@ -14,7 +15,7 @@ import {
   V_SESSIONS_LOAD_MORE,
   dataEvents,
   D_ADD_RULE_SUCCESS,
-  D_REMOVE_RULE_SUCCESS,
+  D_DELETE_RULE_SUCCESS,
 } from '../event_hub';
 import { matchCondition } from '../api_manager/rules_agent_api';
 
@@ -47,6 +48,21 @@ const createParametersObs = ({ route$, lastSessions }) =>
       .takeUntil(routeChange$)
   );
 
+const getSessionDetailsRuleReducer = ({ type, session }) => {
+  const isMatchingSessionDetails = matchCondition(type)(session);
+  const matchingObservable = eventType =>
+    Observable.fromEvent(dataEvents, eventType)
+      .map(({ rule }) => rule)
+      .filter(isMatchingSessionDetails);
+  return Observable.merge(
+    matchingObservable(D_ADD_RULE_SUCCESS).map(rule => s => ({
+      ...s,
+      rule,
+    })),
+    matchingObservable(D_DELETE_RULE_SUCCESS).map(_ => s => omit(s, 'rule'))
+  );
+};
+
 export const createSessionDetailsObs = ({
   routeId,
   logMapping,
@@ -69,12 +85,21 @@ export const createSessionDetailsObs = ({
           Observable.merge(
             Observable.of(session),
             getSessionDetailsObs({ type, id: p[routeId] })
-          ).combineLatest(
-            createLogs({
-              filter: `${logMapping}:${getIn(session, logMapping.split('.'))}`,
-              ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
-            })
           )
+            .switchMap(s =>
+              Observable.of(s)
+                .merge(getSessionDetailsRuleReducer({ type, session: s }))
+                .scan((state, reducer) => reducer(state))
+            )
+            .combineLatest(
+              createLogs({
+                filter: `${logMapping}:${getIn(
+                  session,
+                  logMapping.split('.')
+                )}`,
+                ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
+              })
+            )
         )
         .map(([session, logs]) => ({ session, logs }))
     );
@@ -140,7 +165,7 @@ export const createSessions$ = ({
           ...(matchCondition(type)(session)(rule) ? { rule } : {}),
         }))
     ),
-    Observable.fromEvent(dataEvents, D_REMOVE_RULE_SUCCESS).map(
+    Observable.fromEvent(dataEvents, D_DELETE_RULE_SUCCESS).map(
       ({ rule }) => sessions =>
         sessions.map(session => ({
           ...session,
