@@ -4,6 +4,7 @@
 
 .aw-table__sessions__reputation-preview {
   min-width: $reputation-preview-width;
+  width: $reputation-preview-width;
   padding: 0;
   @each $reputation, $color in $reputation-preview-colors {
     &--#{$reputation} {
