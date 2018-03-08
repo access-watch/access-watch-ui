@@ -35,15 +35,9 @@ export const tableResolvers = [
   {
     id: 'rule',
     // eslint-disable-next-line
-    resolver: ({ rule }) => (rule ? capitalize(rule.type) : ''),
-  },
-  {
-    id: 'actions',
-    label: '',
-    // eslint-disable-next-line
     resolver: ({ rule, type, ...session }) => (
       <RuleActions
-        showFullText={false}
+        activeText={({ ruleType }) => capitalize(ruleType)}
         condition={{ type, value: session[type] }}
         rule={rule}
       />

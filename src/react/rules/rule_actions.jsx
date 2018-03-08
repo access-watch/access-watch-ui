@@ -5,9 +5,9 @@ import RulePropTypes from './rule_prop_types';
 import BlockButton from './block_button';
 import WhitelistButton from './whitelist_button';
 
-const RuleActions = ({ showOnlyActive, ...props }) => {
+const RuleActions = props => {
   const { rule } = props;
-  const shouldDisplay = type => !showOnlyActive || !rule || rule.type === type;
+  const shouldDisplay = type => !rule || rule.type === type;
   return (
     <span>
       {shouldDisplay('blocked') && <BlockButton {...props} />}
@@ -17,12 +17,10 @@ const RuleActions = ({ showOnlyActive, ...props }) => {
 };
 
 RuleActions.propTypes = {
-  showOnlyActive: PropTypes.bool,
   rule: PropTypes.shape(RulePropTypes),
 };
 
 RuleActions.defaultProps = {
-  showOnlyActive: false,
   rule: null,
 };
 

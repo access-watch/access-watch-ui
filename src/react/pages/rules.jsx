@@ -53,7 +53,7 @@ const rulesResolvers = [
       <BlockButton
         rule={rule}
         className="rules__rule__remove-btn"
-        showFullText={false}
+        activeText={() => ''}
       />
     ),
   },

@@ -30,7 +30,7 @@ $session-details-action-color: #fff;
     }
   }
 
-  &--whitelist {
+  &--whitelisted {
     @include btn-icon(url('../../assets/verified-white.svg'));
     &:hover {
       border-color: $brand-blue;
@@ -66,14 +66,16 @@ $session-details-action-color: #fff;
   font-size: 16px;
 }
 
-.rule-button__blocked {
+.rule-button__active-text {
   display: inline-flex;
   align-items: center;
   margin-right: 5px;
 }
 
-.rule-button__blocked__icon {
-  fill: map-get($statuses, 'bad');
+.rule-button__icon {
   height: 16px;
   margin-right: 5px;
+  &--blocked {
+    fill: map-get($statuses, 'bad');
+  }
 }

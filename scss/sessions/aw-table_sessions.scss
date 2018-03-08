@@ -28,32 +28,27 @@
 }
 
 @include table-body-cell() {
-  &--actions {
-    min-width: 140px;
-    .rule-button {
+  &--rule {
+    min-width: 145px;
+    .rule-button-wrapper {
       font-size: 10px;
+      @include white-to-brand-purple();
+      &:nth-child(n + 2) {
+        margin-left: 5px;
+      }
+    }
+    .rule-button {
       border: none;
       padding: 0;
-      @include white-to-brand-purple();
-      opacity: 0.5;
+      opacity: 0.7;
       &:hover {
-        opacity: 0.8;
-      }
-      &--reset {
         opacity: 1;
-        &:before {
-          display: inline-block;
-        }
       }
-      &--blocked {
-        &:before {
-          background-image: url('../../assets/blocked-white.svg');
-        }
+      &__active-text {
+        width: 74px;
       }
-      &--whitelist {
-        &:before {
-          background-image: url('../../assets/verified-white.svg');
-        }
+      &__icon {
+        height: 14px;
       }
     }
   }
