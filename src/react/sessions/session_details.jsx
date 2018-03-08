@@ -76,7 +76,7 @@ const SessionDetails = ({
   let moreButton;
   if (robot && robot.id) {
     moreButton = {
-      text: 'More about this robot in Access Watch database',
+      text: 'More info',
       url: robot.url,
       status: robot.reputation.status,
     };

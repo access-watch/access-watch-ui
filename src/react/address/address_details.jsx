@@ -55,7 +55,7 @@ const AddressDetails = ({ address: addressSession, route, logs }) => {
       icon={icon}
       description=""
       moreButton={{
-        text: 'More about this address in Access Watch database',
+        text: 'More info',
         url: `https://access.watch/database/addresses/${address.value}`,
         status: reputation.status || '',
       }}
