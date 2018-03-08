@@ -134,7 +134,7 @@ const SessionDetails = ({
         !loading &&
         robot && (
           <RuleActions
-            condition={{ type: 'robot', robot }}
+            condition={{ type: 'robot', value: robot }}
             {...(rule.id ? { rule } : {})}
             actionPending={rule.actionPending}
           />
