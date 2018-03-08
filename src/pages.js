@@ -51,7 +51,7 @@ export const onRobotsPage = robots$.map(
     element: (
       <RobotsPageComponent
         robots={robots}
-        route={route}
+        route={route || routeDetails}
         activity={activity}
         searches={searches}
       />
@@ -224,7 +224,7 @@ export const onAddressesPage = addresses$.map(
     element: (
       <AddressesPageComponent
         addresses={addresses}
-        route={route}
+        route={route || routeDetails}
         activity={activity}
         searches={searches}
       />

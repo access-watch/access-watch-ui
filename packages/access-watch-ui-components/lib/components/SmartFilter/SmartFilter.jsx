@@ -109,11 +109,19 @@ class SmartFilter extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('click', () => {
+    this.onWindowClick = () => {
       const { onUnselectFilter } = this.props;
       onUnselectFilter();
       this.setState({ editFilter: {}, addFilter: false });
-    });
+    };
+    window.addEventListener('click', this.onWindowClick);
+  }
+
+  componentWillUmount() {
+    if (this.onWindowClick) {
+      window.removeEventListener('click', this.onWindowClick);
+      this.onWindowClick = null;
+    }
   }
 
   deleteFilterValue = ({ id, value, updateState = true }) => e => {

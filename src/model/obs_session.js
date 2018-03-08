@@ -253,7 +253,7 @@ export const createSessions$ = ({
         .takeUntil(routeChange$)
     )
   )
-    .withLatestFrom(route$.startWith({}), routeDetails$.startWith({}))
+    .withLatestFrom(route$.startWith(null), routeDetails$.startWith(null))
     .map(
       ([
         [{ sessions }, sessionDetails, [activity, searches]],

@@ -21,11 +21,12 @@ AddressAction.propTypes = {
   // eslint-disable-next-line react/no-typos
   address: addressPropType.isRequired,
   rule: PropTypes.shape(RulePropTypes),
-  actionPending: PropTypes.bool.isRequired,
+  actionPending: PropTypes.bool,
 };
 
 AddressAction.defaultProps = {
   rule: null,
+  actionPending: false,
 };
 
 export default AddressAction;

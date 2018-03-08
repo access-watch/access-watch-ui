@@ -115,7 +115,7 @@ AddressDetails.propTypes = {
     rule: PropTypes.shape({
       id: PropTypes.string,
       actionPending: PropTypes.bool,
-    }).isRequired,
+    }),
   }).isRequired,
 };
 
