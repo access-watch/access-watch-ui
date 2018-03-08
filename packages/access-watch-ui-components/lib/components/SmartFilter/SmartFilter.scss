@@ -49,6 +49,8 @@ $invert-transition-duration: 0.3s;
   }
   &__placeholder {
     color: $v-light-gray;
+    display: inline-flex;
+    align-items: center;
   }
   &__negative {
     @include reset-button();
