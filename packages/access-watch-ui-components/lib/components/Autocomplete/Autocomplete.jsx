@@ -11,7 +11,7 @@ const itemClass = `${baseClass}__item`;
 
 const getAutocompleItems = (inputValue, items) =>
   items.filter(({ label }) =>
-    ('' + label).toLowerCase().includes(inputValue.toLowerCase())
+    ('' + label).toLowerCase().includes(('' + inputValue).toLowerCase())
   );
 
 const highlightFirst = items => (
