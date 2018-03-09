@@ -41,6 +41,7 @@ $details-header-bg: $gray-blue;
     &__top {
       display: flex;
       justify-content: space-between;
+      flex-grow: 1;
     }
   }
 
@@ -82,10 +83,6 @@ $details-header-bg: $gray-blue;
 
   &__actions {
     flex-shrink: 0;
-  }
-
-  &__title {
-    max-width: 40%;
   }
 
   &__icon {
