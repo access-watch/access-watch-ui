@@ -19,7 +19,7 @@ export const getTimerangeTableResolvers = route =>
         {
           id: 'count',
           sortable: true,
-          label: `Count (${timerangeDisplay(route, ['d'])})`,
+          label: `Count (${timerangeDisplay(route, [])})`,
           // eslint-disable-next-line react/prop-types
           resolver: ({ count, ...props }) => (
             <div className="activity-count__table-cell">
@@ -36,7 +36,7 @@ export const getTimerangeTableResolvers = route =>
           r.id === 'count'
             ? {
                 ...r,
-                label: `Count (${timerangeDisplay(route, ['d'], 'session')})`,
+                label: `Count (${timerangeDisplay(route, 'session')})`,
               }
             : r
       );

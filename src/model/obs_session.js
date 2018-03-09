@@ -55,7 +55,7 @@ export const createSessionDetailsObs = ({
     .switchMap(sessionOrig =>
       Observable.merge(
         sessionDetails$,
-        getSessionDetailsObs({ type, id: p[routeId] })
+        getSessionDetailsObs({ ...p, type, id: p[routeId] })
       )
         .take(1)
         .startWith(sessionOrig)

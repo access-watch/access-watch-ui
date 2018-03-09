@@ -111,7 +111,7 @@ const SessionDetails = ({
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"
-          label={`Requests last ${timerangeDisplay(route, ['d'], 'session')}`}
+          label={`Requests last ${timerangeDisplay(route, 'session')}`}
         >
           {formatNumber(count)}
         </AbstractSessionDetailsRowBlock>,
