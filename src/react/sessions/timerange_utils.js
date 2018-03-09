@@ -1,3 +1,5 @@
+import React from 'react';
+import omit from 'blacklist';
 import config from '../../app_config';
 import { pickKeys } from '../../utilities/object';
 import { tableResolvers } from './resolvers';
@@ -9,18 +11,24 @@ export const isTimerangeDisplay = route =>
   hasTimerange(route) && canDisplayTimerange;
 export const pickTimerangeKeys = pickKeys(['timerangeFrom', 'timerangeTo']);
 
-const tableResolversNoActivity = tableResolvers.filter(
-  ({ id }) => ['speed', 'activity'].indexOf(id) === -1
-);
-
 export const getTimerangeTableResolvers = route =>
   isTimerangeDisplay(route)
-    ? tableResolversNoActivity.map(resolver => ({
-        ...resolver,
-        ...(resolver.id === 'count'
-          ? { label: `Count (${timerangeDisplay(route, ['d'])})` }
-          : {}),
-      }))
+    ? [
+        {
+          id: 'count',
+          sortable: true,
+          label: `Count (${timerangeDisplay(route, ['d'])})`,
+          // eslint-disable-next-line react/prop-types
+          resolver: ({ count, ...props }) => (
+            <div className="activity-count__table-cell">
+              {count}
+              {tableResolvers
+                .find(({ id }) => id === 'speed')
+                .resolver(omit(props, 'speed'))}
+            </div>
+          ),
+        },
+      ]
     : tableResolvers;
 
 export const getTimeDisplay = route =>
