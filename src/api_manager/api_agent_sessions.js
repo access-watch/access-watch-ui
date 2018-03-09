@@ -6,7 +6,7 @@ import {
   convertObjValues,
 } from '../utilities/object';
 import { getAvgSpeedAndCount, extractTimerange } from './utils';
-import { hasElasticSearch } from '../utilities/config';
+import { hasElasticSearch, getExpiration } from '../utilities/config';
 
 const DEFAULT_POLL_INTERVAL = 5000;
 
@@ -38,7 +38,13 @@ export const getSessionsObs = (
         filter,
         limit,
         ...(hasElasticSearch()
-          ? { start: Math.floor(new Date().getTime() / 1000) - timeSlider * 60 }
+          ? {
+              start:
+                Math.floor(new Date().getTime() / 1000) -
+                (timeSlider === 'auto'
+                  ? getExpiration('session')
+                  : timeSlider * 60),
+            }
           : {}),
         ...timerange,
       }),

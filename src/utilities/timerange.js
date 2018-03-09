@@ -2,7 +2,7 @@ import { updateRouteParameter } from './route_utils';
 
 import { dispatch, V_SET_ROUTE } from '../event_hub';
 
-import config from '../app_config';
+import { getExpiration } from '../utilities/config';
 
 const timerangesDividers = [
   {
@@ -67,15 +67,13 @@ const secondsToHumanDisplay = s => {
   return dividersToShortDisplay(splitted);
 };
 
-const getDefaultExpiration = type => config[type].expiration;
-
 export const timerangeDisplay = (
   { timerangeFrom: from, timerangeTo: to, timeSlider },
   excludeDividers = [],
   type
 ) => {
   const timeSliderValue =
-    timeSlider === 'auto' ? getDefaultExpiration(type) : timeSlider * 60;
+    timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60;
   const seconds = to && from ? Math.round((to - from) / 1000) : timeSliderValue;
   const timerangeDivider = getTimeDivider(
     seconds,
@@ -94,7 +92,7 @@ export const timeDisplay = (
     timerangeDisplay({ timerangeFrom, timerangeTo }) + ' interval') ||
   'last ' +
     secondsToHumanDisplay(
-      timeSlider === 'auto' ? getDefaultExpiration(type) : timeSlider * 60
+      timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60
     );
 
 export const handleTimeSliderChange = (route, value) => {
