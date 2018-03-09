@@ -145,6 +145,7 @@ export const createSessions$ = ({
     timerangeFrom,
     timerangeTo,
     filter,
+    timeSlider,
     ...rest
   }) =>
     getSessionsObs({
@@ -154,6 +155,7 @@ export const createSessions$ = ({
       limit,
       timerangeFrom,
       timerangeTo,
+      timeSlider,
       ...createFilter(rest),
       filter,
     })

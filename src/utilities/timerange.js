@@ -68,10 +68,10 @@ const secondsToHumanDisplay = s => {
 };
 
 export const timerangeDisplay = (
-  { timerangeFrom: from, timerangeTo: to },
+  { timerangeFrom: from, timerangeTo: to, timeSlider },
   excludeDividers = []
 ) => {
-  const seconds = Math.round((to - from) / 1000);
+  const seconds = to && from ? Math.round((to - from) / 1000) : timeSlider * 60;
   const timerangeDivider = getTimeDivider(
     seconds,
     sortedDividers.filter(({ short }) => excludeDividers.indexOf(short) === -1)

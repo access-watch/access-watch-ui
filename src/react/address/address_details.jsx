@@ -6,6 +6,7 @@ import { FlagIcon, addressTypeResolver } from 'access-watch-ui-components';
 
 import { formatNumber } from '../../i18n';
 import { convertBackendKeys } from '../../utilities/object';
+import { timerangeDisplay } from '../../utilities/timerange';
 
 import AbstractSessionDetails, {
   DEFAULT_COLUMNS,
@@ -83,7 +84,7 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"
-          label="Requests Today"
+          label={`Requests last ${timerangeDisplay(route, ['d'])}`}
         >
           {formatNumber(count)}
         </AbstractSessionDetailsRowBlock>,

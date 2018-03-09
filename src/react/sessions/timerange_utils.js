@@ -1,14 +1,16 @@
 import React from 'react';
 import omit from 'blacklist';
-import config from '../../app_config';
+import {
+  hasSessionTimerangeSupport,
+  hasElasticSearch,
+} from '../../utilities/config';
 import { pickKeys } from '../../utilities/object';
 import { tableResolvers } from './resolvers';
 import { timerangeDisplay, timeDisplay } from '../../utilities/timerange';
 
 export const hasTimerange = route => route.timerangeFrom && route.timerangeTo;
-export const canDisplayTimerange = config.session.timerange;
 export const isTimerangeDisplay = route =>
-  hasTimerange(route) && canDisplayTimerange;
+  hasTimerange(route) && hasSessionTimerangeSupport();
 export const pickTimerangeKeys = pickKeys(['timerangeFrom', 'timerangeTo']);
 
 export const getTimerangeTableResolvers = route =>
@@ -29,9 +31,17 @@ export const getTimerangeTableResolvers = route =>
           ),
         },
       ]
-    : tableResolvers;
+    : tableResolvers.map(
+        r =>
+          r.id === 'count'
+            ? {
+                ...r,
+                label: `Count (${timerangeDisplay(route, ['d'])})`,
+              }
+            : r
+      );
 
 export const getTimeDisplay = route =>
   isTimerangeDisplay(route)
     ? timeDisplay(pickTimerangeKeys(route), 'session')
-    : timeDisplay({}, 'session');
+    : timeDisplay(hasElasticSearch() ? route : {}, 'session');

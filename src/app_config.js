@@ -24,6 +24,11 @@ const windowConfig = {
     expiration: 24 * 3600,
     timerange: false,
   },
+  modules: {
+    elasticsearch: {
+      active: false,
+    },
+  },
   ...(window.config || {}),
 };
 

@@ -3,19 +3,28 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { activityPropType } from '../prop_types';
 import TimeSelector from '../time/time_selector';
-import { canDisplayTimerange, hasTimerange } from './timerange_utils';
+import {
+  hasSessionTimerangeSupport,
+  hasElasticSearch,
+} from '../../utilities/config';
+import { hasTimerange } from './timerange_utils';
 
 import '../../../scss/sessions/session_time_selector.scss';
 
 const SessionTimeSelector = ({ route, activity }) => {
-  const disabledTimerange = !canDisplayTimerange && hasTimerange(route);
+  const disabledTimerange =
+    !hasSessionTimerangeSupport() && hasTimerange(route);
   return (
     <div
       className={cx('session-time-selector', {
         'session-time-selector--disabled': disabledTimerange,
       })}
     >
-      <TimeSelector activity={activity.activity} route={route} hideTimerange />
+      <TimeSelector
+        activity={activity.activity}
+        route={route}
+        hideTimerange={!hasElasticSearch()}
+      />
       {disabledTimerange && (
         <div className="session-time-selector__alert">
           This feature is not supported by your current configuration.{' '}
