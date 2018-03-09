@@ -67,11 +67,16 @@ const secondsToHumanDisplay = s => {
   return dividersToShortDisplay(splitted);
 };
 
+const getDefaultExpiration = type => config[type].expiration;
+
 export const timerangeDisplay = (
   { timerangeFrom: from, timerangeTo: to, timeSlider },
-  excludeDividers = []
+  excludeDividers = [],
+  type
 ) => {
-  const seconds = to && from ? Math.round((to - from) / 1000) : timeSlider * 60;
+  const timeSliderValue =
+    timeSlider === 'auto' ? getDefaultExpiration(type) : timeSlider * 60;
+  const seconds = to && from ? Math.round((to - from) / 1000) : timeSliderValue;
   const timerangeDivider = getTimeDivider(
     seconds,
     sortedDividers.filter(({ short }) => excludeDividers.indexOf(short) === -1)
@@ -80,8 +85,6 @@ export const timerangeDisplay = (
     timerangeDivider.short
   }`;
 };
-
-const getDefaultExpiration = type => config[type].expiration;
 
 export const timeDisplay = (
   { timerangeFrom, timerangeTo, timeSlider = 'auto' } = {},

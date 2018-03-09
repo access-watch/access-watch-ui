@@ -36,7 +36,7 @@ export const getTimerangeTableResolvers = route =>
           r.id === 'count'
             ? {
                 ...r,
-                label: `Count (${timerangeDisplay(route, ['d'])})`,
+                label: `Count (${timerangeDisplay(route, ['d'], 'session')})`,
               }
             : r
       );
