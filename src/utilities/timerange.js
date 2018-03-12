@@ -67,13 +67,17 @@ const secondsToHumanDisplay = s => {
   return dividersToShortDisplay(splitted);
 };
 
+const getTimeSliderValue = (timeSlider, type) =>
+  timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60;
+
 export const timerangeDisplay = (
   { timerangeFrom: from, timerangeTo: to, timeSlider = 'auto' },
   type
 ) => {
-  const timeSliderValue =
-    timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60;
-  const seconds = to && from ? Math.round((to - from) / 1000) : timeSliderValue;
+  const seconds =
+    to && from
+      ? Math.round((to - from) / 1000)
+      : getTimeSliderValue(timeSlider, type);
   const timerangeDivider = getTimeDivider(seconds, sortedDividers);
   return `${Math.round(seconds / timerangeDivider.divider)}${
     timerangeDivider.short
@@ -86,10 +90,7 @@ export const timeDisplay = (
 ) =>
   (timerangeFrom &&
     timerangeDisplay({ timerangeFrom, timerangeTo }, type) + ' interval') ||
-  'last ' +
-    secondsToHumanDisplay(
-      timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60
-    );
+  'last ' + secondsToHumanDisplay(getTimeSliderValue(timeSlider, type));
 
 export const handleTimeSliderChange = (route, value) => {
   dispatch({
