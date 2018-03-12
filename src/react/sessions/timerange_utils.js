@@ -15,22 +15,25 @@ export const pickTimerangeKeys = pickKeys(['timerangeFrom', 'timerangeTo']);
 
 export const getTimerangeTableResolvers = route =>
   isTimerangeDisplay(route)
-    ? [
-        {
-          id: 'count',
-          sortable: true,
-          label: `Count (${timerangeDisplay(route, [])})`,
-          // eslint-disable-next-line react/prop-types
-          resolver: ({ count, ...props }) => (
-            <div className="activity-count__table-cell">
-              {count}
-              {tableResolvers
-                .find(({ id }) => id === 'speed')
-                .resolver(omit(props, 'speed'))}
-            </div>
-          ),
-        },
-      ]
+    ? tableResolvers.filter(({ id }) => id !== 'speed').map(
+        r =>
+          r.id === 'count'
+            ? {
+                id: 'count',
+                sortable: true,
+                label: `Count (${timerangeDisplay(route, 'session')})`,
+                // eslint-disable-next-line react/prop-types
+                resolver: ({ count, ...props }) => (
+                  <div className="activity-count__table-cell">
+                    {count}
+                    {tableResolvers
+                      .find(({ id }) => id === 'speed')
+                      .resolver(omit(props, 'speed'))}
+                  </div>
+                ),
+              }
+            : r
+      )
     : tableResolvers.map(
         r =>
           r.id === 'count'
