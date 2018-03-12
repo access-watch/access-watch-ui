@@ -69,11 +69,6 @@ export const tableResolvers = [
     resolver: inAddress('as_number'),
   },
   {
-    id: 'networkName',
-    label: 'Network name',
-    resolver: inAddress('network_name'),
-  },
-  {
     id: 'country',
     resolver: entry => {
       const countryComponent = countryResolver(entry);

@@ -1,12 +1,3 @@
-export const prefixFilter = prefix => ({ id, ...rest }) => ({
-  id: prefix ? `${prefix}.${id}` : id,
-  ...rest,
-});
-export const unfixFilter = prefix => ({ id, ...rest }) => ({
-  id: prefix ? id.replace(`${prefix}.`, '') : id,
-  ...rest,
-});
-
 export const filterToURI = ({ id, values, negative }) =>
   `${negative ? '-' : ''}${id}${
     values && values.length ? `:${values.join(',')}` : ''
@@ -22,7 +13,5 @@ export const URIToFilter = uri => {
     negative,
   };
 };
-export const createURIToFilters = prefix => uri =>
-  uri.length
-    ? uri.split(';').map(f => unfixFilter(prefix)(URIToFilter(f)))
-    : [];
+export const URIToFilters = uri =>
+  uri.length ? uri.split(';').map(f => URIToFilter(f)) : [];

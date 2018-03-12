@@ -33,6 +33,9 @@
     &--remove {
       position: relative;
       width: 30px;
+      .rule-button__active-text {
+        display: none;
+      }
     }
   }
   .aw-table__body__cell {

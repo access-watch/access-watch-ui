@@ -195,7 +195,6 @@ class LogsPage extends React.Component {
           <div className="logs-filters-container">
             <Filters
               route={route}
-              prefix=""
               availableFilters={filters.log}
               searches={searches}
               groupId="log"

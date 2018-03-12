@@ -2,7 +2,9 @@ import React from 'react';
 import cx from 'classnames';
 
 import { formatNumber, formatSpeedMin } from '../../i18n';
+import { capitalize } from '../../utilities/string';
 import ActivityCell from '../activity/activity_cell';
+import RuleActions from '../rules/rule_actions';
 
 import '../../../scss/sessions/aw-table_sessions.scss';
 
@@ -29,6 +31,17 @@ export const tableResolvers = [
     label: 'Activity (last 15m)',
     resolver: ActivityCell,
     sortable: true,
+  },
+  {
+    id: 'rule',
+    // eslint-disable-next-line
+    resolver: ({ rule, type, ...session }) => (
+      <RuleActions
+        activeText={({ ruleType }) => capitalize(ruleType)}
+        condition={{ type, value: session[type] }}
+        rule={rule}
+      />
+    ),
   },
 ];
 

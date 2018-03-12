@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Loader } from 'access-watch-ui-components';
 
 import TimeAgo from '../utilities/time_ago';
-import RuleButton from '../rules/rule_button';
+import RuleActions from '../rules/rule_actions';
 import { formatNumber } from '../../i18n';
 import { getIn } from '../../utilities/object';
 import AbstractSessionDetails from './abstract_session_details';
@@ -19,7 +19,6 @@ import '../../../scss/sessions/session_details.scss';
 const handleGetEarlierLogs = session => {
   const logMapping = getLogMapping(session);
   const value = getIn(session, getLogMapping(session).split('.'));
-  console.log(session);
   return requestEarlierLogs({ logMapping, value });
 };
 
@@ -29,7 +28,6 @@ const SessionDetails = ({
   muteParentEsc,
   requestInfo,
   session: realSession,
-  rule,
 }) => {
   let session = { ...realSession };
   const loading = !session;
@@ -65,6 +63,7 @@ const SessionDetails = ({
     count,
     speed,
     reputation,
+    rule = {},
   } = session;
 
   let title;
@@ -77,7 +76,7 @@ const SessionDetails = ({
   let moreButton;
   if (robot && robot.id) {
     moreButton = {
-      text: 'More about this robot in Access Watch database',
+      text: 'More info',
       url: robot.url,
       status: robot.reputation.status,
     };
@@ -134,9 +133,8 @@ const SessionDetails = ({
       actionChildren={
         !loading &&
         robot && (
-          <RuleButton
-            value={robot}
-            type="robot"
+          <RuleActions
+            condition={{ type: 'robot', value: robot }}
             {...(rule.id ? { rule } : {})}
             actionPending={rule.actionPending}
           />
@@ -152,7 +150,6 @@ const SessionDetails = ({
 SessionDetails.propTypes = {
   session: PropTypes.shape({
     id: PropTypes.string,
-    actionables: PropTypes.array,
     actionPending: PropTypes.bool,
     country: PropTypes.string,
     count: PropTypes.number,
@@ -160,6 +157,10 @@ SessionDetails.propTypes = {
     robot: PropTypes.object,
     reputation: PropTypes.object,
     identity: PropTypes.object,
+    rule: PropTypes.shape({
+      id: PropTypes.string,
+      actionPending: PropTypes.bool,
+    }),
   }).isRequired,
 
   logs: PropTypes.shape({
@@ -169,15 +170,10 @@ SessionDetails.propTypes = {
   requestInfo: logPropType,
   route: routePropType.isRequired,
   muteParentEsc: PropTypes.func,
-  rule: PropTypes.shape({
-    id: PropTypes.string,
-    actionPending: PropTypes.bool,
-  }),
 };
 
 SessionDetails.defaultProps = {
   requestInfo: null,
   muteParentEsc: _ => _,
-  rule: null,
 };
 export default SessionDetails;

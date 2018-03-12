@@ -9,7 +9,7 @@ import { routePropType } from '../prop_types';
 
 import Table from '../table/table';
 import TimeAgo from '../utilities/time_ago';
-import RuleButton from '../rules/rule_button';
+import BlockButton from '../rules/block_button';
 import createSpeedResolvers from '../activity/speed_resolver';
 import ConditionDisplay from '../rules/condition_display';
 import ExportButton from '../rules/export_button';
@@ -50,10 +50,10 @@ const rulesResolvers = [
     id: 'remove',
     label: '',
     resolver: rule => (
-      <RuleButton
+      <BlockButton
         rule={rule}
         className="rules__rule__remove-btn"
-        showBlockedText={false}
+        activeText={() => ''}
       />
     ),
   },

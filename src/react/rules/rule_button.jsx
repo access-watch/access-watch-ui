@@ -2,38 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { V_ADD_RULE, V_REMOVE_RULE, dispatch } from '../../event_hub';
-
+import { V_ADD_RULE, V_DELETE_RULE, dispatch } from '../../event_hub';
+import RulePropTypes from './rule_prop_types';
 import Button from '../utilities/button';
 import SVGIcon from '../utilities/svg_icon';
-import RulePropTypes from './rule_prop_types';
 
-import blockedIcon from '!raw-loader!../../../assets/blocked-nofill.svg'; // eslint-disable-line
-
-import '../../../scss/rules/rules_button.scss';
+import '../../../scss/rules/rule_button.scss';
 
 const baseClass = 'rule-button';
 const cSfx = sfx => `${baseClass}--${sfx}`;
 
 class RuleButton extends React.Component {
   static propTypes = {
-    // FIXME : For now value can be any object matching a rule
-    // eslint-disable-next-line react/forbid-prop-types
-    value: PropTypes.object,
+    condition: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+    }),
     rule: PropTypes.shape(RulePropTypes),
     actionPending: PropTypes.bool,
-    type: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    activeText: PropTypes.func,
     className: PropTypes.string,
-    showBlockedText: PropTypes.bool,
+    activeButtonText: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
-    value: null,
     actionPending: false,
     rule: null,
-    type: null,
+    condition: null,
+    activeText: ({ type, ruleType }) => `You ${ruleType} this ${type}.`,
     className: '',
-    showBlockedText: true,
   };
 
   constructor(props) {
@@ -42,13 +40,17 @@ class RuleButton extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
-    const { value, rule, actionPending, type } = this.props;
+  handleClick(e) {
+    const { condition, rule, actionPending, type } = this.props;
+    e.stopPropagation();
     if (!actionPending) {
-      if (rule) {
-        dispatch({ type: V_REMOVE_RULE, rule });
+      if (rule && rule.type === type) {
+        dispatch({ type: V_DELETE_RULE, rule });
       } else {
-        dispatch({ type: V_ADD_RULE, rule: { type, value } });
+        dispatch({
+          type: V_ADD_RULE,
+          rule: { ...(rule || {}), condition, type },
+        });
       }
     }
   }
@@ -57,37 +59,40 @@ class RuleButton extends React.Component {
     const {
       rule,
       actionPending,
+      condition,
+      type: ruleType,
+      activeText,
       className,
-      type,
-      showBlockedText,
-      ...props
+      icon,
+      activeButtonText,
     } = this.props;
-    const label = rule ? 'Undo' : 'Block';
+    const active = !!rule && rule.type === ruleType;
+    const type = (condition && condition.type) || rule.condition.type;
     return (
-      <span className="rule-button-wrapper">
-        {rule &&
-          showBlockedText && (
-            <span className="rule-button__blocked">
-              <SVGIcon
-                svg={blockedIcon}
-                className="rule-button__blocked__icon"
-              />
-              You blocked this {type}.
-            </span>
-          )}
+      <span className={`rule-button-wrapper rule-button-wrapper--${ruleType}`}>
+        {active && (
+          <span className="rule-button__active-text">
+            <SVGIcon
+              svg={icon}
+              className={`rule-button__icon rule-button__icon--${ruleType}`}
+            />
+            {activeText({ type, ruleType })}
+          </span>
+        )}
         <Button
           disabled={actionPending}
           onClick={this.handleClick}
           className={cx(
             baseClass,
             className,
-            { [cSfx('block')]: !rule },
-            { [cSfx('reset')]: !!rule },
+            cSfx(ruleType),
+            className ? `${className}--${ruleType}` : '',
+            { [cSfx('active')]: !active },
+            { [cSfx('reset')]: active },
             { [cSfx('disabled')]: actionPending }
           )}
-          {...props}
         >
-          {label}
+          {active ? 'Undo' : activeButtonText}
         </Button>
       </span>
     );
