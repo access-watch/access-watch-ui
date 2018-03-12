@@ -32,7 +32,7 @@ const getTimeQuery = ({ timeSlider, ...rest }) => {
       ? {
           start:
             Math.floor(new Date().getTime() / 1000) -
-            (timeSlider === 'auto'
+            (timeSlider === 'auto' || !timeSlider
               ? getExpiration('session')
               : timeSlider * 60),
         }
