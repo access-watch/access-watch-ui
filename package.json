@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "access-watch-sdk": "^0.1.5",
-    "access-watch-ui-components": "^1.1.1",
+    "access-watch-ui-components": "^2.1.0",
     "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.24.1",
