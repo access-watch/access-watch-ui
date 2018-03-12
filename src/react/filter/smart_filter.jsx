@@ -5,21 +5,16 @@ import { SmartFilter as SmartFilterAbstract } from 'access-watch-ui-components';
 
 import { routePropType } from '../prop_types';
 import { updateRouteParameter } from '../../utilities/route_utils';
-import {
-  createURIToFilters,
-  filtersToURI,
-  prefixFilter,
-} from '../../utilities/filter';
+import { URIToFilters, filtersToURI } from '../../utilities/filter';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 import FilterHelper from './filter_helper';
 
 import '../../../scss/smart_filter.scss';
 
-const getFilterFunctions = ({ route, prefix }) => {
-  const URIToFilters = createURIToFilters(prefix);
+const getFilterFunctions = ({ route }) => {
   const dispatchNewFilters = filters =>
     new Promise(resolve => {
-      const value = filtersToURI(filters.map(prefixFilter(prefix)));
+      const value = filtersToURI(filters);
       dispatch({
         type: V_SET_ROUTE,
         route: updateRouteParameter({
@@ -85,7 +80,6 @@ const getFilterFunctions = ({ route, prefix }) => {
 class SmartFilter extends React.Component {
   static propTypes = {
     route: routePropType.isRequired,
-    prefix: PropTypes.string.isRequired,
     children: PropTypes.node,
     onFilterChange: PropTypes.func,
   };
@@ -127,7 +121,6 @@ class SmartFilter extends React.Component {
   onFilterValueClick = ({ id, value }) => {
     const { route } = this.props;
     const {
-      URIToFilters,
       onDeleteFilterValue,
       onAddFilter,
       onFilterValueChange,
@@ -148,7 +141,6 @@ class SmartFilter extends React.Component {
 
   onFilterClick = ({ id }) => {
     const { route } = this.props;
-    const { URIToFilters } = this.getFilterFunctions();
     const filters = URIToFilters(route.filter);
     if (!filters.find(f => f.id === id)) {
       this.onAddFilter({ id });
@@ -161,10 +153,9 @@ class SmartFilter extends React.Component {
   };
 
   getFilterFunctions = () => {
-    const { route, prefix, onFilterChange } = this.props;
+    const { route, onFilterChange } = this.props;
     const origFilterFns = getFilterFunctions({
       route,
-      prefix,
     });
     const shouldCallOnFilterChange = key =>
       [
@@ -190,7 +181,7 @@ class SmartFilter extends React.Component {
   render() {
     const { route, children, ...props } = this.props;
     const { newFilter } = this.state;
-    const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
+    const filtersFn = this.getFilterFunctions();
     const { filter = '' } = route;
     const filters = URIToFilters(filter);
     return (

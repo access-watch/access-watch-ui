@@ -20,7 +20,7 @@ const itemValueClass = getItemElementClass('value');
 const itemPlaceholderClass = getItemElementClass('placeholder');
 const itemValueWrapperClass = `${itemValueClass}-wrapper`;
 
-const classNameFriendly = str => str.replace('.', '-');
+const classNameFriendly = str => str.replace(/\./g, '-');
 const getClassName = base => ({ id, value }) => {
   const compose = s => `${base}--${classNameFriendly(s)}`;
   return `${base} ${compose(id)} ${compose(value)}`;
@@ -109,11 +109,19 @@ class SmartFilter extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('click', () => {
+    this.onWindowClick = () => {
       const { onUnselectFilter } = this.props;
       onUnselectFilter();
       this.setState({ editFilter: {}, addFilter: false });
-    });
+    };
+    window.addEventListener('click', this.onWindowClick);
+  }
+
+  componentWillUmount() {
+    if (this.onWindowClick) {
+      window.removeEventListener('click', this.onWindowClick);
+      this.onWindowClick = null;
+    }
   }
 
   deleteFilterValue = ({ id, value, updateState = true }) => e => {

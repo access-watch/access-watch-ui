@@ -96,7 +96,6 @@ const RobotsPage = ({ route, robots, activity, searches }) => (
       >
         <SessionsFilter
           route={route}
-          prefix="robot"
           availableFilters={filters.robot}
           searches={searches}
           groupId="robot"

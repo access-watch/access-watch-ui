@@ -3,7 +3,7 @@ import { filters as awSdkFilters } from 'access-watch-sdk';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
 import { msToS } from '../utilities/time';
-import { createURIToFilters } from '../utilities/filter';
+import { URIToFilters } from '../utilities/filter';
 import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 
 // maximum requests that we can have renedered at the same time.
@@ -16,8 +16,6 @@ const hasNoStorageParam = params =>
   NO_STORAGE_PARAMS.reduce((acc, k) => acc || params[k], false);
 
 const append = (a, b) => a.concat(b);
-
-const URIToFilters = createURIToFilters();
 
 const toLowerCase = v => (typeof v === 'string' ? v.toLowerCase() : v);
 
