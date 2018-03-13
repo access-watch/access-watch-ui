@@ -24,6 +24,7 @@ $tooltip-content-padding: 6px;
   pointer-events: none;
   display: flex;
   align-items: center;
+  color: white;
   &:before {
     content: '';
     width: 3px;

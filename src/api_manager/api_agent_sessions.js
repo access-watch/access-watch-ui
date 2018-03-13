@@ -1,5 +1,5 @@
 import { poll, api } from './api';
-import { sToMs, msToS } from '../utilities/time';
+import { sToMs, msToS, findPossibleStep } from '../utilities/time';
 import {
   convertObjKeyValues,
   pickKeys,
@@ -7,6 +7,7 @@ import {
 } from '../utilities/object';
 import { getAvgSpeedAndCount, extractTimerange } from './utils';
 import { hasElasticSearch, getExpiration } from '../utilities/config';
+import { serverDataStartTime$ } from './activity_api';
 
 const DEFAULT_POLL_INTERVAL = 5000;
 
@@ -46,13 +47,17 @@ export const getSessionsObs = (
   pollInterval = DEFAULT_POLL_INTERVAL
 ) => {
   const suffix = (type && `/${type}`) || '';
+  const timeQuery = getTimeQuery(rest);
   return poll(
     () =>
       api.get(`/sessions${suffix}`, {
         sort,
         filter,
         limit,
-        ...getTimeQuery(rest),
+        ...timeQuery,
+        step: findPossibleStep(
+          (Math.floor(new Date().getTime() / 1000) - timeQuery.start) * 1000
+        ),
       }),
     pollInterval
   ).map(arr => arr.map(transformSession));

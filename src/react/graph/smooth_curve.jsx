@@ -86,8 +86,8 @@ const getMaxVal = dataDict => {
   );
 };
 
-const logMeanSmoother = (dataSerie, mean) =>
-  dataSerie.map(v => (v === 0 ? 0 : Math.log((mean + v) / mean)));
+const createLogMeanSmoother = mean => v =>
+  v === 0 ? 0 : Math.log((mean + v) / mean);
 
 const cSfx = (classn, suffixes) =>
   [classn, ...suffixes.map(s => `${classn}--${s}`)].join(' ');
@@ -119,6 +119,7 @@ export default class SmoothCurve extends Component {
     withTooltip: PropTypes.bool,
     withHandlers: PropTypes.bool,
     loading: PropTypes.bool,
+    max: PropTypes.number,
   };
 
   static defaultProps = {
@@ -128,13 +129,11 @@ export default class SmoothCurve extends Component {
     withTooltip: false,
     withHandlers: true,
     loading: false,
-  };
-
-  static defaultProps = {
     onHover: _ => {},
     onCurveClicked: _ => {},
     classSuffix: '',
     onRangeChanged: _ => {},
+    max: null,
   };
 
   constructor(props, defaultProps) {
@@ -288,7 +287,7 @@ export default class SmoothCurve extends Component {
     return Math.floor(this.convertToValX(xIndex, this.state.limitX, dLength));
   };
 
-  eventuallyUpdatePath = ({ data }, { limitX }) => {
+  eventuallyUpdatePath = ({ data, max }, { limitX }) => {
     if (!this.state.limitX || !this.limitY) {
       return;
     }
@@ -333,13 +332,12 @@ export default class SmoothCurve extends Component {
         1
       );
 
+      const logMeanSmoother = createLogMeanSmoother(aggregatedMean);
+
       const smoothedData = newDataSeriesName
         .map(dataSerieName => ({
           dataSerie: data[dataSerieName],
-          newYValues: logMeanSmoother(
-            data[dataSerieName].map(i => i[1]),
-            aggregatedMean
-          ),
+          newYValues: data[dataSerieName].map(i => i[1]).map(logMeanSmoother),
           dataSerieName,
         }))
         .reduce(
@@ -350,7 +348,8 @@ export default class SmoothCurve extends Component {
           {}
         );
 
-      this.maxVal = getMaxVal(smoothedData);
+      this.maxVal = logMeanSmoother(max) || getMaxVal(smoothedData);
+      console.log(this.maxVal);
       const prepareData = dataDict => {
         const dataSeries = Object.keys(dataDict);
         return dataSeries.reverse().reduce(
@@ -397,7 +396,8 @@ export default class SmoothCurve extends Component {
     );
   };
 
-  convertToValY = y => this.limitY - y * this.limitY / this.maxVal * 0.9;
+  convertToValY = y =>
+    Math.max(0, this.limitY - y * this.limitY / this.maxVal * 0.9);
 
   convertToValX = (x, limitX, dLength) => x * limitX / (dLength - 1);
 

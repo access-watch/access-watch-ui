@@ -13,6 +13,7 @@ import LoadingIcon from '../utilities/loading_icon';
 import Table from '../table/table';
 import { routePropType } from '../prop_types';
 import { TableResolversPropTypes } from '../table/prop_types';
+import SessionsActivity from './sessions_activity';
 
 import '../../../scss/sessions/sessions.scss';
 
@@ -102,6 +103,7 @@ class Sessions extends React.Component {
       emptyMessage,
       route,
       rowClassResolver,
+      renderActivitySummary,
     } = this.props;
     const { visType, sort } = route;
     const onSessionClick = this.handleSessionClick;
@@ -163,6 +165,15 @@ class Sessions extends React.Component {
               </p>
             </div>
           ))}
+        {visType === 'activity' && (
+          <SessionsActivity
+            sessions={sessions}
+            onSessionClick={onSessionClick}
+            iconResolver={treemapResolvers.icon}
+            titleResolver={treemapResolvers.title}
+            subtitleResolver={treemapResolvers.type}
+          />
+        )}
       </div>
     );
   }

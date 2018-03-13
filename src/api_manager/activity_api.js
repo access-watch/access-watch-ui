@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { extractTimerange } from './utils';
 import { pickKeys } from '../utilities/object';
 import { getMetricsObs, mergeTimeSerieMetrics } from './metrics_agent_api';
+import { possibleSteps, findPossibleStep } from '../utilities/time';
 
 import { routeChange$, metricsRoute$ } from '../router';
 
@@ -11,39 +12,9 @@ import { getExpiration } from '../utilities/config';
 
 const METRICS_RETENTION = getExpiration('metrics');
 
-// The possible amount of time by which activity data will be grouped
-const possibleSteps = [
-  1,
-  2,
-  5,
-  10,
-  30,
-  60,
-  2 * 60,
-  5 * 60,
-  10 * 60,
-  30 * 60,
-  1 * 3600,
-  2 * 3600,
-  5 * 3600,
-  10 * 3600,
-  1 * 24 * 3600,
-];
-
-const findPossibleStep = (hours, ticks) => {
-  const tmpStep = Math.round(hours * 3600 / ticks);
-  return possibleSteps.find((p, i, pDur) => {
-    if (i === pDur.length - 1) {
-      return true;
-    }
-    const nextDiff = tmpStep - pDur[i + 1];
-    return Math.abs(tmpStep - p) < Math.abs(nextDiff) && nextDiff < 0;
-  });
-};
-
 let serverDataStartTimeObserver;
 
-const serverDataStartTime$ = Observable.create(obs => {
+export const serverDataStartTime$ = Observable.create(obs => {
   serverDataStartTimeObserver = obs;
 }).share();
 
@@ -61,7 +32,7 @@ const activityDetailsPollStart$ = Observable.merge(metricsRoute$)
   .map(({ end, start, ticks }) => ({
     end,
     start,
-    step: findPossibleStep((end - start) / 3600000, ticks),
+    step: findPossibleStep(end - start, ticks),
   }))
   .share();
 
@@ -77,7 +48,7 @@ const activityPollStart$ = Observable.merge(metricsRoute$, routeWithTimerange$)
     }
     return {
       start,
-      step: findPossibleStep((new Date().getTime() - start) / 3600000, ticks),
+      step: findPossibleStep(new Date().getTime() - start, ticks),
     };
   })
   .share();
@@ -174,7 +145,7 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
         serverDataStartTimeObserver.next(firstActivityTime);
         startSlidingInterval({
           step: findPossibleStep(
-            (new Date().getTime() - firstActivityTime) / 3600000,
+            new Date().getTime() - firstActivityTime,
             ticks
           ),
           start: firstActivityTime,

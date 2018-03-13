@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: $brand-purple;
   //overflow: hidden;
   &__items {
     position: relative;
