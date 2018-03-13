@@ -75,7 +75,7 @@ export const createSessionDetailsObs = ({
     .switchMap(sessionOrig =>
       Observable.merge(
         sessionDetails$,
-        getSessionDetailsObs({ type, id: p[routeId] })
+        getSessionDetailsObs({ ...p, type, id: p[routeId] })
       )
         .take(1)
         .startWith(sessionOrig)
@@ -183,6 +183,7 @@ export const createSessions$ = ({
     timerangeFrom,
     timerangeTo,
     filter,
+    timeSlider,
     ...rest
   }) =>
     getSessionsObs({
@@ -192,6 +193,7 @@ export const createSessions$ = ({
       limit,
       timerangeFrom,
       timerangeTo,
+      timeSlider,
       ...createFilter(rest),
       filter,
     }).switchMap(s =>

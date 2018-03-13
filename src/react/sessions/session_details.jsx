@@ -14,6 +14,8 @@ import { logPropType, routePropType } from '../prop_types';
 import { getLogMapping } from '../../model/session_details';
 import { requestEarlierLogs } from '../../utilities/session';
 
+import { timerangeDisplay } from '../../utilities/timerange';
+
 import '../../../scss/sessions/session_details.scss';
 
 const handleGetEarlierLogs = session => {
@@ -109,7 +111,7 @@ const SessionDetails = ({
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"
-          label="Requests Today"
+          label={`Requests last ${timerangeDisplay(route, 'session')}`}
         >
           {formatNumber(count)}
         </AbstractSessionDetailsRowBlock>,

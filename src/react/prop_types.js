@@ -92,7 +92,7 @@ export const logsPropType = PropTypes.shape({
 export const sessionPropTypeValues = {
   end: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  start: PropTypes.number.isRequired,
+  start: PropTypes.number,
   type: PropTypes.string.isRequired,
   updated: PropTypes.number.isRequired,
   ...speedPropTypeValues,

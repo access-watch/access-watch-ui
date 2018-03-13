@@ -2,7 +2,7 @@ import { updateRouteParameter } from './route_utils';
 
 import { dispatch, V_SET_ROUTE } from '../event_hub';
 
-import config from '../app_config';
+import { getExpiration } from '../utilities/config';
 
 const timerangesDividers = [
   {
@@ -67,32 +67,30 @@ const secondsToHumanDisplay = s => {
   return dividersToShortDisplay(splitted);
 };
 
+const getTimeSliderValue = (timeSlider, type) =>
+  timeSlider === 'auto' ? getExpiration(type) : timeSlider * 60;
+
 export const timerangeDisplay = (
-  { timerangeFrom: from, timerangeTo: to },
-  excludeDividers = []
+  { timerangeFrom: from, timerangeTo: to, timeSlider = 'auto' },
+  type
 ) => {
-  const seconds = Math.round((to - from) / 1000);
-  const timerangeDivider = getTimeDivider(
-    seconds,
-    sortedDividers.filter(({ short }) => excludeDividers.indexOf(short) === -1)
-  );
+  const seconds =
+    to && from
+      ? Math.round((to - from) / 1000)
+      : getTimeSliderValue(timeSlider, type);
+  const timerangeDivider = getTimeDivider(seconds, sortedDividers);
   return `${Math.round(seconds / timerangeDivider.divider)}${
     timerangeDivider.short
   }`;
 };
-
-const getDefaultExpiration = type => config[type].expiration;
 
 export const timeDisplay = (
   { timerangeFrom, timerangeTo, timeSlider = 'auto' } = {},
   type
 ) =>
   (timerangeFrom &&
-    timerangeDisplay({ timerangeFrom, timerangeTo }) + ' interval') ||
-  'last ' +
-    secondsToHumanDisplay(
-      timeSlider === 'auto' ? getDefaultExpiration(type) : timeSlider * 60
-    );
+    timerangeDisplay({ timerangeFrom, timerangeTo }, type) + ' interval') ||
+  'last ' + secondsToHumanDisplay(getTimeSliderValue(timeSlider, type));
 
 export const handleTimeSliderChange = (route, value) => {
   dispatch({

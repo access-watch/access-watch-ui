@@ -7,9 +7,9 @@ import { routeChange$, metricsRoute$ } from '../router';
 
 import { dataEvents, D_ACTIVITY } from '../event_hub';
 
-import config from '../app_config';
+import { getExpiration } from '../utilities/config';
 
-const METRICS_RETENTION = config.metrics.expiration;
+const METRICS_RETENTION = getExpiration('metrics');
 
 // The possible amount of time by which activity data will be grouped
 const possibleSteps = [
