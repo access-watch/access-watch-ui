@@ -1,6 +1,6 @@
 {
   "name": "access-watch-ui",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "The Access Watch User Interface",
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "access-watch-sdk": "^0.1.7",
-    "access-watch-ui-components": "^2.1.0",
+    "access-watch-ui-components": "^2.2.0",
     "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.24.1",
