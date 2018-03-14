@@ -12,13 +12,13 @@ const createSpeedResolvers = ({
 }) => [
   {
     id,
-    label,
+    label: `${label} (24h)`,
     resolver: obj => formatNumber(obj[id].count),
     sortable,
   },
   {
     id: `${id}Activity`,
-    label: 'Activity',
+    label: 'Activity (15m)',
     resolver: obj => (
       <ActivityCell
         id={`${obj.id}${capitalize(id)}`}
