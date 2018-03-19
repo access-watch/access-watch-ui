@@ -332,21 +332,25 @@ export default class SmoothCurve extends Component {
       }
     }
     if (!existingPreparedData || shouldUpdate || limitX !== this.state.limitX) {
-      const aggregatedValues = data[
-        newDataSeriesName[newDataSeriesName.length - 1]
-      ]
-        .map((_, i) =>
-          newDataSeriesName.reduce((acc, dsn) => acc + data[dsn][i][1], 0)
-        )
-        .filter(a => a > 0)
-        .sort();
+      let logMeanSmoother;
+      if (max) {
+        logMeanSmoother = createLogMeanSmoother(max);
+      } else {
+        const aggregatedValues = data[
+          newDataSeriesName[newDataSeriesName.length - 1]
+        ]
+          .map((_, i) =>
+            newDataSeriesName.reduce((acc, dsn) => acc + data[dsn][i][1], 0)
+          )
+          .filter(a => a > 0)
+          .sort();
+        const aggregatedMean = Math.max(
+          aggregatedValues[Math.round(aggregatedValues.length / 2) - 1],
+          1
+        );
 
-      const aggregatedMean = Math.max(
-        aggregatedValues[Math.round(aggregatedValues.length / 2)],
-        1
-      );
-
-      const logMeanSmoother = createLogMeanSmoother(aggregatedMean);
+        logMeanSmoother = createLogMeanSmoother(aggregatedMean);
+      }
 
       const smoothedData = newDataSeriesName
         .map(dataSerieName => ({
