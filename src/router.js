@@ -385,3 +385,10 @@ export const addressDetailsRoute$ = withRoute(ROUTE_ADDRESSES_DETAILS);
 export const rulesRoute$ = withRoute(ROUTE_RULES);
 
 export const rulesDetailsRoute$ = withRoute(ROUTE_RULES_DETAILS);
+
+export const sessionsRoute$ = Observable.merge(
+  addressesRoute$,
+  robotsRoute$,
+  addressDetailsRoute$,
+  robotDetailsRoute$
+);

@@ -4,7 +4,7 @@ import { pickKeys } from '../utilities/object';
 import { getMetricsObs, mergeTimeSerieMetrics } from './metrics_agent_api';
 import { possibleSteps, findPossibleStep } from '../utilities/time';
 
-import { routeChange$, metricsRoute$ } from '../router';
+import { routeChange$, metricsRoute$, sessionsRoute$ } from '../router';
 
 import { dataEvents, D_ACTIVITY } from '../event_hub';
 
@@ -36,8 +36,20 @@ const activityDetailsPollStart$ = Observable.merge(metricsRoute$)
   }))
   .share();
 
-const activityPollStart$ = Observable.merge(metricsRoute$, routeWithTimerange$)
-  .combineLatest(serverDataStartTime$.startWith(undefined))
+const activityPollRoutes$ = Observable.merge(
+  metricsRoute$,
+  routeWithTimerange$,
+  sessionsRoute$
+);
+
+const initialStartTime =
+  (Math.floor(new Date().getTime() / 1000) - getExpiration('metrics')) * 1000;
+
+// also polling activity anyway for sessionsRoute as they need the serverDataStartTime
+const activityPollStart$ = activityPollRoutes$
+  .combineLatest(
+    serverDataStartTime$.startWith(initialStartTime).distinctUntilChanged()
+  )
   .map(([{ timeSlider, ticks }, serverDataStartTime]) => {
     let start = serverDataStartTime;
     // If no auto, we want the full timespan
@@ -130,7 +142,7 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
   routeChange$,
   serverDataStartTime$,
 ])
-  .withLatestFrom(Observable.merge(metricsRoute$, routeWithTimerange$))
+  .withLatestFrom(activityPollRoutes$)
   .filter(([{ activity, query }, { timeSlider, ticks, timerangeFrom }]) => {
     // We don't modify at all the query with a timerange
     if (timerangeFrom) {
@@ -153,6 +165,9 @@ export const activityRes$ = activityResFactory(activityPollStart$, [
           obs: serverDataStartTimeObserver,
         });
         return false;
+      }
+      if (timeSlider === 'auto') {
+        serverDataStartTimeObserver.next(firstActivityTime);
       }
       if (timeSlider !== 'auto') {
         if (startSlidingIntervalTimeout) {
