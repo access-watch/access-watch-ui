@@ -119,7 +119,7 @@ export const robotSessionsPropType = createSessionsPropType({
 
 export const addressSessionsPropType = createSessionsPropType({
   address: addressPropType,
-  user_agents: PropTypes.objectOf(userAgentPropType),
+  user_agents: PropTypes.arrayOf(userAgentPropType),
 });
 
 export const routePropType = PropTypes.shape({
