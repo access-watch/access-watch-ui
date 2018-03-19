@@ -46,13 +46,14 @@ const SessionsActivity = ({
           </div>
           <SmoothCurve
             max={sessionMax}
-            data={{ [reputation.status]: activity.reverse() }}
+            data={{ [reputation.status]: activity.slice().reverse() }}
             height={100}
             withTooltip
             renderTooltip={({ xValue, yValues }) => (
               <ActivityTooltip xValue={xValue} yValues={yValues} />
             )}
             selectable={false}
+            animated={false}
           />
         </div>
       ))}

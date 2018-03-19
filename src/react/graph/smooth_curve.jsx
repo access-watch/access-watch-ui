@@ -124,6 +124,7 @@ export default class SmoothCurve extends Component {
     // eslint-disable-next-line react/no-unused-prop-types
     max: PropTypes.number,
     selectable: PropTypes.bool,
+    animated: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -139,6 +140,7 @@ export default class SmoothCurve extends Component {
     onRangeChanged: _ => {},
     max: null,
     selectable: true,
+    animated: true,
   };
 
   constructor(props, defaultProps) {
@@ -299,7 +301,7 @@ export default class SmoothCurve extends Component {
     return Math.floor(this.convertToValX(xIndex, this.state.limitX, dLength));
   };
 
-  eventuallyUpdatePath = ({ data, max }, { limitX }) => {
+  eventuallyUpdatePath = ({ data, max, animated }, { limitX }) => {
     if (!this.state.limitX || !this.limitY) {
       return;
     }
@@ -385,7 +387,8 @@ export default class SmoothCurve extends Component {
       const newPreparedData = prepareData(smoothedData);
       if (
         this.preparedData &&
-        this.preparedData[Object.keys(this.preparedData)[0]].length
+        this.preparedData[Object.keys(this.preparedData)[0]].length &&
+        animated
       ) {
         this.startTransition({ ...this.preparedData }, newPreparedData);
       } else {
@@ -576,6 +579,7 @@ export default class SmoothCurve extends Component {
       withTooltip,
       loading,
       renderTooltip,
+      animated,
     } = this.props;
 
     return (
@@ -600,10 +604,10 @@ export default class SmoothCurve extends Component {
             Object.keys(path).map(statusKey => (
               <g
                 key={statusKey}
-                className={cSfx('smooth-curve__curve', [
-                  classSuffix,
-                  statusKey,
-                ])}
+                className={cx(
+                  cSfx('smooth-curve__curve', [classSuffix, statusKey]),
+                  { 'smooth-curve__curve--animated': animated }
+                )}
               >
                 {path[statusKey]}
               </g>
