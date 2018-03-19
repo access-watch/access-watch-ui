@@ -51,6 +51,7 @@ const SessionsActivity = ({
             renderTooltip={({ xValue, yValues }) => (
               <ActivityTooltip xValue={xValue} yValues={yValues} />
             )}
+            selectable={false}
           />
         </div>
       ))}

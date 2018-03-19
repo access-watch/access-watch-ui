@@ -119,7 +119,11 @@ export default class SmoothCurve extends Component {
     withTooltip: PropTypes.bool,
     withHandlers: PropTypes.bool,
     loading: PropTypes.bool,
+    // Disabled here as we are using this props in an inner function
+    // so eslint does not understand it
+    // eslint-disable-next-line react/no-unused-prop-types
     max: PropTypes.number,
+    selectable: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -134,6 +138,7 @@ export default class SmoothCurve extends Component {
     classSuffix: '',
     onRangeChanged: _ => {},
     max: null,
+    selectable: true,
   };
 
   constructor(props, defaultProps) {
@@ -146,12 +151,16 @@ export default class SmoothCurve extends Component {
   }
 
   componentDidMount() {
-    this.state.limitX = this.mainEl.parentElement.offsetWidth;
+    const { selectable } = this.props;
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ limitX: this.mainEl.parentElement.offsetWidth });
     if (!this.limitY) {
       this.limitY = this.mainEl.parentElement.offsetHeight;
     }
     window.addEventListener('resize', this.handleResize);
-    this.subscribeToRangeSelector();
+    if (selectable) {
+      this.subscribeToRangeSelector();
+    }
   }
 
   componentWillReceiveProps({ data, selectedRange }) {
@@ -184,8 +193,11 @@ export default class SmoothCurve extends Component {
   }
 
   componentWillUnmount() {
+    const { selectable } = this.props;
     window.removeEventListener('resize', this.handleResize);
-    this.rangeSelector.unsubscribe();
+    if (selectable) {
+      this.rangeSelector.unsubscribe();
+    }
   }
 
   onHandlerChanged = ({ id, pos }) => {
@@ -349,7 +361,6 @@ export default class SmoothCurve extends Component {
         );
 
       this.maxVal = logMeanSmoother(max) || getMaxVal(smoothedData);
-      console.log(this.maxVal);
       const prepareData = dataDict => {
         const dataSeries = Object.keys(dataDict);
         return dataSeries.reverse().reduce(
