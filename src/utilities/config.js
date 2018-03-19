@@ -12,4 +12,3 @@ export const getExpiration = type => {
 };
 
 export const supportsSessionsActivity = hasElasticSearch;
-
