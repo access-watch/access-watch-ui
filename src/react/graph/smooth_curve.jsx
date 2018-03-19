@@ -432,7 +432,7 @@ export default class SmoothCurve extends Component {
 
   handleMouseMove({ clientX }) {
     const { data, onHover, withTooltip } = this.props;
-    if (!withTooltip) {
+    if (!withTooltip || !this.preparedData) {
       return;
     }
     const { left } = this.mainEl.getBoundingClientRect();
