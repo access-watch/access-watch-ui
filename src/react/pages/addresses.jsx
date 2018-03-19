@@ -13,7 +13,6 @@ import {
   getTimeDisplay,
 } from '../sessions/timerange_utils';
 
-import AddressLabel from '../address/address_label';
 import SessionTimeSelector from '../sessions/session_time_selector';
 import Sessions from '../sessions/sessions';
 import SessionsFilter from '../sessions/sessions_filter';

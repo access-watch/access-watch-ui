@@ -103,7 +103,6 @@ class Sessions extends React.Component {
       emptyMessage,
       route,
       rowClassResolver,
-      renderActivitySummary,
     } = this.props;
     const { visType, sort } = route;
     const onSessionClick = this.handleSessionClick;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SmoothCurve from '../graph/smooth_curve';
 import ActivityTooltip from '../graph/activity_tooltip';
@@ -22,7 +23,7 @@ const SessionsActivity = ({
   );
   return (
     <div className="sessions-activity">
-      {sessions.map(({ activity, id, reputation, ...session }, i) => (
+      {sessions.map(({ activity, id, reputation, ...session }) => (
         <div
           className="sessions-activity__session"
           key={id}
@@ -57,6 +58,14 @@ const SessionsActivity = ({
       ))}
     </div>
   );
+};
+
+SessionsActivity.propTypes = {
+  sessions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onSessionClick: PropTypes.func.isRequired,
+  iconResolver: PropTypes.func.isRequired,
+  titleResolver: PropTypes.func.isRequired,
+  subtitleResolver: PropTypes.func.isRequired,
 };
 
 export default SessionsActivity;
