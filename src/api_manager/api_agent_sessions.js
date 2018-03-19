@@ -66,11 +66,12 @@ export const getSessionsObs = (
 };
 
 export const getSessionDetails = ({ type, id, ...rest }) =>
-  getTimeQuery$(rest).switchMap(timeQuery =>
-    api.get(`/sessions/${type}/${id}`, timeQuery).then(transformSession)
-  );
+  api.get(`/sessions/${type}/${id}`, rest).then(transformSession);
 
 export const getSessionDetailsObs = (
   args,
   pollInterval = DEFAULT_POLL_INTERVAL
-) => poll(() => getSessionDetails(args), pollInterval);
+) =>
+  getTimeQuery$(args).switchMap(timeQuery =>
+    poll(() => getSessionDetails({ ...args, ...timeQuery }), pollInterval)
+  );
