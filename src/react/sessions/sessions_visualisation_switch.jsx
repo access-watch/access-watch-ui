@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import { capitalize } from '../../utilities/string';
+import { supportsSessionsActivity } from '../../utilities/config';
 
 import SVGIcon from '../utilities/svg_icon';
 import { routePropType } from '../prop_types';
@@ -20,6 +21,12 @@ const visualisationTypes = {
   treemap: TREEMAP_SVG,
   table: TABLE_SVG,
   activity: ACTIVITY_SVG,
+};
+
+const isSupportedDict = {
+  treemap: () => true,
+  table: () => true,
+  activity: supportsSessionsActivity,
 };
 
 class SessionsVisualisationSwitch extends React.Component {
@@ -48,8 +55,16 @@ class SessionsVisualisationSwitch extends React.Component {
             alt={`${capitalize(vis)} icon`}
             onClick={_ => this.switchVisualisation(vis)}
             onKeyPress={_ => this.switchVisualisation(vis)}
+            title={
+              isSupportedDict[vis]()
+                ? capitalize(vis)
+                : 'Not supported by your configuration'
+            }
             className={cx('sessions-visualisation-switch__icon', {
               'sessions-visualisation-switch__icon--active': vis === visType,
+              'sessions-visualisation-switch__icon--disabled': !isSupportedDict[
+                vis
+              ](),
             })}
           />
         ))}
