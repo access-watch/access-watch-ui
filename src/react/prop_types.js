@@ -63,7 +63,7 @@ export const robotPropType = PropTypes.shape({
   label: PropTypes.string,
   name: PropTypes.string,
   reputation: reputationPropType,
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
   type: PropTypes.string,
 });
 
