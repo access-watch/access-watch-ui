@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { V_SET_ROUTE, V_SESSIONS_LOAD_MORE, dispatch } from '../../event_hub';
 import { updateRouteParameter } from '../../utilities/route_utils';
 import { pickKeys } from '../../utilities/object';
+import { supportsSessionsActivity } from '../../utilities/config';
 
 import { sessionsToTreemap } from './treemap_tools';
 import { treemapResolvers as commonTreemapResolvers } from './resolvers';
@@ -13,6 +14,7 @@ import LoadingIcon from '../utilities/loading_icon';
 import Table from '../table/table';
 import { routePropType } from '../prop_types';
 import { TableResolversPropTypes } from '../table/prop_types';
+import SessionsActivity from './sessions_activity';
 
 import '../../../scss/sessions/sessions.scss';
 
@@ -161,6 +163,21 @@ class Sessions extends React.Component {
               >
                 {emptyMessage}
               </p>
+            </div>
+          ))}
+        {visType === 'activity' &&
+          (supportsSessionsActivity() ? (
+            <SessionsActivity
+              sessions={sessions}
+              onSessionClick={onSessionClick}
+              iconResolver={treemapResolvers.icon}
+              titleResolver={treemapResolvers.title}
+              subtitleResolver={treemapResolvers.type}
+            />
+          ) : (
+            <div>
+              Your current configuration does not support this feature. <br />
+              You can enable it by using elasticsearch.
             </div>
           ))}
       </div>

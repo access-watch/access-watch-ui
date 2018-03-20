@@ -9,14 +9,21 @@
     margin-right: 10px;
     fill: white;
     opacity: 0.6;
+    &:hover {
+      opacity: 0.8;
+    }
     &--active {
       opacity: 1;
       &:hover {
         opacity: 1;
       }
     }
-    &:hover {
-      opacity: 0.8;
+    &--disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      &:hover {
+        opacity: 0.3;
+      }
     }
     transition: opacity 0.2s;
   }

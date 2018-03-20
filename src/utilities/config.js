@@ -10,3 +10,5 @@ export const getExpiration = type => {
   }
   return config[type].expiration;
 };
+
+export const supportsSessionsActivity = hasElasticSearch;

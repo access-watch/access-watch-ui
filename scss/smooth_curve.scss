@@ -24,6 +24,7 @@ $tooltip-content-padding: 6px;
   pointer-events: none;
   display: flex;
   align-items: center;
+  color: white;
   &:before {
     content: '';
     width: 3px;
@@ -93,9 +94,12 @@ $tooltip-content-padding: 6px;
 }
 
 g.smooth-curve__curve {
+  pointer-events: none;
+}
+
+g.smooth-curve__curve--animated {
   transform-origin: bottom;
   opacity: 0;
-  pointer-events: none;
   stroke-width: 2;
   //Delay is added here since animation seems to be computationally expensive and the transform-origin
   //may take some time to strike in somehow
