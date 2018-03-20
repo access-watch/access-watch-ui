@@ -79,10 +79,11 @@ class Sessions extends React.Component {
 
   handleSessionClick = id => {
     const { route: { route } } = this.props;
+    const [base, search] = route.split('?');
     // Replacing the ':' (which can appear in IPv6 address) as somehow our router cannot process it
     dispatch({
       type: V_SET_ROUTE,
-      route: `${route.split('?')[0]}/${id.replace(/:/g, '_')}`,
+      route: `${base}/${id.replace(/:/g, '_')}${search ? `?${search}` : ''}`,
     });
   };
 

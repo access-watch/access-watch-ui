@@ -155,7 +155,9 @@ export const createSessions$ = ({
     sessionDetailsObserver = obs;
   });
 
-  const parameters$ = createParametersObs({ route$, lastSessions });
+  const allRoute$ = Observable.merge(route$, routeDetails$);
+
+  const parameters$ = createParametersObs({ route$: allRoute$, lastSessions });
 
   const rulesReducer$ = Observable.merge(
     Observable.fromEvent(dataEvents, D_ADD_RULE_SUCCESS).map(
@@ -227,8 +229,6 @@ export const createSessions$ = ({
     sessionDetails$,
     type,
   });
-
-  const allRoute$ = Observable.merge(route$, routeDetails$);
 
   return Observable.combineLatest(
     globalSessions$,
