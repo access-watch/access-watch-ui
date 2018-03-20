@@ -76,7 +76,7 @@ const SessionDetails = ({
   }
 
   let moreButton;
-  if (robot && robot.id) {
+  if (robot && robot.url) {
     moreButton = {
       text: 'More info',
       url: robot.url,

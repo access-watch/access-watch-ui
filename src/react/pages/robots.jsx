@@ -44,7 +44,7 @@ const treemapResolvers = {
   },
   country: ({ country_code: countryCode }) =>
     countryCode && countries[countryCode],
-  type: session => session.robot.label,
+  type: session => session.robot.label || '',
   reputation: ({ reputation }) => reputation,
 };
 
