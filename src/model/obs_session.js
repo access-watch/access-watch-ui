@@ -84,7 +84,7 @@ export const createSessionDetailsObs = ({
         .switchMap(session =>
           Observable.merge(
             Observable.of(session),
-            getSessionDetailsObs({ type, id: p[routeId] })
+            getSessionDetailsObs({ ...p, type, id: p[routeId] })
           )
             .switchMap(s =>
               Observable.of(s)

@@ -31,7 +31,10 @@ const rulesDetails$ = rulesDetailsRoute$.switchMap(({ id }) =>
         sessionDetails$: Observable.never(),
         type,
         routeId: 'id',
-      })({ id: getIn(condition, logMapping.split('.')) }).map(session => ({
+      })({
+        id: getIn(condition, logMapping.split('.')),
+        timeSlider: 24 * 60,
+      }).map(session => ({
         type,
         session,
       }));

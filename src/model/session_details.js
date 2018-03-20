@@ -26,7 +26,7 @@ export default ({ session: id }) =>
           sessionDetails$: Observable.of(s),
           type,
           logMapping: robotLogMapping,
-        })({ session: id });
+        })({ session: id, timeSlider: 24 * 3600 });
       }
       return createLogs({
         filter: filterToURI({ id: identityLogMapping, values: [id] }),
