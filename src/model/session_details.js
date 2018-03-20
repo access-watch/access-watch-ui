@@ -4,6 +4,7 @@ import createLogs from './create_logs';
 import { getSessionDetails } from '../api_manager/api_agent_sessions';
 import { type, logMapping as robotLogMapping } from './obs_robots';
 import { filterToURI } from '../utilities/filter';
+import { getExpiration } from '../utilities/config';
 
 const identityLogMapping = 'identity.id';
 
@@ -26,7 +27,7 @@ export default ({ session: id }) =>
           sessionDetails$: Observable.of(s),
           type,
           logMapping: robotLogMapping,
-        })({ session: id, timeSlider: 24 * 3600 });
+        })({ session: id, timeSlider: getExpiration('session') });
       }
       return createLogs({
         filter: filterToURI({ id: identityLogMapping, values: [id] }),

@@ -6,6 +6,7 @@ import { logMapping as addressLogMapping } from './obs_addresses';
 import { logMapping as robotLogMapping } from './obs_robots';
 import { createSessionDetailsObs } from './obs_session';
 import { getIn } from '../utilities/object';
+import { getExpiration } from '../utilities/config';
 
 const allRulesRoute$ = rulesRoute$.merge(rulesDetailsRoute$);
 
@@ -33,7 +34,7 @@ const rulesDetails$ = rulesDetailsRoute$.switchMap(({ id }) =>
         routeId: 'id',
       })({
         id: getIn(condition, logMapping.split('.')),
-        timeSlider: 24 * 60,
+        timeSlider: getExpiration('session'),
       }).map(session => ({
         type,
         session,
