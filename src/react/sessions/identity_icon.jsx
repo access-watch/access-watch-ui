@@ -8,7 +8,6 @@ import SVGIcon from '../utilities/svg_icon';
 
 const isBadReputation = ({ status }) =>
   status === 'suspicious' || status === 'bad';
-const hasRobotIcon = robot => robot && robot.icon;
 const hasUaName = ua => ua && ua.agent && ua.agent.name;
 
 export const getIdentityLabel = ({ robot, ua }) =>
@@ -16,7 +15,7 @@ export const getIdentityLabel = ({ robot, ua }) =>
 
 const IdentityIcon = ({ robot, reputation, user_agent: ua, className }) => {
   let icon;
-  if (!hasRobotIcon(robot) && hasUaName(ua) && !isBadReputation(reputation)) {
+  if (!robot && hasUaName(ua) && !isBadReputation(reputation)) {
     icon = userAgentIcons[ua.agent.name];
   }
   // All uas with bad reputation should have suspicious icons
