@@ -149,7 +149,10 @@ export default class SmoothCurve extends Component {
     this.domCurves = {};
     this.CPS = null;
     this.limitY = props.height;
-    this.state = { activeCurve: null, rangeSelectionInProgress: false };
+    this.state = {
+      activeCurve: null,
+      rangeSelectionInProgress: false,
+    };
   }
 
   componentDidMount() {
@@ -266,14 +269,20 @@ export default class SmoothCurve extends Component {
       x: this.convertSvgToDate(Math.min(...Object.values(range))),
       x1: this.convertSvgToDate(Math.max(...Object.values(range))),
     };
-    this.setState(
-      {
-        rangeSelectionInProgress: false,
-      },
-      () => {
-        this.props.onRangeChanged(rangeChanged);
-        this.subscribeToRangeSelector();
-      }
+    // TODO FIXME : For now only solution found as the onMouseUp from the path
+    // is always triggered to late compared to those events
+    window.setTimeout(
+      () =>
+        this.setState(
+          {
+            rangeSelectionInProgress: false,
+          },
+          () => {
+            this.props.onRangeChanged(rangeChanged);
+            this.subscribeToRangeSelector();
+          }
+        ),
+      0
     );
   };
 
@@ -462,6 +471,14 @@ export default class SmoothCurve extends Component {
     }
   }
 
+  handleCurveClicked = () => {
+    const { rangeSelectionInProgress, activeCurve } = this.state;
+    const { onCurveClicked } = this.props;
+    if (!rangeSelectionInProgress) {
+      onCurveClicked(activeCurve);
+    }
+  };
+
   determineTooltipPos(x) {
     let position = 'center';
     const { left, width } = this.mainEl.getBoundingClientRect();
@@ -559,7 +576,7 @@ export default class SmoothCurve extends Component {
                     'M '
                   )
                   .concat(` V ${this.limitY} H 0 Z`)}
-                onClick={_ => this.props.onCurveClicked(this.state.activeCurve)}
+                onMouseUp={this.handleCurveClicked}
               />
             ),
           }),

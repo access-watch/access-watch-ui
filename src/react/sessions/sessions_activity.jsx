@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import SmoothCurve from '../graph/smooth_curve';
 import ActivityTooltip from '../graph/activity_tooltip';
+import { routePropType } from '../prop_types';
+
+import { handleTimeRangeChanged } from '../../utilities/activity';
 
 import '../../../scss/sessions/sessions_activity.scss';
 
@@ -12,6 +15,7 @@ const SessionsActivity = ({
   iconResolver,
   titleResolver,
   subtitleResolver,
+  route,
 }) => {
   const sessionMax = sessions.reduce(
     (max, { activity }) =>
@@ -28,10 +32,13 @@ const SessionsActivity = ({
           className="sessions-activity__session"
           key={id}
           style={{ position: 'relative' }}
-          onClick={_ => onSessionClick(id)}
           onKeyPress={_ => onSessionClick(id)}
         >
-          <div className="sessions-activity__session__summary">
+          <div
+            className="sessions-activity__session__summary"
+            onClick={_ => onSessionClick(id)}
+            onKeyPress={_ => onSessionClick(id)}
+          >
             <div className="sessions-activity__session__summary__top">
               <span className="sessions-activity__session__summary__icon">
                 {iconResolver(session)}
@@ -52,8 +59,11 @@ const SessionsActivity = ({
             renderTooltip={({ xValue, yValues }) => (
               <ActivityTooltip xValue={xValue} yValues={yValues} />
             )}
-            selectable={false}
             animated={false}
+            onRangeChanged={o =>
+              handleTimeRangeChanged({ ...o, route: route.route })
+            }
+            onCurveClicked={_ => onSessionClick(id)}
           />
         </div>
       ))}
@@ -67,6 +77,7 @@ SessionsActivity.propTypes = {
   iconResolver: PropTypes.func.isRequired,
   titleResolver: PropTypes.func.isRequired,
   subtitleResolver: PropTypes.func.isRequired,
+  route: routePropType.isRequired,
 };
 
 export default SessionsActivity;

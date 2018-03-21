@@ -174,6 +174,7 @@ class Sessions extends React.Component {
               iconResolver={treemapResolvers.icon}
               titleResolver={treemapResolvers.title}
               subtitleResolver={treemapResolvers.type}
+              route={route}
             />
           ) : (
             <div>
