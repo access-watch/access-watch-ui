@@ -63,7 +63,7 @@ const SessionsActivity = ({
             onRangeChanged={o =>
               handleTimeRangeChanged({ ...o, route: route.route })
             }
-            onCurveClicked={_ => onSessionClick(id)}
+            onClick={_ => onSessionClick(id)}
           />
         </div>
       ))}
