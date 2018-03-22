@@ -125,6 +125,7 @@
   },
   "greenkeeper": {
     "ignore": [
+      "access-watch-ui-components",
       "react-transition-group"
     ]
   }
