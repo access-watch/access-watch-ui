@@ -109,7 +109,11 @@ export default class RequestInfo extends Component {
           <dt className="request-info__header">IP Address</dt>
           {dd(
             'IP',
-            <a href={`#/addresses/${address.value}`}> {address.value} </a>
+            // Replacing the ':' (which can appear in IPv6 address) as somehow our router cannot process it
+            <a href={`#/addresses/${address.value.replace(/:/g, '_')}`}>
+              {' '}
+              {address.value}{' '}
+            </a>
           )}
           {dd('Hostname', address.hostname)}
           {dd(
