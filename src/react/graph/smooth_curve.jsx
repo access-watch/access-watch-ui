@@ -125,6 +125,7 @@ export default class SmoothCurve extends Component {
     max: PropTypes.number,
     selectable: PropTypes.bool,
     animated: PropTypes.bool,
+    onClick: PropTypes.func,
   };
 
   static defaultProps = {
@@ -141,6 +142,7 @@ export default class SmoothCurve extends Component {
     max: null,
     selectable: true,
     animated: true,
+    onClick: _ => {},
   };
 
   constructor(props, defaultProps) {
@@ -471,6 +473,14 @@ export default class SmoothCurve extends Component {
     }
   }
 
+  handleClick = () => {
+    const { rangeSelectionInProgress } = this.state;
+    const { onClick } = this.props;
+    if (!rangeSelectionInProgress) {
+      onClick();
+    }
+  };
+
   handleCurveClicked = () => {
     const { rangeSelectionInProgress, activeCurve } = this.state;
     const { onCurveClicked } = this.props;
@@ -620,6 +630,7 @@ export default class SmoothCurve extends Component {
           }}
           onMouseMove={e => this.handleMouseMove(e)}
           onMouseLeave={this.handleMouseLeave}
+          onMouseUp={this.handleClick}
         >
           {path &&
             Object.keys(path).map(statusKey => (
