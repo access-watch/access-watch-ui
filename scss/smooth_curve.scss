@@ -20,8 +20,8 @@ $tooltip-content-padding: 6px;
 
 .smooth-curve__tooltip {
   transition: opacity 0.2s ease-in;
-  position: relative;
   pointer-events: none;
+  position: relative;
   display: flex;
   align-items: center;
   color: white;
@@ -93,11 +93,8 @@ $tooltip-content-padding: 6px;
   font-family: $default-bold-font;
 }
 
-g.smooth-curve__curve {
-  pointer-events: none;
-}
-
 g.smooth-curve__curve--animated {
+  pointer-events: none;
   transform-origin: bottom;
   opacity: 0;
   stroke-width: 2;
