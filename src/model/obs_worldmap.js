@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { getMetricsSummaryObs } from '../api_manager/metrics_agent_api';
 import { metricsRoute$ } from '../../src/router';
 import { extractTimerange } from '../api_manager/utils';
-import { pickKeys } from '../utilities/object';
 import { getExpiration } from '../utilities/config';
 
 const computeFilterType = type => {
