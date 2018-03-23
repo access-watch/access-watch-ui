@@ -130,13 +130,15 @@ $btn-default-color: $dark-gray;
 @mixin activityResolver() {
   text-align: right;
   margin-right: 20px;
-  width: 90px;
+  min-width: 90px;
   &Activity {
+    min-width: 180px;
     width: 250px;
     margin-right: 20px;
     .spark-line {
       width: 150px;
       margin-right: 5px;
+      height: 100%;
     }
   }
 }

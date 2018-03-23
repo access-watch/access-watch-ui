@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Loader } from 'access-watch-ui-components';
 
 import TimeAgo from '../utilities/time_ago';
-import RuleButton from '../rules/rule_button';
+import RuleActions from '../rules/rule_actions';
 import { formatNumber } from '../../i18n';
 import { getIn } from '../../utilities/object';
 import AbstractSessionDetails from './abstract_session_details';
@@ -13,6 +13,8 @@ import IdentityIcon from './identity_icon';
 import { logPropType, routePropType } from '../prop_types';
 import { getLogMapping } from '../../model/session_details';
 import { requestEarlierLogs } from '../../utilities/session';
+
+import { timerangeDisplay } from '../../utilities/timerange';
 
 import '../../../scss/sessions/session_details.scss';
 
@@ -28,7 +30,6 @@ const SessionDetails = ({
   muteParentEsc,
   requestInfo,
   session: realSession,
-  rule,
 }) => {
   let session = { ...realSession };
   const loading = !session;
@@ -64,6 +65,7 @@ const SessionDetails = ({
     count,
     speed,
     reputation,
+    rule = {},
   } = session;
 
   let title;
@@ -74,9 +76,9 @@ const SessionDetails = ({
   }
 
   let moreButton;
-  if (robot && robot.id) {
+  if (robot && robot.url) {
     moreButton = {
-      text: 'More about this robot in Access Watch database',
+      text: 'More info',
       url: robot.url,
       status: robot.reputation.status,
     };
@@ -84,6 +86,9 @@ const SessionDetails = ({
 
   const description =
     (robot && robot.description) || (identity && identity.description);
+
+  const agentType =
+    (robot && robot.label) || (identity && identity.label) || '';
 
   return (
     <AbstractSessionDetails
@@ -94,19 +99,19 @@ const SessionDetails = ({
       moreButton={moreButton}
       description={description}
       requestInfo={requestInfo}
-      handleGetEarlierLogs={handleGetEarlierLogs(realSession)}
+      handleGetEarlierLogs={handleGetEarlierLogs(session)}
       headerRowChildren={[
         <AbstractSessionDetailsRowBlock
           key="agentType"
           modifier="agent-type"
           label="Agent Type"
-          value={identity.label}
+          value={agentType}
         >
-          {identity.label}
+          {agentType}
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"
-          label="Requests Today"
+          label={`Requests last ${timerangeDisplay(route, 'session')}`}
         >
           {formatNumber(count)}
         </AbstractSessionDetailsRowBlock>,
@@ -130,9 +135,8 @@ const SessionDetails = ({
       actionChildren={
         !loading &&
         robot && (
-          <RuleButton
-            value={robot}
-            type="robot"
+          <RuleActions
+            condition={{ type: 'robot', value: robot }}
             {...(rule.id ? { rule } : {})}
             actionPending={rule.actionPending}
           />
@@ -148,7 +152,6 @@ const SessionDetails = ({
 SessionDetails.propTypes = {
   session: PropTypes.shape({
     id: PropTypes.string,
-    actionables: PropTypes.array,
     actionPending: PropTypes.bool,
     country: PropTypes.string,
     count: PropTypes.number,
@@ -156,6 +159,10 @@ SessionDetails.propTypes = {
     robot: PropTypes.object,
     reputation: PropTypes.object,
     identity: PropTypes.object,
+    rule: PropTypes.shape({
+      id: PropTypes.string,
+      actionPending: PropTypes.bool,
+    }),
   }).isRequired,
 
   logs: PropTypes.shape({
@@ -165,15 +172,10 @@ SessionDetails.propTypes = {
   requestInfo: logPropType,
   route: routePropType.isRequired,
   muteParentEsc: PropTypes.func,
-  rule: PropTypes.shape({
-    id: PropTypes.string,
-    actionPending: PropTypes.bool,
-  }),
 };
 
 SessionDetails.defaultProps = {
   requestInfo: null,
   muteParentEsc: _ => _,
-  rule: null,
 };
 export default SessionDetails;

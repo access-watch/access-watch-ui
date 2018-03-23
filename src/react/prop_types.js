@@ -63,7 +63,7 @@ export const robotPropType = PropTypes.shape({
   label: PropTypes.string,
   name: PropTypes.string,
   reputation: reputationPropType,
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
   type: PropTypes.string,
 });
 
@@ -92,9 +92,12 @@ export const logsPropType = PropTypes.shape({
 export const sessionPropTypeValues = {
   end: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  start: PropTypes.number.isRequired,
+  start: PropTypes.number,
   type: PropTypes.string.isRequired,
   updated: PropTypes.number.isRequired,
+  identity: identityPropType,
+  reputation: reputationPropType,
+  user_agents: PropTypes.arrayOf(userAgentPropType),
   ...speedPropTypeValues,
 };
 
@@ -110,16 +113,11 @@ const createSessionsPropType = sessionTypeProps =>
   });
 
 export const robotSessionsPropType = createSessionsPropType({
-  address: addressPropType,
-  identity: identityPropType,
-  reputation: reputationPropType,
   robot: robotPropType.isRequired,
-  user_agent: userAgentPropType,
 });
 
 export const addressSessionsPropType = createSessionsPropType({
-  address: addressPropType,
-  user_agents: PropTypes.objectOf(userAgentPropType),
+  address: addressPropType.isRequired,
 });
 
 export const routePropType = PropTypes.shape({

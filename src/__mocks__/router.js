@@ -9,4 +9,5 @@ module.exports = {
   routeChange$: Observable.never(),
   addressesRoute$: Observable.never(),
   statusRoute$: Observable.never(),
+  sessionsRoute$: Observable.never(),
 };

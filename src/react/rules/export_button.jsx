@@ -10,7 +10,11 @@ const noop = _ => _;
 
 const ExportButton = ({ id, ...props }) => (
   <Button onClick={noop} className="export-button" {...props}>
-    <a href={`${config.apiBaseUrl}/rules/export/${id}`} download>
+    <a
+      href={`${config.apiBaseUrl}/rules/export/${id}`}
+      download={`access-watch-rules.${id}`}
+      target="_blank"
+    >
       {id}
     </a>
   </Button>

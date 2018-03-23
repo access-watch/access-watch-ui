@@ -6,6 +6,7 @@ import { FlagIcon, addressTypeResolver } from 'access-watch-ui-components';
 
 import { formatNumber } from '../../i18n';
 import { convertBackendKeys } from '../../utilities/object';
+import { timerangeDisplay } from '../../utilities/timerange';
 
 import AbstractSessionDetails, {
   DEFAULT_COLUMNS,
@@ -24,9 +25,8 @@ import '../../../scss/address_details.scss';
 const handleGetEarlierLogs = ({ address }) =>
   requestEarlierLogs({ logMapping, value: address.value });
 
-const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
-  const { count, speed } = addressSession;
-  const { address } = addressSession;
+const AddressDetails = ({ address: addressSession, route, logs }) => {
+  const { count, speed, address, rule = {} } = addressSession;
   const {
     countryCode,
     asNumber,
@@ -56,7 +56,7 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
       icon={icon}
       description=""
       moreButton={{
-        text: 'More about this address in Access Watch database',
+        text: 'More info',
         url: `https://access.watch/database/addresses/${address.value}`,
         status: reputation.status || '',
       }}
@@ -83,7 +83,7 @@ const AddressDetails = ({ address: addressSession, route, logs, rule }) => {
         </AbstractSessionDetailsRowBlock>,
         <AbstractSessionDetailsRowBlock
           key="requestsCount"
-          label="Requests Today"
+          label={`Requests last ${timerangeDisplay(route, 'session')}`}
         >
           {formatNumber(count)}
         </AbstractSessionDetailsRowBlock>,
@@ -113,10 +113,10 @@ AddressDetails.propTypes = {
   route: routePropType.isRequired,
   address: PropTypes.shape({
     address: addressPropType.isRequired,
-  }).isRequired,
-  rule: PropTypes.shape({
-    id: PropTypes.string,
-    actionPending: PropTypes.bool,
+    rule: PropTypes.shape({
+      id: PropTypes.string,
+      actionPending: PropTypes.bool,
+    }),
   }).isRequired,
 };
 

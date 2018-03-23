@@ -52,7 +52,6 @@ const AddressesPage = ({ route, addresses, activity, searches }) => (
       >
         <SessionsFilter
           route={route}
-          prefix="address"
           availableFilters={filters.address}
           searches={searches}
           groupId="address"

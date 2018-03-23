@@ -1,7 +1,7 @@
 @import '../vars';
 @import '../button'; // need those mixins :s
 
-@mixin btn-icon ($icon) {
+@mixin btn-icon($icon) {
   &::before {
     background-size: contain;
     background-repeat: no-repeat;
@@ -21,13 +21,19 @@ $session-details-action-color: #fff;
   @include btn-type(white, transparent);
   font-size: inherit;
 
-  &--block {
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
+  &--blocked {
     @include btn-icon(url('../../assets/blocked-white.svg'));
-    border-radius: 2px;
-    transition: border-color 0.2s ease;
-
     &:hover {
       border-color: $red;
+    }
+  }
+
+  &--whitelisted {
+    @include btn-icon(url('../../assets/verified-white.svg'));
+    &:hover {
+      border-color: $brand-blue;
     }
   }
 
@@ -48,6 +54,9 @@ $session-details-action-color: #fff;
       color: $light-gray;
       background-color: unset;
     }
+    &:before {
+      display: none;
+    }
   }
 }
 
@@ -57,14 +66,16 @@ $session-details-action-color: #fff;
   font-size: 16px;
 }
 
-.rule-button__blocked {
+.rule-button__active-text {
   display: inline-flex;
   align-items: center;
   margin-right: 5px;
 }
 
-.rule-button__blocked__icon {
-  fill: map-get($statuses, 'bad');
+.rule-button__icon {
   height: 16px;
   margin-right: 5px;
+  &--blocked {
+    fill: map-get($statuses, 'bad');
+  }
 }

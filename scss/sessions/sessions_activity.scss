@@ -1,0 +1,34 @@
+@import '../vars';
+
+$icon-size: 32px;
+
+.sessions-activity__session {
+  cursor: pointer;
+}
+
+.sessions-activity__session__summary {
+  position: absolute;
+  margin: 10px;
+  color: $light-gray;
+  text-shadow: 1px 1px 2px $brand-purple;
+  pointer-events: none;
+  &__top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  &__icon {
+    margin-right: 10px;
+    img {
+      height: $icon-size;
+      width: $icon-size;
+      margin: 0;
+    }
+  }
+  &__title {
+    font-size: 18px;
+  }
+  &__subtitle {
+    font-size: 12px;
+  }
+}

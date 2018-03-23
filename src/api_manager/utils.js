@@ -8,7 +8,7 @@ export const extractTimerange = ({ timerangeFrom, timerangeTo, ...props }) => ({
 
 const sumArray = arr => arr.reduce((sum, v) => sum + v, 0);
 
-export const getAvgSpeedAndCount = ({ speed: originalSpeed }) => {
+export const getAvgSpeedAndCount = ({ speed: originalSpeed, count }) => {
   const speeds = convertBackendKeys(originalSpeed);
   speeds.perMinute = [
     ...speeds.perMinute,
@@ -16,10 +16,9 @@ export const getAvgSpeedAndCount = ({ speed: originalSpeed }) => {
   ];
   const { perMinute, perHour } = speeds;
   const speed = sumArray(perMinute) / perMinute.length;
-  const count = sumArray(perHour);
   return {
     speeds,
     speed,
-    count,
+    count: typeof count === 'undefined' ? sumArray(perHour) : count,
   };
 };

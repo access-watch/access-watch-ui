@@ -77,7 +77,7 @@ StatusPage.propTypes = {
     PropTypes.shape({
       speeds: PropTypes.objectOf(speedPropType).isRequired,
       name: PropTypes.string.isRequired,
-      rejected: speedPropType.isRequired,
+      rejected: speedPropType,
     })
   ).isRequired,
   statusLoading: PropTypes.bool,

@@ -4,15 +4,13 @@ import { pickKeys } from '../utilities/object';
 import { routeChange$, metricsRoute$, requestsRoute$ } from '../router';
 
 import { dataEvents, D_METRICS } from '../event_hub';
-import config from '../app_config';
+import { getExpiration } from '../utilities/config';
 
 import { getMetricsSummaryObs, getMetricsSpeed } from './metrics_agent_api';
 
 const metricsObs = params => {
   const timeSlider =
-    params.timeSlider === 'auto'
-      ? config.metrics.expiration
-      : params.timeSlider;
+    params.timeSlider === 'auto' ? getExpiration('metrics') : params.timeSlider;
   const timeFilter = pickKeys(['start', 'end'])({
     ...{
       start: new Date().getTime() - timeSlider * 60000,
