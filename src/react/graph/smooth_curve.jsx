@@ -653,7 +653,7 @@ export default class SmoothCurve extends Component {
             />
           )}
         </svg>
-        {loading && (
+        {(loading || !path) && (
           <div className="smooth-curve__loading">
             <Loader />
           </div>
