@@ -4,6 +4,7 @@ import { getMetricsSummaryObs } from '../api_manager/metrics_agent_api';
 import { metricsRoute$ } from '../../src/router';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys } from '../utilities/object';
+import { getExpiration } from '../utilities/config';
 
 const computeFilterType = type => {
   if (type === 'all') {
@@ -30,18 +31,14 @@ const transformFilters = origFilters => {
   return filters;
 };
 
-const getCountriesObs = params =>
+const getCountriesObs = ({ start, end, type, status, timeSlider }) =>
   getMetricsSummaryObs({
     metric: 'request',
-    timeFilter: {
-      start: new Date().getTime() - 24 * 3600 * 1000,
-      ...pickKeys(['start', 'end'])(params),
-    },
+    timeDelta:
+      (timeSlider === 'auto' ? getExpiration('metrics') : timeSlider) * 60,
+    ...(start || end ? { timeFilter: { start, end } } : {}),
     by: 'country',
-    tags:
-      params.type || params.status
-        ? pickKeys(['type', 'status'])(params)
-        : null,
+    tags: type || status ? { type, status } : null,
   });
 
 const worldMapFilter$ = metricsRoute$
