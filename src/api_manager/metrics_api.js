@@ -11,23 +11,22 @@ import { getMetricsSummaryObs, getMetricsSpeed } from './metrics_agent_api';
 const metricsObs = params => {
   const timeSlider =
     params.timeSlider === 'auto' ? getExpiration('metrics') : params.timeSlider;
-  const timeFilter = pickKeys(['start', 'end'])({
-    ...{
-      start: new Date().getTime() - timeSlider * 60000,
-    },
-    ...params,
-  });
+  const timeFilter = pickKeys(['start', 'end'])(params);
   const metric = 'request';
   const speedParams = {
     metric,
     by: 'type',
     ...(params.end ? { timeFilter } : {}),
   };
+  const timeParams = {
+    ...(Object.keys(timeFilter).length > 0 ? { timeFilter } : {}),
+    timeDelta: timeSlider * 60,
+  };
   return Observable.zip(
-    getMetricsSummaryObs({ metric, timeFilter, by: 'type' }),
+    getMetricsSummaryObs({ metric, ...timeParams, by: 'type' }),
     getMetricsSummaryObs({
       metric,
-      timeFilter,
+      ...timeParams,
       by: 'status',
       tags: { type: 'robot' },
     }),

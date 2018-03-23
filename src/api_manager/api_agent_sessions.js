@@ -23,7 +23,7 @@ const convertTime = s =>
 
 const transformSession = s => (s.speed ? addAvgSpeed(convertTime(s)) : s);
 
-const pickTimerangeKeys = pickKeys(['start', 'end']);
+const pickTimerangeKeys = pickKeys(['start', 'end', 'step']);
 
 const getTimeQuery$ = ({ timeSlider, ...rest }) => {
   const timerange = convertObjValues(msToS)(
@@ -66,7 +66,9 @@ export const getSessionsObs = (
 };
 
 export const getSessionDetails = ({ type, id, ...rest }) =>
-  api.get(`/sessions/${type}/${id}`, rest).then(transformSession);
+  api
+    .get(`/sessions/${type}/${id}`, pickTimerangeKeys(rest))
+    .then(transformSession);
 
 export const getSessionDetailsObs = (
   args,
