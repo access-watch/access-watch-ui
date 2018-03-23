@@ -21,7 +21,7 @@ export const addressPropType = PropTypes.shape({
   country_code: PropTypes.string,
   flags: PropTypes.arrayOf(PropTypes.string),
   hostname: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   label: PropTypes.string,
   network_name: PropTypes.string,
   reputation: reputationPropType,
