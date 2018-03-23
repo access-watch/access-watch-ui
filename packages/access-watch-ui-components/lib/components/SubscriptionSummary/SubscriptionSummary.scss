@@ -13,9 +13,13 @@
 .subscription-summary__main {
   font-size: 14px;
   font-family: $default-bold-font;
+  button {
+    @include reset-button();
+  }
 }
 
 .subscription-summary__update-link {
+  @include reset-button();
   text-decoration: underline;
   margin: 0 4px;
 }

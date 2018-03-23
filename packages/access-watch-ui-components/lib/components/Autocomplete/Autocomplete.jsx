@@ -11,13 +11,10 @@ const itemClass = `${baseClass}__item`;
 
 const getAutocompleItems = (inputValue, items) =>
   items.filter(({ label }) =>
-    ('' + label).toLowerCase().includes(('' + inputValue).toLowerCase())
+    `${label}`.toLowerCase().includes(`${inputValue}`.toLowerCase())
   );
 
-const highlightFirst = items => (
-  inputValue,
-  { setHighlightedIndex, ...args }
-) => {
+const highlightFirst = items => (inputValue, { setHighlightedIndex }) => {
   if (inputValue && getAutocompleItems(inputValue, items).length > 0) {
     setHighlightedIndex(0);
   }
@@ -37,7 +34,6 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
       inputValue,
       selectedItem,
       highlightedIndex,
-      selectItem,
       reset,
     }) => {
       const renderedItems = isOpen ? getAutocompleItems(inputValue, items) : [];
@@ -62,6 +58,9 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
               {renderedItems.map((item, index) => {
                 const { onClick, ...itemProps } = getItemProps({ item });
                 return (
+                  // Disable rules as those properties are provided in itemProps from downshit
+                  /* eslint-disable jsx-a11y/no-static-element-interactions  */
+                  /* eslint-disable jsx-a11y/click-events-have-key-events */
                   <div
                     className={cx(itemClass, {
                       [`${itemClass}--highlight`]: highlightedIndex === index,
@@ -77,6 +76,8 @@ const Autocomplete = ({ items, inputRef, onKeyDown, ...downshiftProps }) => (
                   >
                     {item.label}
                   </div>
+                  /* eslint-enable jsx-a11y/no-static-element-interactions */
+                  /* eslint-enable jsx-a11y/click-events-have-key-events */
                 );
               })}
             </div>
@@ -101,7 +102,7 @@ Autocomplete.propTypes = {
 
 Autocomplete.defaultProps = {
   inputRef: _ => _,
-  onKeyPressed: _ => _,
+  onKeyDown: _ => _,
 };
 
 export default Autocomplete;

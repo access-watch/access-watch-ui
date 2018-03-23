@@ -1,8 +1,10 @@
 import React from 'react';
 
+/* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
+/* eslint-enable import/no-extraneous-dependencies */
 
 import {
   ChatButton,
@@ -20,6 +22,8 @@ import {
 
 import integrations from './data/integrations';
 import './index.scss';
+
+/* eslint-disable react/jsx-filename-extension */
 
 storiesOf('ChatButton', module).add('default', () => <ChatButton />);
 
@@ -76,7 +80,11 @@ storiesOf('IntegrationPicker', module).add('default', () => (
 
 storiesOf('IntegrationManual', module).add('default', () => (
   <IntegrationManual
-    site={{ API_KEY: 'fake_api_key', url: 'http://fake_site.com' }}
+    site={{
+      API_KEY: 'fake_api_key',
+      url: 'http://fake_site.com',
+      key: 'fake_key',
+    }}
     integration={integrations.filter(({ id }) => id === 'php')[0]}
     integrations={integrations}
     handleNewParams={action('Integration clicked')}
@@ -110,7 +118,12 @@ storiesOf('SubscriptionSummary', module)
     'default',
     withInfo('Shows a summary of your subscription')(() => (
       <SubscriptionSummary
-        subscription={{ plan: 'FREE', status: [] }}
+        subscription={{
+          plan: 'FREE',
+          status: [],
+          is_trial: false,
+          trial_expires: 1500000,
+        }}
         onUpgradeClicked={action}
       />
     ))
@@ -119,7 +132,12 @@ storiesOf('SubscriptionSummary', module)
     'with a bad status',
     withInfo('Shows a summary of your subscription')(() => (
       <SubscriptionSummary
-        subscription={{ plan: 'FREE', status: ['requests_exceeded'] }}
+        subscription={{
+          plan: 'FREE',
+          status: ['requests_exceeded'],
+          is_trial: false,
+          trial_expires: 1500000,
+        }}
         onUpgradeClicked={action}
       />
     ))
@@ -148,13 +166,11 @@ const fakeDistributionsEmpty = fakeDistributions.map(d => ({
 const trickyDistributions = [
   {
     name: 'foo',
-    //percentage: 0.71223
-    percentage: 0.3,
+    percentage: 0.71223,
   },
   {
     name: 'bar',
-    //percentage: 0.28777
-    percentage: 0.7,
+    percentage: 0.28777,
   },
 ];
 
@@ -197,7 +213,7 @@ storiesOf('PieChart', module)
     ))
   );
 
-const filters = [
+const initialFilters = [
   {
     id: 'identity.id',
     values: ['robot', 'human'],
@@ -205,7 +221,7 @@ const filters = [
 ];
 
 const availableFilters = [
-  ...filters,
+  ...initialFilters,
   {
     id: 'reputation.status',
     values: ['nice', 'ok', 'suspicious', 'bad'],
@@ -217,7 +233,7 @@ const availableFilters = [
 
 class SmartFilterWrapperTest extends React.Component {
   state = {
-    filters,
+    filters: initialFilters,
   };
 
   onDeleteFilter = ({ id }) => {
@@ -245,30 +261,24 @@ class SmartFilterWrapperTest extends React.Component {
 
   onFilterValueChange = ({ id, newValue, oldValue }) => {
     const { filters } = this.state;
-    console.log(id, newValue, oldValue);
-    this.setState(
-      {
-        filters: filters.reduce(
-          (newFilters, f) => [
-            ...newFilters,
-            f.id === id
-              ? {
-                  ...f,
-                  values: oldValue
-                    ? f.values.map(
-                        value => (oldValue === value ? newValue : value)
-                      )
-                    : f.values.concat([newValue]),
-                }
-              : f,
-          ],
-          []
-        ),
-      },
-      () => {
-        console.log(this.state.filters);
-      }
-    );
+    this.setState({
+      filters: filters.reduce(
+        (newFilters, f) => [
+          ...newFilters,
+          f.id === id
+            ? {
+                ...f,
+                values: oldValue
+                  ? f.values.map(
+                      value => (oldValue === value ? newValue : value)
+                    )
+                  : f.values.concat([newValue]),
+              }
+            : f,
+        ],
+        []
+      ),
+    });
   };
 
   onAddFilter = ({ id }) => {
@@ -279,8 +289,25 @@ class SmartFilterWrapperTest extends React.Component {
     });
   };
 
+  onInvertFilter = ({ id }) => {
+    const { filters } = this.state;
+    this.setState({
+      filters: filters.reduce(
+        (newFilters, f) => [
+          ...newFilters,
+          f.id === id
+            ? {
+                ...f,
+                negative: !f.negative,
+              }
+            : f,
+        ],
+        []
+      ),
+    });
+  };
+
   render() {
-    console.log(this.state.filters);
     return (
       <SmartFilter
         filters={this.state.filters}
@@ -289,6 +316,8 @@ class SmartFilterWrapperTest extends React.Component {
         availableFilters={availableFilters}
         onFilterValueChange={this.onFilterValueChange}
         onAddFilter={this.onAddFilter}
+        onUnselectFilter={_ => _}
+        onInvertFilter={this.onInvertFilter}
       />
     );
   }
@@ -301,5 +330,5 @@ storiesOf('SmartFilter', module).add(
 
 storiesOf('Pill', module).add(
   'default',
-  withInfo('Displays Pill')(() => <Pill>Test pill</Pill>)
+  withInfo('Displays Pill')(() => <Pill onDelete={_ => _}>Test pill</Pill>)
 );

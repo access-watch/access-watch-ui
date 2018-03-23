@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+/* eslint-disable import/no-named-as-default */
 import Pill from '../Pill';
 import Autocomplete from '../Autocomplete';
+/* eslint-enable import/no-named-as-default */
 
 import './SmartFilter.scss';
 
@@ -88,25 +90,24 @@ class SmartFilter extends React.Component {
           PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         ),
       })
-    ),
+    ).isRequired,
     selectedFilter: PropTypes.string,
-    onUnselectFilter: PropTypes.func,
-    negative: PropTypes.bool,
+    onUnselectFilter: PropTypes.func.isRequired,
+    onInvertFilter: PropTypes.func.isRequired,
+    onAddFilter: PropTypes.func.isRequired,
+    onFilterValueChange: PropTypes.func.isRequired,
+    onDeleteFilter: PropTypes.func.isRequired,
+    onDeleteFilterValue: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    selectedFilter: null,
   };
 
   state = {
     editFilter: {},
     addFilter: false,
-    selectedFilter: null,
-    onUnselectFilter: _ => _,
   };
-
-  componentWillReceiveProps({ selectedFilter }) {
-    const { editFilter } = this.state;
-    if (selectedFilter && selectedFilter !== editFilter.id) {
-      this.setState({ editFilter: { id: selectedFilter } });
-    }
-  }
 
   componentDidMount() {
     this.onWindowClick = () => {
@@ -123,12 +124,28 @@ class SmartFilter extends React.Component {
     window.addEventListener('click', this.onWindowClick);
   }
 
-  componentWillUmount() {
-    if (this.onWindowClick) {
-      window.removeEventListener('click', this.onWindowClick);
-      this.onWindowClick = null;
+  componentWillReceiveProps({ selectedFilter }) {
+    const { editFilter } = this.state;
+    if (selectedFilter && selectedFilter !== editFilter.id) {
+      this.setState({ editFilter: { id: selectedFilter } });
     }
   }
+
+  onAddFilter = ({ value: id }) => {
+    this.setState({ editFilter: { id }, addFilter: false });
+    this.props.onAddFilter({ id });
+  };
+
+  onOuterClick = () => {
+    const { onUnselectFilter } = this.props;
+    onUnselectFilter();
+    this.setState({ editFilter: {} });
+  };
+
+  setAddFilter = e => {
+    e.stopPropagation();
+    this.setState({ addFilter: true });
+  };
 
   deleteFilterValue = ({ id, value, updateState = true }) => e => {
     const { onDeleteFilterValue } = this.props;
@@ -175,10 +192,8 @@ class SmartFilter extends React.Component {
         id,
         value,
       });
-    } else {
-      if (values.length === availableValues.length) {
-        editFilter.value = values[values.length - 1];
-      }
+    } else if (values.length === availableValues.length) {
+      editFilter.value = values[values.length - 1];
     }
     this.setState({
       editFilter,
@@ -244,7 +259,7 @@ class SmartFilter extends React.Component {
     }
   };
 
-  handleFilterInputKeyDown = (e, { reset, highlightedItem }) => {
+  handleFilterInputKeyDown = e => {
     const { availableFilters } = this.props;
     const { key, target: { value: inputValue } } = e;
     const valueIndex = availableFilters.findIndex(f => f.label === inputValue);
@@ -254,21 +269,12 @@ class SmartFilter extends React.Component {
     }
   };
 
-  onAddFilter = ({ value: id }) => {
-    this.setState({ editFilter: { id }, addFilter: false });
-    this.props.onAddFilter({ id });
-  };
-
-  setAddFilter = e => {
-    e.stopPropagation();
-    this.setState({ addFilter: true });
-  };
-
-  onOuterClick = () => {
-    const { onUnselectFilter } = this.props;
-    onUnselectFilter();
-    this.setState({ editFilter: {} });
-  };
+  componentWillUmount() {
+    if (this.onWindowClick) {
+      window.removeEventListener('click', this.onWindowClick);
+      this.onWindowClick = null;
+    }
+  }
 
   handleInvertFilter = ({ id }) => e => {
     const { onInvertFilter } = this.props;
@@ -285,7 +291,7 @@ class SmartFilter extends React.Component {
       filters.length < availableFilters.length && !addingFilterValue;
     return (
       <div className={baseClass}>
-        {filters.map(({ id, label = id, values, negative, exists }) => (
+        {filters.map(({ id, values, negative, exists }) => (
           <Pill
             className={cx(itemClass, { [`${itemClass}--negative`]: negative })}
             onClick={this.handleFilterClick({ id })}
@@ -361,9 +367,12 @@ class SmartFilter extends React.Component {
               onOuterClick={this.onOuterClick}
             />
           ) : (
-            <div className={itemPlaceholderClass} onClick={this.setAddFilter}>
+            <button
+              className={itemPlaceholderClass}
+              onClick={this.setAddFilter}
+            >
               Add filter
-            </div>
+            </button>
           ))}
       </div>
     );

@@ -23,7 +23,7 @@ export const typeOrder = [
   'cable',
   'dsl',
   'fiber',
-  'broadband'
+  'broadband',
 ];
 
 export const addressTypeResolver = ({ flags }) => {

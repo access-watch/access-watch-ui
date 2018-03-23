@@ -1,4 +1,5 @@
 @import '../vars';
+@import '../mixins';
 
 $active-border-size: 5px;
 $triangle-size: $active-border-size * 4;
@@ -21,6 +22,7 @@ $active-border-color: $aw-sub-color;
 }
 
 .integration-picker__item {
+  @include reset-button();
   position: relative;
   padding: 10px 20px;
   text-align: center;
@@ -61,7 +63,10 @@ $active-border-color: $aw-sub-color;
 }*/
 
 .integration-picker__item__link {
-  &:visited, &:hover, &:active, &:link {
+  &:visited,
+  &:hover,
+  &:active,
+  &:link {
     text-decoration: none;
     color: $main-color;
   }

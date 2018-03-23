@@ -3,19 +3,23 @@ import PropTypes from 'prop-types';
 
 import './Loader.scss';
 
-const loader = ({color}) => (
+const Loader = ({ color }) => (
   <div className="loader">
     <div
       className="loader__circle"
       style={{
-        ...color ? {backgroundColor: color} : {}
+        ...(color ? { backgroundColor: color } : {}),
       }}
     />
   </div>
 );
 
-loader.propTypes = {
-  color: PropTypes.string
+Loader.propTypes = {
+  color: PropTypes.string,
 };
 
-export default loader;
+Loader.defaultProps = {
+  color: null,
+};
+
+export default Loader;

@@ -8,6 +8,7 @@ import flags3x from './flags3x.png';
 import './FlagIcon.scss';
 
 // this is the order of the flags in the sprite sheet
+/* eslint-disable prettier/prettier */
 const ccs = [
   'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AN', 'AO', 'AQ', 'AR', 'AS', 'AT',
   'AU', 'AW', 'AX', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ',
@@ -29,21 +30,22 @@ const ccs = [
   'TT', 'TV', 'TW', 'TZ', 'UA', 'UG', 'US', 'UY', 'UZ', 'VA', 'VC', 'VE', 'VG',
   'VI', 'VN', 'VU', 'WF', 'WS', 'YE', 'YT', 'ZA', 'ZM', 'ZW'
 ];
+/* eslint-enable prettier/prettier */
 
 const sizes = {
   s: 16,
   m: 32,
-  l: 64
+  l: 64,
 };
 
 const flagsSrc = {
   s: flags1x,
   m: flags2x,
-  l: flags3x
+  l: flags3x,
 };
 
-export const FlagIcon = ({ cc, title, size = 's', className }) => {
-  const pos = -ccs.indexOf(cc.toUpperCase()) *  sizes[size];
+const FlagIcon = ({ cc, title, size, className }) => {
+  const pos = -ccs.indexOf(cc.toUpperCase()) * sizes[size];
   return (
     <span className={`flag-icon flag-icon--${size} ${className}`}>
       <img
@@ -52,7 +54,7 @@ export const FlagIcon = ({ cc, title, size = 's', className }) => {
         src={flagsSrc[size]}
         style={{
           marginTop: pos,
-          height: 'auto'
+          height: 'auto',
         }}
       />
     </span>
@@ -60,9 +62,16 @@ export const FlagIcon = ({ cc, title, size = 's', className }) => {
 };
 
 FlagIcon.propTypes = {
-  cc: PropTypes.string,
+  cc: PropTypes.string.isRequired,
   title: PropTypes.string,
-  size: PropTypes.oneOf(['s', 'm', 'l'])
+  size: PropTypes.oneOf(['s', 'm', 'l']),
+  className: PropTypes.string,
+};
+
+FlagIcon.defaultProps = {
+  title: '',
+  size: 's',
+  className: '',
 };
 
 export default FlagIcon;

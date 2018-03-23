@@ -1,0 +1,16 @@
+---
+parser: "babel-eslint"
+extends:
+  - "airbnb"
+  - "plugin:prettier/recommended"
+env:
+  jest: true
+  browser: true
+globals:
+  __DEV__: false
+  process: false
+rules:
+  no-plusplus: 0
+  no-unused-vars:
+    - 2
+    - argsIgnorePattern: "^_$"
