@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: $brand-purple;
   //overflow: hidden;
   &__items {
     position: relative;
@@ -19,12 +20,22 @@
   .aw-table {
     background-color: white;
     color: $brand-purple;
-    .aw-table__body__cell--speed {
-      width: 200px;
-      .spark-line {
-        width: 150px;
-        display: inline-block;
-        height: 100%;
+    .aw-table__body__cell {
+      &--speed,
+      .activity-count__table-cell {
+        width: 200px;
+        .spark-line {
+          width: 150px;
+          display: inline-block;
+          height: 100%;
+        }
+      }
+      .activity-count__table-cell {
+        display: inline-flex;
+        justify-content: flex-end;
+        .spark-line {
+          margin-left: 15px;
+        }
       }
     }
   }

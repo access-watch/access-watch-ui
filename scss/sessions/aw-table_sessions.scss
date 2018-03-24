@@ -1,7 +1,9 @@
 @import '../vars';
 @import '../table_mixins';
+@import '../mixins';
 
 .aw-table__sessions__reputation-preview {
+  min-width: $reputation-preview-width;
   width: $reputation-preview-width;
   padding: 0;
   @each $reputation, $color in $reputation-preview-colors {
@@ -15,14 +17,39 @@
   &--count {
     text-align: right;
     margin-right: 10px;
+    min-width: 100px;
   }
   &--reputationPreview {
     padding: 0;
   }
+  &--rule {
+    min-width: 80px;
+  }
 }
 
 @include table-body-cell() {
-  &--count {
-    padding-right: 25px;
+  &--rule {
+    min-width: 145px;
+    .rule-button-wrapper {
+      font-size: 10px;
+      @include white-to-brand-purple();
+      &:nth-child(n + 2) {
+        margin-left: 5px;
+      }
+    }
+    .rule-button {
+      border: none;
+      padding: 0;
+      opacity: 0.7;
+      &:hover {
+        opacity: 1;
+      }
+      &__active-text {
+        width: 74px;
+      }
+      &__icon {
+        height: 14px;
+      }
+    }
   }
 }

@@ -36,7 +36,13 @@ $alert-close-arrow-thickness: 1px;
 }
 
 .aw-alert__close {
-  @include cross($alert-padding + 2px, $alert-close-arrow-size, $alert-close-arrow-thickness, $main-color);
+  @include reset-button();
+  @include cross(
+    $alert-padding + 2px,
+    $alert-close-arrow-size,
+    $alert-close-arrow-thickness,
+    $main-color
+  );
 }
 
 .aw-alert--success {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {openChat, loadChat} from './chat';
+import { openChat, loadChat } from './chat';
 
 import ChatSvg from '!svg-react-loader!./chat.svg'; //eslint-disable-line
 import './ChatButton.scss';
@@ -13,11 +13,16 @@ class ChatButton extends React.Component {
   render = _ => (
     <div
       className="chat-button"
-      style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+      }}
     >
-    	<ChatSvg onClick={openChat} />
+      <ChatSvg onClick={openChat} />
     </div>
-  )
+  );
 }
 
 export default ChatButton;

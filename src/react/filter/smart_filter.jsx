@@ -5,21 +5,16 @@ import { SmartFilter as SmartFilterAbstract } from 'access-watch-ui-components';
 
 import { routePropType } from '../prop_types';
 import { updateRouteParameter } from '../../utilities/route_utils';
-import {
-  createURIToFilters,
-  filtersToURI,
-  prefixFilter,
-} from '../../utilities/filter';
+import { URIToFilters, filtersToURI } from '../../utilities/filter';
 import { V_SET_ROUTE, dispatch } from '../../event_hub';
 import FilterHelper from './filter_helper';
 
 import '../../../scss/smart_filter.scss';
 
-const getFilterFunctions = ({ route, prefix }) => {
-  const URIToFilters = createURIToFilters(prefix);
+const getFilterFunctions = ({ route }) => {
   const dispatchNewFilters = filters =>
     new Promise(resolve => {
-      const value = filtersToURI(filters.map(prefixFilter(prefix)));
+      const value = filtersToURI(filters);
       dispatch({
         type: V_SET_ROUTE,
         route: updateRouteParameter({
@@ -34,50 +29,50 @@ const getFilterFunctions = ({ route, prefix }) => {
   const onDeleteFilter = ({ id }) =>
     dispatchNewFilters(URIToFilters(route.filter).filter(f => f.id !== id));
 
+  const updateFilter = ({ id, updateFn }) =>
+    URIToFilters(route.filter).reduce(
+      (newFilters, f) => [...newFilters, f.id === id ? updateFn(f) : f],
+      []
+    );
+
   const onDeleteFilterValue = ({ id, value }) =>
     dispatchNewFilters(
-      URIToFilters(route.filter).reduce(
-        (newFilters, f) => [
-          ...newFilters,
-          f.id === id
-            ? {
-                ...f,
-                values: f.values.filter(val => value !== val),
-              }
-            : f,
-        ],
-        []
-      )
+      updateFilter({
+        id,
+        updateFn: f => ({
+          ...f,
+          values: f.values.filter(val => value !== val),
+        }),
+      })
     );
 
   const onFilterValueChange = ({ id, newValue, oldValue }) =>
     dispatchNewFilters(
-      URIToFilters(route.filter).reduce(
-        (newFilters, f) => [
-          ...newFilters,
-          f.id === id
-            ? {
-                ...f,
-                values: oldValue
-                  ? f.values.map(
-                      value => (oldValue === value ? newValue : value)
-                    )
-                  : f.values.concat([newValue]),
-              }
-            : f,
-        ],
-        []
-      )
+      updateFilter({
+        id,
+        updateFn: f => ({
+          ...f,
+          values: oldValue
+            ? f.values.map(value => (oldValue === value ? newValue : value))
+            : [...(f.values || []), newValue],
+        }),
+      })
     );
 
   const onAddFilter = filter =>
     dispatchNewFilters(URIToFilters(route.filter).concat([filter]));
+
+  const onInvertFilter = ({ id }) =>
+    dispatchNewFilters(
+      updateFilter({ id, updateFn: f => ({ ...f, negative: !f.negative }) })
+    );
 
   return {
     onDeleteFilter,
     onDeleteFilterValue,
     onFilterValueChange,
     onAddFilter,
+    onInvertFilter,
     URIToFilters,
   };
 };
@@ -85,7 +80,6 @@ const getFilterFunctions = ({ route, prefix }) => {
 class SmartFilter extends React.Component {
   static propTypes = {
     route: routePropType.isRequired,
-    prefix: PropTypes.string.isRequired,
     children: PropTypes.node,
     onFilterChange: PropTypes.func,
   };
@@ -100,18 +94,19 @@ class SmartFilter extends React.Component {
   onFilterValueChange = args => {
     const { id, newValue: newValueRaw } = args;
     const { newFilter } = this.state;
-    const { onAddFilter, onFilterValueChange } = this.getFilterFunctions();
-    const newValue = newValueRaw.trim();
+    const { onFilterValueChange } = this.getFilterFunctions();
+    const newValue =
+      typeof newValueRaw === 'string' ? newValueRaw.trim() : newValueRaw;
     if (newFilter === id) {
-      onAddFilter({ id, values: [newValue] });
       this.setState({ newFilter: null });
-    } else {
-      onFilterValueChange({ ...args, newValue });
     }
+    onFilterValueChange({ ...args, newValue });
   };
 
   onAddFilter = ({ id }) => {
+    const { onAddFilter } = this.getFilterFunctions();
     this.setState({ newFilter: id });
+    onAddFilter({ id });
   };
 
   onDeleteFilter = ({ id }) => {
@@ -126,7 +121,6 @@ class SmartFilter extends React.Component {
   onFilterValueClick = ({ id, value }) => {
     const { route } = this.props;
     const {
-      URIToFilters,
       onDeleteFilterValue,
       onAddFilter,
       onFilterValueChange,
@@ -147,18 +141,21 @@ class SmartFilter extends React.Component {
 
   onFilterClick = ({ id }) => {
     const { route } = this.props;
-    const { URIToFilters } = this.getFilterFunctions();
     const filters = URIToFilters(route.filter);
     if (!filters.find(f => f.id === id)) {
       this.onAddFilter({ id });
     }
   };
 
+  onInvertFilter = ({ id }) => {
+    const { onInvertFilter } = this.getFilterFunctions();
+    onInvertFilter({ id });
+  };
+
   getFilterFunctions = () => {
-    const { route, prefix, onFilterChange } = this.props;
+    const { route, onFilterChange } = this.props;
     const origFilterFns = getFilterFunctions({
       route,
-      prefix,
     });
     const shouldCallOnFilterChange = key =>
       [
@@ -166,6 +163,7 @@ class SmartFilter extends React.Component {
         'onDeleteFilterValue',
         'onFilterValueChange',
         'onAddFilter',
+        'onInvertFilter',
       ].indexOf(key) !== -1;
     return Object.keys(origFilterFns).reduce((filterFns, key) => {
       let fn = origFilterFns[key];
@@ -183,11 +181,9 @@ class SmartFilter extends React.Component {
   render() {
     const { route, children, ...props } = this.props;
     const { newFilter } = this.state;
-    const { URIToFilters, ...filtersFn } = this.getFilterFunctions();
+    const filtersFn = this.getFilterFunctions();
     const { filter = '' } = route;
-    const filters = newFilter
-      ? [...URIToFilters(filter), { id: newFilter }]
-      : URIToFilters(filter);
+    const filters = URIToFilters(filter);
     return (
       <div className="smart-filter__wrapper">
         <FilterHelper
@@ -204,6 +200,7 @@ class SmartFilter extends React.Component {
           onDeleteFilter={this.onDeleteFilter}
           selectedFilter={newFilter}
           onUnselectFilter={this.handleUnselectFilter}
+          onInvertFilter={this.onInvertFilter}
           {...props}
         />
         <div className="smart-filter__children">{children}</div>

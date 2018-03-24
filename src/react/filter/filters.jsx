@@ -27,19 +27,11 @@ const saveSearch = ({ route, groupId }) => filter => {
   }
 };
 
-const Filters = ({
-  route,
-  prefix,
-  availableFilters,
-  searches,
-  groupId,
-  children,
-}) => (
+const Filters = ({ route, availableFilters, searches, groupId, children }) => (
   <div className="filters">
     <Tabs {...searches} route={route} groupId={groupId} />
     <SmartFilter
       route={route}
-      prefix={prefix}
       availableFilters={availableFilters}
       onFilterChange={saveSearch({ route, groupId })}
     >
@@ -50,7 +42,6 @@ const Filters = ({
 
 Filters.propTypes = {
   route: routePropType.isRequired,
-  prefix: PropTypes.string.isRequired,
   searches: searchesPropType.isRequired,
   availableFilters: PropTypes.arrayOf(availableFilterPropType).isRequired,
   groupId: PropTypes.string.isRequired,

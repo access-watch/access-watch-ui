@@ -17,7 +17,7 @@ export default class RequestInfo extends Component {
 
   render() {
     const { entry } = this.props;
-    const { address, request, response } = entry;
+    const { address, request, response, robot } = entry;
     const ddWithEmpty = (label, value, key) => (
       <dd key={key ? `${label}-${key}` : label}>
         <span className="request-info__label">{label}:</span>
@@ -109,13 +109,10 @@ export default class RequestInfo extends Component {
           <dt className="request-info__header">IP Address</dt>
           {dd(
             'IP',
-            <a
-              href={`https://access.watch/database/addresses/${address.value}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              title="More about this address in Access Watch database"
-            >
-              {address.value}
+            // Replacing the ':' (which can appear in IPv6 address) as somehow our router cannot process it
+            <a href={`#/addresses/${address.value.replace(/:/g, '_')}`}>
+              {' '}
+              {address.value}{' '}
             </a>
           )}
           {dd('Hostname', address.hostname)}
@@ -141,6 +138,22 @@ export default class RequestInfo extends Component {
               ))
             )}
         </dl>
+        {robot && (
+          <dl className="request-info__section">
+            <dt className="request-info__header">Robot</dt>
+            {dd('Name', <a href={`#/robots/${robot.id}`}>{robot.name}</a>)}
+            {dd('Type', robot.label)}
+            {robot.flags.length > 0 &&
+              dd(
+                'Flags',
+                robot.flags.map(f => (
+                  <span key={f} className="request-info__bubble">
+                    {f}
+                  </span>
+                ))
+              )}
+          </dl>
+        )}
         <dl className="request-info__section">
           <dt className="request-info__header">Response</dt>
           {dd('Status', statusCode(response.status))}

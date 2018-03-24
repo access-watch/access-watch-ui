@@ -1,17 +1,23 @@
 import { Observable } from 'rxjs';
+import omit from 'blacklist';
 import {
   getSessionsObs,
   getSessionDetailsObs,
 } from '../api_manager/api_agent_sessions';
 import { routeChange$ } from '../../src/router';
 import createLogs from './create_logs';
-import { getRulesObs, matchCondition } from '../api_manager/rules_agent_api';
 import { getSearchesObs } from '../api_manager/searches_api';
-import rules$ from '../store/obs_rules_store';
 import searches$ from '../store/obs_searches_store';
 import { getIn, pickKeys } from '../utilities/object';
 import { globalActivity$ } from './obs_activity';
-import { viewEvents, V_SESSIONS_LOAD_MORE } from '../event_hub';
+import {
+  viewEvents,
+  V_SESSIONS_LOAD_MORE,
+  dataEvents,
+  D_ADD_RULE_SUCCESS,
+  D_DELETE_RULE_SUCCESS,
+} from '../event_hub';
+import { matchCondition } from '../api_manager/rules_agent_api';
 
 const MORE_SESSIONS_LIMIT = 50;
 
@@ -42,6 +48,21 @@ const createParametersObs = ({ route$, lastSessions }) =>
       .takeUntil(routeChange$)
   );
 
+const getSessionDetailsRuleReducer = ({ type, session }) => {
+  const isMatchingSessionDetails = matchCondition(type)(session);
+  const matchingObservable = eventType =>
+    Observable.fromEvent(dataEvents, eventType)
+      .map(({ rule }) => rule)
+      .filter(isMatchingSessionDetails);
+  return Observable.merge(
+    matchingObservable(D_ADD_RULE_SUCCESS).map(rule => s => ({
+      ...s,
+      rule,
+    })),
+    matchingObservable(D_DELETE_RULE_SUCCESS).map(_ => s => omit(s, 'rule'))
+  );
+};
+
 export const createSessionDetailsObs = ({
   routeId,
   logMapping,
@@ -54,7 +75,7 @@ export const createSessionDetailsObs = ({
     .switchMap(sessionOrig =>
       Observable.merge(
         sessionDetails$,
-        getSessionDetailsObs({ type, id: p[routeId] })
+        getSessionDetailsObs({ ...p, type, id: p[routeId] })
       )
         .take(1)
         .startWith(sessionOrig)
@@ -63,21 +84,24 @@ export const createSessionDetailsObs = ({
         .switchMap(session =>
           Observable.merge(
             Observable.of(session),
-            getSessionDetailsObs({ type, id: p[routeId] })
-          ).combineLatest(
-            createLogs({
-              filter: `${logMapping}:${getIn(session, logMapping.split('.'))}`,
-              ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
-            }),
-            rules$.map(({ rules, actionPending }) => ({
-              ...Object.values(rules).find(matchCondition(type)(session)),
-              actionPending,
-            })),
-            // We explicitly need to say we want to poll rules while here
-            getRulesObs()
+            getSessionDetailsObs({ ...p, type, id: p[routeId] })
           )
+            .switchMap(s =>
+              Observable.of(s)
+                .merge(getSessionDetailsRuleReducer({ type, session: s }))
+                .scan((state, reducer) => reducer(state))
+            )
+            .combineLatest(
+              createLogs({
+                filter: `${logMapping}:${getIn(
+                  session,
+                  logMapping.split('.')
+                )}`,
+                ...pickKeys(['timerangeFrom', 'timerangeTo'])(p),
+              })
+            )
         )
-        .map(([session, logs, rule]) => ({ session, logs, rule }))
+        .map(([session, logs]) => ({ session, logs }))
     );
 
 const timerangeChanged = ({ timerangeFrom, timerangeTo }, { timerange }) =>
@@ -131,7 +155,28 @@ export const createSessions$ = ({
     sessionDetailsObserver = obs;
   });
 
-  const parameters$ = createParametersObs({ route$, lastSessions });
+  const allRoute$ = Observable.merge(route$, routeDetails$);
+
+  const parameters$ = createParametersObs({ route$: allRoute$, lastSessions });
+
+  const rulesReducer$ = Observable.merge(
+    Observable.fromEvent(dataEvents, D_ADD_RULE_SUCCESS).map(
+      ({ rule }) => sessions =>
+        sessions.map(session => ({
+          ...session,
+          ...(matchCondition(type)(session)(rule) ? { rule } : {}),
+        }))
+    ),
+    Observable.fromEvent(dataEvents, D_DELETE_RULE_SUCCESS).map(
+      ({ rule }) => sessions =>
+        sessions.map(session => ({
+          ...session,
+          ...(session.rule && session.rule.id === rule.id
+            ? { rule: null }
+            : {}),
+        }))
+    )
+  );
 
   const allSessions$ = ({
     sort,
@@ -140,6 +185,7 @@ export const createSessions$ = ({
     timerangeFrom,
     timerangeTo,
     filter,
+    timeSlider,
     ...rest
   }) =>
     getSessionsObs({
@@ -149,22 +195,27 @@ export const createSessions$ = ({
       limit,
       timerangeFrom,
       timerangeTo,
+      timeSlider,
       ...createFilter(rest),
       filter,
-    })
-      .do(sessions => {
-        lastSessions.timerange = !!(timerangeFrom && timerangeTo);
-        lastSessions.sessions = [...sessions];
-      })
-      .do(sessions => {
-        const sessionId = rest[routeId];
-        if (sessionId) {
-          const sessionDetails = sessions.find(({ id }) => id === sessionId);
-          if (sessionDetails) {
-            sessionDetailsObserver.next(sessionDetails);
+    }).switchMap(s =>
+      Observable.of(s)
+        .merge(rulesReducer$)
+        .scan((state, reducer) => reducer(state))
+        .do(sessions => {
+          lastSessions.timerange = !!(timerangeFrom && timerangeTo);
+          lastSessions.sessions = [...sessions];
+        })
+        .do(sessions => {
+          const sessionId = rest[routeId];
+          if (sessionId) {
+            const sessionDetails = sessions.find(({ id }) => id === sessionId);
+            if (sessionDetails) {
+              sessionDetailsObserver.next(sessionDetails);
+            }
           }
-        }
-      });
+        })
+    );
 
   const globalSessions$ = createGlobalSessions$({
     parameters$,
@@ -178,8 +229,6 @@ export const createSessions$ = ({
     sessionDetails$,
     type,
   });
-
-  const allRoute$ = Observable.merge(route$, routeDetails$);
 
   return Observable.combineLatest(
     globalSessions$,
@@ -206,7 +255,7 @@ export const createSessions$ = ({
         .takeUntil(routeChange$)
     )
   )
-    .withLatestFrom(route$.startWith({}), routeDetails$.startWith({}))
+    .withLatestFrom(route$.startWith(null), routeDetails$.startWith(null))
     .map(
       ([
         [{ sessions }, sessionDetails, [activity, searches]],
@@ -223,5 +272,4 @@ export const createSessions$ = ({
     );
 };
 
-rules$.connect();
 searches$.connect();

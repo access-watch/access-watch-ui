@@ -6,7 +6,7 @@ import { filtersPropTypes, filtersDefaultProps } from './prop_types';
 
 import '../../../scss/filter_helper.scss';
 
-const cssFriendly = s => s.replace('.', '-');
+const cssFriendly = s => s.replace(/\./g, '-');
 
 const generateFilterCn = (cn, f, val) =>
   cx(cn, `${cn}--${cssFriendly(f)}`, val ? `${cn}--${cssFriendly(val)}` : '');

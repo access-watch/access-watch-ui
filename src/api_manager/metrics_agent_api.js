@@ -267,10 +267,18 @@ const getMetrics = ({ metric, timeFilter, by, tags }) => {
 };
 
 export const getMetricsObs = (
-  { metric, timeFilter, by, tags },
+  { metric, timeFilter: origTimeFilter, by, tags, timeDelta },
   pollingInterval = 5000
 ) =>
   poll(_ => {
+    let timeFilter;
+    if (!origTimeFilter && timeDelta) {
+      timeFilter = {
+        start: new Date().getTime() - timeDelta * 1000,
+      };
+    } else {
+      timeFilter = origTimeFilter;
+    }
     const cached = metricsCache.get({ metric, timeFilter, by, tags });
     if (cached) {
       return Promise.resolve([...cached]);
@@ -279,9 +287,9 @@ export const getMetricsObs = (
     return getMetrics({
       metric,
       timeFilter: {
-        step: Math.floor(
-          ((timeFilter.end || new Date().getTime()) - timeFilter.start) / 1000
-        ),
+        step:
+          timeDelta ||
+          Math.floor((new Date().getTime() - timeFilter.start) / 1000),
         ...timeFilter,
       },
       by,

@@ -9,6 +9,7 @@ const countries = countryList.reduce((acc, el) => {
   return acc;
 }, {});
 
+/* eslint-disable no-multi-assign */
 countries.AG.name = countries.ATG.name = 'Antigua and Barbuda';
 countries.BO.name = countries.BOL.name = 'Bolivia';
 countries.BQ.name = countries.BES.name = 'Caribbean Netherlands';
@@ -26,6 +27,7 @@ countries.TZ.name = countries.TZA.name = 'Tanzania';
 countries.US.name = countries.USA.name = 'USA';
 countries.VE.name = countries.VEN.name = 'Venezuela';
 countries.VN.name = countries.VNM.name = 'Vietnam';
+/* eslint-enable no-multi-assign */
 
 countries.EU = { name: 'Europe' };
 
@@ -36,27 +38,54 @@ countries.EU = { name: 'Europe' };
 const countriesFullName = Object.keys(countries).reduce(
   (acc, el) => ({
     ...acc,
-    [el]: {...countries[el]}
-  }), {}
+    [el]: { ...countries[el] },
+  }),
+  {}
 );
-countriesFullName.US.name = countriesFullName.USA.name = 'United States of America';
+// eslint-disable-next-line no-multi-assign
+countriesFullName.US.name = countriesFullName.USA.name =
+  'United States of America';
 
-export {countriesFullName};
+export { countriesFullName };
 
 export default countries;
 
 export const EUROPEAN_COUNTRY_CODES = [
-  'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK',
-  'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR',
-  'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT',
-  'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'
+  'AT',
+  'BE',
+  'BG',
+  'CY',
+  'CZ',
+  'DE',
+  'DK',
+  'EE',
+  'ES',
+  'FI',
+  'FR',
+  'GB',
+  'GR',
+  'HR',
+  'HU',
+  'IE',
+  'IT',
+  'LT',
+  'LU',
+  'LV',
+  'MT',
+  'NL',
+  'PL',
+  'PT',
+  'RO',
+  'SE',
+  'SI',
+  'SK',
 ];
 
 export const SPECIAL_VAT_COUNTRY_CODES = {
-  'MC': {
-    refCountry: 'FR'
+  MC: {
+    refCountry: 'FR',
   },
-  'IM': {
-    refCountry: 'GB'
-  }
+  IM: {
+    refCountry: 'GB',
+  },
 };

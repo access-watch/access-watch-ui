@@ -8,6 +8,7 @@ import 'rxjs/add/observable/defer';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/never';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/observable/zip';
@@ -24,6 +25,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/exhaustMap'; // PKA flatMapFirst
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/merge';

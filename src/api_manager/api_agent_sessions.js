@@ -1,11 +1,14 @@
+import { Observable } from 'rxjs';
 import { poll, api } from './api';
-import { sToMs, msToS } from '../utilities/time';
+import { sToMs, msToS, findPossibleStep } from '../utilities/time';
 import {
   convertObjKeyValues,
   pickKeys,
   convertObjValues,
 } from '../utilities/object';
 import { getAvgSpeedAndCount, extractTimerange } from './utils';
+import { hasElasticSearch } from '../utilities/config';
+import { serverDataStartTime$ } from './activity_api';
 
 const DEFAULT_POLL_INTERVAL = 5000;
 
@@ -20,32 +23,57 @@ const convertTime = s =>
 
 const transformSession = s => (s.speed ? addAvgSpeed(convertTime(s)) : s);
 
-const pickTimerangeKeys = pickKeys(['start', 'end']);
+const pickTimerangeKeys = pickKeys(['start', 'end', 'step']);
+
+const getTimeQuery$ = ({ timeSlider, ...rest }) => {
+  const timerange = convertObjValues(msToS)(
+    pickTimerangeKeys(extractTimerange(rest))
+  );
+  let startObs = Observable.of({});
+  if (hasElasticSearch()) {
+    startObs =
+      timeSlider === 'auto'
+        ? serverDataStartTime$
+            .map(start => ({ start: Math.floor(start / 1000) }))
+            .take(1)
+        : Observable.of({
+            start: Math.floor(new Date().getTime() / 1000) - timeSlider * 60,
+          });
+  }
+  return startObs.map(timeStart => ({ ...timeStart, ...timerange }));
+};
 
 export const getSessionsObs = (
   { type, sort, filter, limit, ...rest },
   pollInterval = DEFAULT_POLL_INTERVAL
 ) => {
   const suffix = (type && `/${type}`) || '';
-  const timerange = convertObjValues(msToS)(
-    pickTimerangeKeys(extractTimerange(rest))
+  return getTimeQuery$(rest).switchMap(timeQuery =>
+    poll(
+      () =>
+        api.get(`/sessions${suffix}`, {
+          sort,
+          filter,
+          limit,
+          ...timeQuery,
+          step: findPossibleStep(
+            (Math.floor(new Date().getTime() / 1000) - timeQuery.start) * 1000
+          ),
+        }),
+      pollInterval
+    ).map(arr => arr.map(transformSession))
   );
-  return poll(
-    () =>
-      api.get(`/sessions${suffix}`, {
-        sort,
-        filter,
-        limit,
-        ...timerange,
-      }),
-    pollInterval
-  ).map(arr => arr.map(transformSession));
 };
 
-export const getSessionDetails = ({ type, id }) =>
-  api.get(`/sessions/${type}/${id}`).then(transformSession);
+export const getSessionDetails = ({ type, id, ...rest }) =>
+  api
+    .get(`/sessions/${type}/${id}`, pickTimerangeKeys(rest))
+    .then(transformSession);
 
 export const getSessionDetailsObs = (
-  { type, id },
+  args,
   pollInterval = DEFAULT_POLL_INTERVAL
-) => poll(() => getSessionDetails({ type, id }), pollInterval);
+) =>
+  getTimeQuery$(args).switchMap(timeQuery =>
+    poll(() => getSessionDetails({ ...args, ...timeQuery }), pollInterval)
+  );

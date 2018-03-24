@@ -86,8 +86,8 @@ const getMaxVal = dataDict => {
   );
 };
 
-const logMeanSmoother = (dataSerie, mean) =>
-  dataSerie.map(v => (v === 0 ? 0 : Math.log((mean + v) / mean)));
+const createLogMeanSmoother = mean => v =>
+  v === 0 ? 0 : Math.log((mean + v) / mean);
 
 const cSfx = (classn, suffixes) =>
   [classn, ...suffixes.map(s => `${classn}--${s}`)].join(' ');
@@ -119,6 +119,13 @@ export default class SmoothCurve extends Component {
     withTooltip: PropTypes.bool,
     withHandlers: PropTypes.bool,
     loading: PropTypes.bool,
+    // Disabled here as we are using this props in an inner function
+    // so eslint does not understand it
+    // eslint-disable-next-line react/no-unused-prop-types
+    max: PropTypes.number,
+    selectable: PropTypes.bool,
+    animated: PropTypes.bool,
+    onClick: PropTypes.func,
   };
 
   static defaultProps = {
@@ -128,13 +135,14 @@ export default class SmoothCurve extends Component {
     withTooltip: false,
     withHandlers: true,
     loading: false,
-  };
-
-  static defaultProps = {
     onHover: _ => {},
     onCurveClicked: _ => {},
     classSuffix: '',
     onRangeChanged: _ => {},
+    max: null,
+    selectable: true,
+    animated: true,
+    onClick: _ => {},
   };
 
   constructor(props, defaultProps) {
@@ -143,16 +151,23 @@ export default class SmoothCurve extends Component {
     this.domCurves = {};
     this.CPS = null;
     this.limitY = props.height;
-    this.state = { activeCurve: null, rangeSelectionInProgress: false };
+    this.state = {
+      activeCurve: null,
+      rangeSelectionInProgress: false,
+    };
   }
 
   componentDidMount() {
-    this.state.limitX = this.mainEl.parentElement.offsetWidth;
+    const { selectable } = this.props;
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ limitX: this.mainEl.parentElement.offsetWidth });
     if (!this.limitY) {
       this.limitY = this.mainEl.parentElement.offsetHeight;
     }
     window.addEventListener('resize', this.handleResize);
-    this.subscribeToRangeSelector();
+    if (selectable) {
+      this.subscribeToRangeSelector();
+    }
   }
 
   componentWillReceiveProps({ data, selectedRange }) {
@@ -185,8 +200,11 @@ export default class SmoothCurve extends Component {
   }
 
   componentWillUnmount() {
+    const { selectable } = this.props;
     window.removeEventListener('resize', this.handleResize);
-    this.rangeSelector.unsubscribe();
+    if (selectable) {
+      this.rangeSelector.unsubscribe();
+    }
   }
 
   onHandlerChanged = ({ id, pos }) => {
@@ -253,14 +271,20 @@ export default class SmoothCurve extends Component {
       x: this.convertSvgToDate(Math.min(...Object.values(range))),
       x1: this.convertSvgToDate(Math.max(...Object.values(range))),
     };
-    this.setState(
-      {
-        rangeSelectionInProgress: false,
-      },
-      () => {
-        this.props.onRangeChanged(rangeChanged);
-        this.subscribeToRangeSelector();
-      }
+    // TODO FIXME : For now only solution found as the onMouseUp from the path
+    // is always triggered to late compared to those events
+    window.setTimeout(
+      () =>
+        this.setState(
+          {
+            rangeSelectionInProgress: false,
+          },
+          () => {
+            this.props.onRangeChanged(rangeChanged);
+            this.subscribeToRangeSelector();
+          }
+        ),
+      0
     );
   };
 
@@ -288,7 +312,7 @@ export default class SmoothCurve extends Component {
     return Math.floor(this.convertToValX(xIndex, this.state.limitX, dLength));
   };
 
-  eventuallyUpdatePath = ({ data }, { limitX }) => {
+  eventuallyUpdatePath = ({ data, max, animated }, { limitX }) => {
     if (!this.state.limitX || !this.limitY) {
       return;
     }
@@ -319,27 +343,30 @@ export default class SmoothCurve extends Component {
       }
     }
     if (!existingPreparedData || shouldUpdate || limitX !== this.state.limitX) {
-      const aggregatedValues = data[
-        newDataSeriesName[newDataSeriesName.length - 1]
-      ]
-        .map((_, i) =>
-          newDataSeriesName.reduce((acc, dsn) => acc + data[dsn][i][1], 0)
-        )
-        .filter(a => a > 0)
-        .sort();
+      let logMeanSmoother;
+      if (max) {
+        logMeanSmoother = createLogMeanSmoother(max);
+      } else {
+        const aggregatedValues = data[
+          newDataSeriesName[newDataSeriesName.length - 1]
+        ]
+          .map((_, i) =>
+            newDataSeriesName.reduce((acc, dsn) => acc + data[dsn][i][1], 0)
+          )
+          .filter(a => a > 0)
+          .sort();
+        const aggregatedMean = Math.max(
+          aggregatedValues[Math.round(aggregatedValues.length / 2) - 1],
+          1
+        );
 
-      const aggregatedMean = Math.max(
-        aggregatedValues[Math.round(aggregatedValues.length / 2)],
-        1
-      );
+        logMeanSmoother = createLogMeanSmoother(aggregatedMean);
+      }
 
       const smoothedData = newDataSeriesName
         .map(dataSerieName => ({
           dataSerie: data[dataSerieName],
-          newYValues: logMeanSmoother(
-            data[dataSerieName].map(i => i[1]),
-            aggregatedMean
-          ),
+          newYValues: data[dataSerieName].map(i => i[1]).map(logMeanSmoother),
           dataSerieName,
         }))
         .reduce(
@@ -350,7 +377,7 @@ export default class SmoothCurve extends Component {
           {}
         );
 
-      this.maxVal = getMaxVal(smoothedData);
+      this.maxVal = logMeanSmoother(max) || getMaxVal(smoothedData);
       const prepareData = dataDict => {
         const dataSeries = Object.keys(dataDict);
         return dataSeries.reverse().reduce(
@@ -375,7 +402,8 @@ export default class SmoothCurve extends Component {
       const newPreparedData = prepareData(smoothedData);
       if (
         this.preparedData &&
-        this.preparedData[Object.keys(this.preparedData)[0]].length
+        this.preparedData[Object.keys(this.preparedData)[0]].length &&
+        animated
       ) {
         this.startTransition({ ...this.preparedData }, newPreparedData);
       } else {
@@ -397,7 +425,8 @@ export default class SmoothCurve extends Component {
     );
   };
 
-  convertToValY = y => this.limitY - y * this.limitY / this.maxVal * 0.9;
+  convertToValY = y =>
+    Math.max(0, this.limitY - y * this.limitY / this.maxVal * 0.9);
 
   convertToValX = (x, limitX, dLength) => x * limitX / (dLength - 1);
 
@@ -414,7 +443,7 @@ export default class SmoothCurve extends Component {
 
   handleMouseMove({ clientX }) {
     const { data, onHover, withTooltip } = this.props;
-    if (!withTooltip) {
+    if (!withTooltip || !this.preparedData) {
       return;
     }
     const { left } = this.mainEl.getBoundingClientRect();
@@ -443,6 +472,22 @@ export default class SmoothCurve extends Component {
       onHover(tooltipInfos);
     }
   }
+
+  handleClick = () => {
+    const { rangeSelectionInProgress } = this.state;
+    const { onClick } = this.props;
+    if (!rangeSelectionInProgress) {
+      onClick();
+    }
+  };
+
+  handleCurveClicked = () => {
+    const { rangeSelectionInProgress, activeCurve } = this.state;
+    const { onCurveClicked } = this.props;
+    if (!rangeSelectionInProgress) {
+      onCurveClicked(activeCurve);
+    }
+  };
 
   determineTooltipPos(x) {
     let position = 'center';
@@ -541,7 +586,7 @@ export default class SmoothCurve extends Component {
                     'M '
                   )
                   .concat(` V ${this.limitY} H 0 Z`)}
-                onClick={_ => this.props.onCurveClicked(this.state.activeCurve)}
+                onMouseUp={this.handleCurveClicked}
               />
             ),
           }),
@@ -565,6 +610,7 @@ export default class SmoothCurve extends Component {
       withTooltip,
       loading,
       renderTooltip,
+      animated,
     } = this.props;
 
     return (
@@ -584,15 +630,16 @@ export default class SmoothCurve extends Component {
           }}
           onMouseMove={e => this.handleMouseMove(e)}
           onMouseLeave={this.handleMouseLeave}
+          onMouseUp={this.handleClick}
         >
           {path &&
             Object.keys(path).map(statusKey => (
               <g
                 key={statusKey}
-                className={cSfx('smooth-curve__curve', [
-                  classSuffix,
-                  statusKey,
-                ])}
+                className={cx(
+                  cSfx('smooth-curve__curve', [classSuffix, statusKey]),
+                  { 'smooth-curve__curve--animated': animated }
+                )}
               >
                 {path[statusKey]}
               </g>
@@ -606,7 +653,7 @@ export default class SmoothCurve extends Component {
             />
           )}
         </svg>
-        {loading && (
+        {(loading || !path) && (
           <div className="smooth-curve__loading">
             <Loader />
           </div>

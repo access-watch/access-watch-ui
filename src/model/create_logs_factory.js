@@ -3,7 +3,7 @@ import { filters as awSdkFilters } from 'access-watch-sdk';
 import { extractTimerange } from '../api_manager/utils';
 import { pickKeys, getIn } from '../utilities/object';
 import { msToS } from '../utilities/time';
-import { createURIToFilters } from '../utilities/filter';
+import { URIToFilters } from '../utilities/filter';
 import { V_REQUEST_EARLIER_LOGS } from '../event_hub';
 
 // maximum requests that we can have renedered at the same time.
@@ -17,23 +17,27 @@ const hasNoStorageParam = params =>
 
 const append = (a, b) => a.concat(b);
 
-const URIToFilters = createURIToFilters();
-
 const toLowerCase = v => (typeof v === 'string' ? v.toLowerCase() : v);
 
-const getLogFilter = ({ id, values }) => log => {
+const getLogFilter = ({ id, values, negative, exists }) => log => {
   const filterDef = filtersDef.find(f => f.id === id) || {};
   const keyPath = id.split('.');
   const logValue = getIn(log, keyPath);
-  let compFn = v => toLowerCase(logValue) === toLowerCase(v);
-  if (filterDef.fullText) {
-    compFn = v =>
-      logValue && logValue.toLowerCase().indexOf(v.toLowerCase()) !== -1;
+  let compValue;
+  if (exists) {
+    compValue = !!logValue;
+  } else {
+    let compFn = v => toLowerCase(logValue) === toLowerCase(v);
+    if (filterDef.fullText) {
+      compFn = v =>
+        logValue && logValue.toLowerCase().indexOf(v.toLowerCase()) !== -1;
+    }
+    if (Array.isArray(logValue)) {
+      compFn = v => logValue.map(toLowerCase).indexOf(toLowerCase(v)) !== -1;
+    }
+    compValue = values.findIndex(compFn) !== -1;
   }
-  if (Array.isArray(logValue)) {
-    compFn = v => logValue.map(toLowerCase).indexOf(toLowerCase(v)) !== -1;
-  }
-  return values.findIndex(compFn) !== -1;
+  return negative ? !compValue : compValue;
 };
 
 const getLogFilters = filters => log =>
@@ -45,11 +49,13 @@ const filterLogs = (logs, filtersURI = '') => {
   }
   const filters = URIToFilters(filtersURI).map(({ values, ...f }) => ({
     ...f,
-    values: values.map(v => {
-      const { transform = _ => _ } =
-        filtersDef.find(filterDef => filterDef.id === f.id) || {};
-      return transform(v);
-    }),
+    values:
+      values &&
+      values.map(v => {
+        const { transform = _ => _ } =
+          filtersDef.find(filterDef => filterDef.id === f.id) || {};
+        return transform(v);
+      }),
   }));
   return logs.filter(getLogFilters(filters));
 };

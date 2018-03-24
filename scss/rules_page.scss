@@ -1,33 +1,22 @@
 @import 'vars';
 @import 'mixins';
 
-.rules {
-  padding: 80px 40px;
-}
-
-.rules__title {
-  font-size: 25px;
-  padding-left: $rounded-table-border-radius;
-  margin: 25px 0;
-}
-
 .rules__export {
-  padding-left: $rounded-table-border-radius;
-  padding-bottom: 15px;
-  border-bottom: solid 1px $light-gray;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  font-size: 16px;
+  padding-left: 20px;
+  background-color: $light-purple;
+  height: 42px;
+  display: flex;
+  align-items: center;
 }
 
 .rules {
-  .rounded-table__header__cell,
-  .rounded-table__body__cell {
+  .aw-table__header__cell,
+  .aw-table__body__cell {
     &--type {
-      width: 150px;
       font-family: $default-bold-font;
     }
     &--value {
-      width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -37,15 +26,19 @@
         @include activityResolver();
       }
     }
-    &--created {
-      width: 150px;
+    &--created,
+    &--last_hit {
+      min-width: 110px;
     }
     &--remove {
       position: relative;
       width: 30px;
+      .rule-button__active-text {
+        display: none;
+      }
     }
   }
-  .rounded-table__body__cell {
+  .aw-table__body__cell {
     &--blocked {
       color: $green;
     }
@@ -56,14 +49,11 @@
 }
 
 .btn.rules__rule__remove-btn {
-  position: absolute;
-  top: -5px;
-  left: 5px;
   border: none;
   background-image: url('../assets/trash.svg');
   font-size: 0;
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.4;
