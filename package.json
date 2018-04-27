@@ -24,11 +24,11 @@
     "dev": "NODE_ENV=development webpack-dev-server --hot",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint './src/**/*.{js,jsx}' './__tests__/**/*.js'",
+    "lint": "eslint '{__tests__,jest,src}/**/*.{js,jsx}'",
     "build": "NODE_ENV=production webpack",
     "build:staging": "NODE_ENV=staging webpack",
     "clean": "rm -rf ./dist",
-    "prettier": "prettier --write '**/*'",
+    "prettier": "prettier --write '{__tests__,jest,scss,src}/**/*'",
     "prettier:watch": "prettier --watch '**/*'",
     "prepublish": "npm run build"
   },

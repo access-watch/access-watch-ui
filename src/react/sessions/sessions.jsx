@@ -61,14 +61,18 @@ class Sessions extends React.Component {
 
   componentWillReceiveProps({ sessions: { loading: nextLoading } }) {
     const { loading } = this.state;
-    const { sessions: { loading: prevLoading } } = this.props;
+    const {
+      sessions: { loading: prevLoading },
+    } = this.props;
     if (loading && !nextLoading && prevLoading) {
       this.setState({ loading: false });
     }
   }
 
   handleSortChange = value => {
-    const { route: { route, sort } } = this.props;
+    const {
+      route: { route, sort },
+    } = this.props;
     if (sort !== value) {
       dispatch({
         type: V_SET_ROUTE,
@@ -78,7 +82,9 @@ class Sessions extends React.Component {
   };
 
   handleSessionClick = id => {
-    const { route: { route } } = this.props;
+    const {
+      route: { route },
+    } = this.props;
     const [base, search] = route.split('?');
     // Replacing the ':' (which can appear in IPv6 address) as somehow our router cannot process it
     dispatch({

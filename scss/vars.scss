@@ -74,5 +74,5 @@ $rounded-table-border-radius: 25px;
 $reputation-preview-width: 15px;
 $reputation-preview-colors: map-merge(
   $statuses-strong,
-   (browser: map-get($type-map, 'browser'))
+  (browser: map-get($type-map, 'browser'))
 );

@@ -82,7 +82,12 @@ class TextTooltip extends React.Component {
   };
 
   render() {
-    const { pos: [x, y], visible, left, right } = this.state;
+    const {
+      pos: [x, y],
+      visible,
+      left,
+      right,
+    } = this.state;
     return (
       <div
         className={cx(

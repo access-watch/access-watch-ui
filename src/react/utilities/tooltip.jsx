@@ -54,7 +54,11 @@ export default class Tooltip extends React.Component {
   };
 
   render() {
-    const { pos: [x, y], visible, message } = this.state;
+    const {
+      pos: [x, y],
+      visible,
+      message,
+    } = this.state;
     return (
       <div
         key="tooltip"
