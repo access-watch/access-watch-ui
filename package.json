@@ -57,7 +57,7 @@
     "director": "^1.2.8",
     "elemental": "git+https://github.com/access-watch/elemental.git#build",
     "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.1.0",
+    "enzyme-adapter-react-16": "^1.5.0",
     "eslint": "^4.18.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "2.9.0",
