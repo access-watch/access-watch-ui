@@ -52,7 +52,7 @@
     "clean-webpack-plugin": "^0.1.16",
     "core-js": "^2.4.1",
     "country-data": "0.0.31",
-    "css-loader": "^0.28.1",
+    "css-loader": "^2.0.2",
     "date-fns": "^1.15.1",
     "director": "^1.2.8",
     "elemental": "git+https://github.com/access-watch/elemental.git#build",
