@@ -50,7 +50,7 @@
     "blacklist": "^1.1.4",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.16",
-    "core-js": "^2.4.1",
+    "core-js": "^2.6.2",
     "country-data": "0.0.31",
     "css-loader": "^0.28.1",
     "date-fns": "^1.15.1",
