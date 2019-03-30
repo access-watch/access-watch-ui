@@ -81,7 +81,7 @@
     "react": "^16.0.0",
     "react-beautiful-dnd": "^7.1.0",
     "react-dom": "^16.0.0",
-    "react-hot-loader": "^4.0.0",
+    "react-hot-loader": "^4.8.2",
     "react-transition-group": "^1.2.1",
     "rxjs": "^5.5.6",
     "sass-loader": "^7.0.1",
